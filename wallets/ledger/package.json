@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/ledger",
-  "version": "0.0.1-beta.2",
+  "version": "0.0.1-beta.3",
   "author": "cosmology-tech <developers@cosmology.zone>",
   "description": "cosmos-kit wallet connector",
   "main": "index.js",
@@ -31,7 +31,7 @@
   },
   "keywords": [],
   "dependencies": {
-    "@interchain-kit/core": "0.0.1-beta.2"
+    "@interchain-kit/core": "0.0.1-beta.3"
   },
   "gitHead": "ddbd4f20f3dee91a506ea462608fc4c1a88c5483"
 }
