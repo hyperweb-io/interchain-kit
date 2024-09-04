@@ -1,0 +1,93 @@
+# How to Add Web3Auth Wallet to CosmosKit
+
+> ### Note! This package is still on progress. it doesn't work on mobile yet and it's pretty vulnerable to XSS attacks.
+
+There is one package for web3auth
+
+- `@cosmos-kit/web3auth`
+
+> Note: all these packages export `wallets` and it's an array of `MainWalletBase`
+
+## install `@cosmos-kit/web3auth`
+
+```
+yarn add @cosmos-kit/web3auth
+```
+
+## import the wallets
+
+```js
+import { makeWeb3AuthWallets, PromptSign } from "@cosmos-kit/web3auth";
+import { useMemo, useState } from "react";
+```
+
+## set up web3auth account to retrieve a client ID
+
+https://web3auth.io/docs/dashboard-setup/
+
+## add to your provider
+
+```js
+function MyCosmosApp({ Component, pageProps }: AppProps) {
+  const [web3AuthPrompt, setWeb3AuthPrompt] = useState<{
+    signData: SignData
+    resolve: (approved: boolean) => void
+  } | undefined>();
+  const web3AuthWallets = useMemo(
+    () =>
+      makeWeb3AuthWallets({
+        loginMethods: [
+          // add whichever login methods you want to support
+          {
+            provider: "google",
+            name: "Google",
+            logo: "https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg",
+          },
+        ],
+        // get client ID and network from your web3auth dashboard:
+        // https://web3auth.io/docs/dashboard-setup/get-client-id
+        client: {
+          clientId: "localhostid",
+          web3AuthNetwork: "testnet",
+        },
+        // set state to show data to sign and approve/reject buttons in modal
+        promptSign: async (_, signData) =>
+          new Promise((resolve) =>
+            setWeb3AuthPrompt({
+              signData,
+              resolve: (approved) => {
+                setWeb3AuthPrompt(undefined);
+                resolve(approved);
+              },
+            })
+          ),
+      }),
+    []
+  );
+
+  return (
+      <ChainProvider
+        chains={chains}
+        assetLists={assets}
+        wallets={[...web3Auth]}
+        walletConnectOptions={...} // required if `wallets` contains mobile wallets
+      >
+        <Component {...pageProps} />
+
+        {/* wallet signature prompt */}
+        <Modal
+          visible={web3AuthPrompt !== undefined}
+          onClose={() => web3AuthPrompt?.resolve(false)}
+        >
+          <DisplayDataToSign
+            data={signData}
+            approve={() => web3AuthPrompt?.resolve(true)}
+            reject={() => web3AuthPrompt?.resolve(false)}
+          />
+        </Modal>
+      </ChainProvider>
+  );
+}
+
+export default MyCosmosApp;
+```

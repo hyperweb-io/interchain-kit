@@ -1,0 +1,43 @@
+# How to Add Okx Wallet to CosmosKit
+
+There are two packages for okxwallet
+
+- `@cosmos-kit/okxwallet`
+- `@cosmos-kit/okxwallet-extension`
+
+`@cosmos-kit/okxwallet` export all available okxwallet wallets, while if you only want to add a particular one, choose `@cosmos-kit/okxwallet-extension`
+
+> Note: all these packages export `wallets` and it's an array of `MainWalletBase`
+
+Take `@cosmos-kit/okxwallet` for example
+
+## install `@cosmos-kit/okxwallet`
+
+```
+yarn add @cosmos-kit/okxwallet
+```
+
+## import the wallets
+
+```js
+import { wallets as okxwallet } from "@cosmos-kit/okxwallet";
+```
+
+## add to your provider
+
+```js
+function MyCosmosApp({ Component, pageProps }: AppProps) {
+  return (
+      <ChainProvider
+        chains={chains}
+        assetLists={assets}
+        wallets={[...okxwallet]}
+        walletConnectOptions={...} // required if `wallets` contains mobile wallets
+      >
+        <Component {...pageProps} />
+      </ChainProvider>
+  );
+}
+
+export default MyCosmosApp;
+```

@@ -1,5 +1,5 @@
-import { useWalletManager } from "../hooks"
-import { useWalletModal } from "./provider"
+import { useWalletManager } from '../hooks';
+import { useWalletModal } from './provider';
 
 const style: React.CSSProperties = {
   position: 'absolute',
@@ -8,21 +8,27 @@ const style: React.CSSProperties = {
   transform: 'translate(-50%,-50%)',
   width: '500px',
   backgroundColor: 'white',
-}
+};
 
 export const WalletModal = () => {
-  const walletManager = useWalletManager()
-  const { close } = useWalletModal()
+  const walletManager = useWalletManager();
+  const { close } = useWalletModal();
   return (
     <ul style={style}>
-      {walletManager.wallets.map(wallet => {
+      {walletManager.wallets.map((wallet) => {
         return (
           <li key={wallet.option.name}>
             <span>{wallet.option.prettyName}</span>
-            <button onClick={() => walletManager.connect(wallet.option.name).then(close)}>connect</button>
+            <button
+              onClick={() =>
+                walletManager.connect(wallet.option.name).then(close)
+              }
+            >
+              connect
+            </button>
           </li>
-        )
+        );
       })}
     </ul>
-  )
-}
+  );
+};

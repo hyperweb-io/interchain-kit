@@ -1,0 +1,43 @@
+# How to Add Vectis Wallet to CosmosKit
+
+There are two packages for vectis
+
+- `@cosmos-kit/vectis`
+- `@cosmos-kit/vectis-extension`
+
+`@cosmos-kit/vectis` export all available vectis wallets (currently only extension available), while if you only want to add a particular one, choose `@cosmos-kit/vectis-extension`
+
+> Note: all these packages export `wallets` and it's an array of `MainWalletBase`
+
+Take `@cosmos-kit/vectis` for example
+
+## add `@cosmos-kit/vectis`
+
+```
+yarn add @cosmos-kit/vectis
+```
+
+## import the wallets
+
+```js
+import { wallets as vectis } from "@cosmos-kit/vectis";
+```
+
+## add to your provider
+
+```js
+function MyCosmosApp({ Component, pageProps }: AppProps) {
+  return (
+      <ChainProvider
+        chains={chains}
+        assetLists={assets}
+        wallets={[...vectis]}
+        walletConnectOptions={...} // required if `wallets` contains mobile wallets
+      >
+        <Component {...pageProps} />
+      </ChainProvider>
+  );
+}
+
+export default MyCosmosApp;
+```

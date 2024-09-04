@@ -1,0 +1,43 @@
+# How to Add Omni Wallet to CosmosKit
+
+There are two packages for omni
+
+- `@cosmos-kit/omni`
+- `@cosmos-kit/omni-mobile`
+
+`@cosmos-kit/omni` export all available omni wallets (currently only mobile available), while if you only want to add a particular one, choose `@cosmos-kit/omni-mobile`
+
+> Note: all these packages export `wallets` and it's an array of `MainWalletBase`
+
+Take `@cosmos-kit/omni` for example
+
+## add `@cosmos-kit/omni`
+
+```
+yarn add @cosmos-kit/omni
+```
+
+## import the wallets
+
+```js
+import { wallets as omni } from "@cosmos-kit/omni";
+```
+
+## add to your provider
+
+```js
+function MyCosmosApp({ Component, pageProps }: AppProps) {
+  return (
+      <ChainProvider
+        chains={chains}
+        assetLists={assets}
+        wallets={[...omni]}
+        walletConnectOptions={...} // required if `wallets` contains mobile wallets
+      >
+        <Component {...pageProps} />
+      </ChainProvider>
+  );
+}
+
+export default MyCosmosApp;
+```

@@ -1,0 +1,43 @@
+# How to Add Compass Wallet to CosmosKit
+
+There are two packages for compass
+
+- `@cosmos-kit/compass`
+- `@cosmos-kit/compass-extension`
+
+`@cosmos-kit/compass` export all available compass wallets (currently only extension available), while if you only want to add a particular one, choose `@cosmos-kit/compass-extension`
+
+> Note: all these packages export `wallets` and it's an array of `MainWalletBase`
+
+Take `@cosmos-kit/compass` for example
+
+## add `@cosmos-kit/compass`
+
+```
+yarn add @cosmos-kit/compass
+```
+
+## import the wallets
+
+```js
+import { wallets as compass } from "@cosmos-kit/compass";
+```
+
+## add to your provider
+
+```js
+function MyCosmosApp({ Component, pageProps }: AppProps) {
+  return (
+      <ChainProvider
+        chains={chains}
+        assetLists={assets}
+        wallets={[...compass]}
+        walletConnectOptions={...} // required if `wallets` contains mobile wallets
+      >
+        <Component {...pageProps} />
+      </ChainProvider>
+  );
+}
+
+export default MyCosmosApp;
+```

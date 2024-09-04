@@ -1,0 +1,105 @@
+# How to use CosmosKit
+
+> 💡 Make sure you are using `React18`
+>
+> `CosmosKit V1` is deprecated, we suggest using [`CosmosKit V2`](/migration-to-v2)
+>
+> `defaultSignOptions` has been preset as below in latest version (core >= 2.7, react-lite >= 2.5, react >= 2.9):
+
+```json
+{
+    preferNoSetFee: false,
+    preferNoSetMemo: true,
+    disableBalanceCheck: true,
+  };
+```
+
+## Quickstart
+
+🏁 Get started quickly by using [create-cosmos-app](https://github.com/cosmology-tech/create-cosmos-app) to help you build high-quality Cosmos apps fast!
+
+## Use CosmosKit from Scratch
+
+### 1️⃣ Install Dependencies
+
+Taking `Keplr` wallet as an example.
+
+```sh
+yarn add @cosmos-kit/react @cosmos-kit/keplr chain-registry
+```
+
+`@cosmos-kit/react` includes default modal made with `@interchain-ui/react`. If [customized modal](/provider/chain-provider/#customize-modal-with-walletmodal) is provided, you can use `@cosmos-kit/react-lite` instead to lighter your app.
+
+There are multiple wallets supported by CosmosKit. Details see [Integrating Wallets](/integrating-wallets)
+
+> Note: `@cosmjs/*` packages are peer dependencies in `@cosmos-kit/core`, so if you're not using `@cosmjs/*` in your dapp, `yarn install` would complain UNMET cosmjs peer dependencies.
+
+### 2️⃣ Wrap Provider
+
+First, add [`ChainProvider`](/provider/chain-provider) and provider [required properties](/provider/chain-provider#required-properties).
+
+Example:
+
+```tsx
+import * as React from 'react';
+
+import { ChainProvider } from '@cosmos-kit/react';
+import { chains, assets } from 'chain-registry';
+import { wallets } from '@cosmos-kit/keplr';
+
+// Import this in your top-level route/layout
+import "@interchain-ui/react/styles";
+
+function CosmosApp() {
+  return (
+    <ChainProvider
+      chains={chains} // supported chains
+      assetLists={assets} // supported asset lists
+      wallets={wallets} // supported wallets
+      walletConnectOptions={...} // required if `wallets` contains mobile wallets
+    >
+      <YourWalletRelatedComponents />
+    </ChainProvider>
+  );
+}
+```
+
+### 3️⃣ Consume with Hook
+
+Take `useChain` as an example.
+
+```tsx
+import * as React from 'react';
+
+import { useChain } from "@cosmos-kit/react";
+
+function Component ({ chainName }: { chainName: string }) => {
+    const chainContext = useChain(chainName);
+
+    const {
+      status,
+      username,
+      address,
+      message,
+      connect,
+      disconnect,
+      openView,
+    } = chainContext;
+}
+```
+
+## Localstorage Settings
+
+### current wallet
+
+- **Key**: `cosmos-kit@2:core//current-wallet`
+- **Type**: `string`
+
+It records current wallet name. You can use this key to implement auto-connection in dapp. And it will expire after provided [session duration](#sessionoptions).
+
+### accounts
+
+- **Key**: `cosmos-kit@2:core//accounts`
+- **Type**: `SimpleAccount[]`
+
+It records the connected chains' account information. It's used for account restore when refreshing in CosmosKit. And it will expire after provided [session duration](#sessionoptions).

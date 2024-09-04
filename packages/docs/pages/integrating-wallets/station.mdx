@@ -1,0 +1,43 @@
+# How to Add Station Wallet to CosmosKit
+
+There are two packages for station
+
+- `@cosmos-kit/station`
+- `@cosmos-kit/station-extension`
+
+`@cosmos-kit/station` export all available station wallets (currently only extension available), while if you only want to add a particular one, choose `@cosmos-kit/station-extension`
+
+> Note: all these packages export `wallets` and it's an array of `MainWalletBase`
+
+Take `@cosmos-kit/station` for example
+
+## add `@cosmos-kit/station`
+
+```
+yarn add @cosmos-kit/station
+```
+
+## import the wallets
+
+```js
+import { wallets as station } from "@cosmos-kit/station";
+```
+
+## add to your provider
+
+```js
+function MyCosmosApp({ Component, pageProps }: AppProps) {
+  return (
+      <ChainProvider
+        chains={chains}
+        assetLists={assets}
+        wallets={[...station]}
+        walletConnectOptions={...} // required if `wallets` contains mobile wallets
+      >
+        <Component {...pageProps} />
+      </ChainProvider>
+  );
+}
+
+export default MyCosmosApp;
+```

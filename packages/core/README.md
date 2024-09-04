@@ -97,14 +97,14 @@ classDiagram
 
     }
     class KeplrMobileWallet {
-  
+
     }
 
     class LeapExtensionWallet {
 
     }
     class LeapMobileWallet {
-  
+
     }
 
     class CosmosSigner {

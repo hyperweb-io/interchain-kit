@@ -1,0 +1,56 @@
+## How to connect multiple chains?
+
+### 1. Use `useChains` Hook
+CosmosKit introduces **[`useChains`](/hooks/use-chains)** hook starting from `v2.3.0`. Use it to connect to multiple chains.
+
+### 2. For A Specific Wallet (No Modal Required)
+
+Let's take `keplr-extension` for example.
+
+```javascript
+import { useWalletClient } from "@cosmos-kit/react";
+
+export default function Home() {
+  const { status, client } = useWalletClient("keplr-extension"); // or comostation-extension, leap-extension, etc.
+
+  useEffect(() => {
+    if (status === "Done") {
+      client.enable?.(["cosmoshub-4", "osmosis-1", "juno-1"]);
+      client.getAccount?.("juno-4").then((account) => console.log(account));
+      client.getAccount?.("osmosis-1").then((account) => console.log(account));
+      client
+        .getAccount?.("cosmoshub-4")
+        .then((account) => console.log(account));
+    }
+  }, [status]);
+  // ...
+}
+```
+
+### 3. No Specific Wallets (Modal Required, Version Prior to `v2.3.0`)
+
+There's no `useChains` hook in CosmosKit then, so the best you can do is below.
+
+```javascript
+export default function Home() {
+  const { openView } = useChain("cosmoshub"); // or juno, osmosis, etc.
+  const { status, client } = useWalletClient();
+
+  useEffect(() => {
+    if (status === "Done") {
+      client.enable?.(["cosmoshub-4", "osmosis-1", "juno-1"]);
+      client.getAccount?.("juno-4").then((account) => console.log(account));
+      client.getAccount?.("osmosis-1").then((account) => console.log(account));
+      client
+        .getAccount?.("cosmoshub-4")
+        .then((account) => console.log(account));
+    }
+  }, [status]);
+
+  return (
+    <div style={{ textAlign: "center", margin: "4rem" }}>
+      <Button onClick={openView}>Connect</Button>
+    </div>
+  );
+}
+```

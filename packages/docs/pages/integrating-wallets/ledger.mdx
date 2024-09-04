@@ -1,0 +1,52 @@
+# How to Add Ledger to CosmosKit
+
+## Prerequisites
+
+1. Connect your Ledger device via an USB cable and unlock it.
+2. Open the Cosmos app in Ledger, which shows `Cosmos Ready` in the screen.
+
+## Browser Support
+
+This package uses the [WebUSB](https://caniuse.com/webusb) API to connect to Ledger devices.  
+We recommend using the latest version of Chrome and Chrome Android.
+
+- https://developer.mozilla.org/en-US/docs/Web/API/USB/getDevices
+- https://developer.mozilla.org/en-US/docs/Web/API/USB/requestDevice
+
+## Add `@cosmos-kit/ledger`
+
+```sh
+# npm
+npm i @cosmos-kit/ledger
+
+# pnpm
+pnpm i @cosmos-kit/ledger
+
+# yarn
+yarn add @cosmos-kit/ledger
+```
+
+## Import the wallets
+
+```js
+import { wallets as ledger } from "@cosmos-kit/ledger";
+```
+
+## Add to your provider
+
+```js
+function MyCosmosApp({ Component, pageProps }: AppProps) {
+  return (
+      <ChainProvider
+        chains={chains}
+        assetLists={assets}
+        wallets={[...ledger]}
+        walletConnectOptions={...} // required if `wallets` contains mobile wallets
+      >
+        <Component {...pageProps} />
+      </ChainProvider>
+  );
+}
+
+export default MyCosmosApp;
+```

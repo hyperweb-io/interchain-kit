@@ -1,0 +1,12 @@
+{
+  "index": "Introduction",
+  "use-chain": "- useChain",
+  "use-chains": "- useChains",
+  "use-chain-wallet": "- useChainWallet",
+  "use-iframe": "- useIframe",
+  "use-manager": "- useManager",
+  "use-modal-theme": "- useModalTheme",
+  "use-name-service": "- useNameService",
+  "use-wallet": "- useWallet",
+  "use-wallet-client": "- useWalletClient"
+}
