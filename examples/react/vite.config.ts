@@ -28,6 +28,7 @@ export default defineConfig({
       '@interchain-kit/core': path.resolve(__dirname, '../../packages/core/src'),
       '@interchain-kit/keplr-extension': path.resolve(__dirname, '../../wallets/keplr-extension/src'),
       '@interchain-kit/leap-extension': path.resolve(__dirname, '../../wallets/leap-extension/src'),
+      '@interchain-kit/cosmostation-extension': path.resolve(__dirname, '../../wallets/cosmostation-extension/src'),
       '@interchain-kit/mock-wallet': path.resolve(__dirname, '../../wallets/mock-wallet/src'),
     }
   }

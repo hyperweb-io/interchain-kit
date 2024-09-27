@@ -27,6 +27,7 @@
       "@interchain-kit/core": ["../../packages/core/src/"],
       "@interchain-kit/keplr-extension": ["../../wallets/keplr-extension/src"],
       "@interchain-kit/leap-extension": ["../../wallets/leap-extension/src"],
+      "@interchain-kit/cosmostation-extension": ["../../wallets/cosmostation-extension/src"],
     }
   },
   "include": ["src"]
