@@ -14,7 +14,7 @@ import {
 import { useWalletModal } from "./provider";
 import { useActiveWallet } from "../hooks";
 import { useEffect, useState } from "react";
-import { WalletState, WCWallet } from "@interChain-kit/core";
+import { WalletState, WCWallet } from "@interchain-kit/core";
 
 const defaultModalView = {
   header: <WalletListHeader />,

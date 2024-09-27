@@ -9,7 +9,7 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "Node",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -21,7 +21,13 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@interchain-kit/react": ["../../packages/react/src/"],
+      "@interchain-kit/core": ["../../packages/core/src/"],
+      "@interchain-kit/keplr-extension": ["../../wallets/keplr-extension/src"],
+      "@interchain-kit/leap-extension": ["../../wallets/leap-extension/src"],
+    }
   },
   "include": ["src"]
 }

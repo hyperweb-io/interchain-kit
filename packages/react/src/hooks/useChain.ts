@@ -5,7 +5,7 @@ import { AssetList, Chain } from "@chain-registry/v2-types";
 import { useActiveWallet } from './useActiveWallet';
 import { useInterchainClient } from './useInterchainClient';
 import { useWalletModal } from "../modal";
-import { ChainNameNotExist } from "@interChain-kit/core";
+import { ChainNameNotExist } from "@interchain-kit/core";
 import { getChainLogoUrl } from "../utils";
 
 export const useChain = (chainName: string): UseChainReturnType & CosmosKitUseChainReturnType => {

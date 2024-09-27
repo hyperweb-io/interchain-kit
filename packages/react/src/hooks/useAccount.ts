@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { WalletAccount, WalletState } from "@interChain-kit/core"
+import { WalletAccount, WalletState } from "@interchain-kit/core"
 import { useWalletManager } from './useWalletManager';
 
 export const useAccount = (chainName: string, walletName: string): WalletAccount | null => {

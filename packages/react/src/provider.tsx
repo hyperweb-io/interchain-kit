@@ -5,7 +5,7 @@ import {
   SignerOptions,
   WalletManager,
   EndpointOptions,
-} from "@interChain-kit/core";
+} from "@interchain-kit/core";
 import { AssetList, Chain } from "@chain-registry/v2-types";
 import { WalletModal, WalletModalProvider } from "./modal";
 

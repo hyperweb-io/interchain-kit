@@ -1,4 +1,4 @@
-import { WalletState } from '@interChain-kit/core';
+import { WalletState } from '@interchain-kit/core';
 import { useInterchainWalletContext } from '../provider';
 import { useActiveWallet } from './useActiveWallet';
 import { useAccount } from './useAccount';

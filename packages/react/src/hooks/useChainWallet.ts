@@ -1,7 +1,7 @@
 import { AssetList, Chain } from "@chain-registry/v2-types"
 import { useWalletManager } from "./useWalletManager"
 import { useAccount } from "./useAccount"
-import { BaseWallet } from "@interChain-kit/core"
+import { BaseWallet } from "@interchain-kit/core"
 import { UseChainReturnType } from "../types/chain"
 import { useInterchainClient } from "./useInterchainClient"
 import { getChainLogoUrl } from "../utils"

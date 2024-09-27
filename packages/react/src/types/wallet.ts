@@ -1,4 +1,4 @@
-import { BaseWallet } from "@interChain-kit/core";
+import { BaseWallet } from "@interchain-kit/core";
 import { ConnectState } from "../enum";
 
 export type UseWalletReturnType = {

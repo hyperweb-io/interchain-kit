@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useWalletManager } from './useWalletManager';
 import { Chain } from '@chain-registry/v2-types';
 import { useAccount } from './useAccount';
-import { WalletState } from '@interChain-kit/core';
+import { WalletState } from '@interchain-kit/core';
 import { InjSigningClient } from '@interchainjs/injective/signing-client';
 
 export const useInterchainClient = (chainName: string, walletName: string) => {

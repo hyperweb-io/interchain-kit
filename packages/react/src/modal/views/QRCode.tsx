@@ -1,5 +1,5 @@
 import { ConnectModalHead, ConnectModalQRCode } from "@interchain-ui/react";
-import { WCWallet } from "@interChain-kit/core";
+import { WCWallet } from "@interchain-kit/core";
 import { useActiveWallet, useWalletManager } from "../../hooks";
 import { useWalletModal } from "../provider";
 

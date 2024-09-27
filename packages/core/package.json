@@ -3,9 +3,9 @@
   "version": "0.0.1-beta.22",
   "author": "cosmology-tech <developers@cosmology.zone>",
   "description": "cosmos-kit wallet connector core package",
-  "main": "index.js",
-  "module": "esm/index.js",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
   "homepage": "https://github.com/@interchain-kit/core",
   "license": "SEE LICENSE IN LICENSE",
   "publishConfig": {

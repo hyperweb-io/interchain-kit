@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
-
+import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -23,7 +23,12 @@ export default defineConfig({
   resolve: {
     alias: {
       "node-fetch": "node-fetch/lib/index.js",
-      "stream": "stream-browserify"
+      "stream": "stream-browserify",
+      '@interchain-kit/react': path.resolve(__dirname, '../../packages/react/src'),
+      '@interchain-kit/core': path.resolve(__dirname, '../../packages/core/src'),
+      '@interchain-kit/keplr-extension': path.resolve(__dirname, '../../wallets/keplr-extension/src'),
+      '@interchain-kit/leap-extension': path.resolve(__dirname, '../../wallets/leap-extension/src'),
+      '@interchain-kit/mock-wallet': path.resolve(__dirname, '../../wallets/mock-wallet/src'),
     }
   }
 })
