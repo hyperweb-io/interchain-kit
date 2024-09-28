@@ -31,7 +31,8 @@ export class CosmostationExtension extends ExtensionWallet {
   }
 
   async disconnect(chainId: string | string[]): Promise<void> {
-    const targetChain = Array.isArray(chainId) ? chainId : [chainId]
-    await Promise.all(targetChain.map(async (chainId) => this.client.disconnect(chainId)))
+    await this.client.cosmos.request({
+      method: 'cos_disconnect',
+    });
   }
 }

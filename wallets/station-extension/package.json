@@ -1,12 +1,12 @@
 {
-  "name": "@interchain-kit/cosmostation-extension",
+  "name": "@interchain-kit/station-extension",
   "version": "0.0.1-beta.22",
   "author": "cosmology-tech <developers@cosmology.zone>",
   "description": "cosmos-kit wallet connector",
   "main": "index.js",
   "module": "esm/index.js",
   "types": "index.d.ts",
-  "homepage": "https://github.com/interchain-kit/cosmostation-extension",
+  "homepage": "https://github.com/interchain-kit/station-extension",
   "license": "SEE LICENSE IN LICENSE",
   "publishConfig": {
     "access": "public",
@@ -14,10 +14,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/interchain-kit/cosmostation-extension"
+    "url": "https://github.com/interchain-kit/station-extension"
   },
   "bugs": {
-    "url": "https://github.com/interchain-kit/cosmostation-extension/issues"
+    "url": "https://github.com/interchain-kit/station-extension/issues"
   },
   "scripts": {
     "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
