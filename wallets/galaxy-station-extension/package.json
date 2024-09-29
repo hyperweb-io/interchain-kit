@@ -1,0 +1,37 @@
+{
+  "name": "@interchain-kit/galaxy-station-extension",
+  "version": "0.0.1-beta.22",
+  "author": "cosmology-tech <developers@cosmology.zone>",
+  "description": "cosmos-kit wallet connector",
+  "main": "index.js",
+  "module": "esm/index.js",
+  "types": "index.d.ts",
+  "homepage": "https://github.com/interchain-kit/galaxy-station-extension",
+  "license": "SEE LICENSE IN LICENSE",
+  "publishConfig": {
+    "access": "public",
+    "directory": "dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/interchain-kit/galaxy-station-extension"
+  },
+  "bugs": {
+    "url": "https://github.com/interchain-kit/galaxy-station-extension/issues"
+  },
+  "scripts": {
+    "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
+    "clean": "rimraf dist/**",
+    "prepare": "npm run build",
+    "build": "npm run clean; tsc; tsc -p tsconfig.esm.json; npm run copy",
+    "build:dev": "npm run clean; tsc --declarationMap; tsc -p tsconfig.esm.json; npm run copy",
+    "lint": "eslint . --fix",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@interchain-kit/core": "0.0.1-beta.22"
+  },
+  "gitHead": "4f812e296043ff768200bc125b31b31570257616"
+}
