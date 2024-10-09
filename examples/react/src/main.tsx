@@ -92,7 +92,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         }}
       >
         <BrowserRouter>
-          <App />
+            <App />
         </BrowserRouter>
       </ChainProvider>
     </ThemeProvider>

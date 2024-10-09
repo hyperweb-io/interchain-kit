@@ -1,12 +1,12 @@
 {
-  "name": "@interchain-kit/keplr-extension",
-  "version": "0.0.1-beta.24",
+  "name": "@interchain-kit/trust-extension",
+  "version": "0.0.1-beta.22",
   "author": "cosmology-tech <developers@cosmology.zone>",
   "description": "cosmos-kit wallet connector",
   "main": "index.js",
   "module": "esm/index.js",
   "types": "index.d.ts",
-  "homepage": "https://github.com/interchain-kit/interchain-kit",
+  "homepage": "https://github.com/interchain-kit/trust-extension",
   "license": "SEE LICENSE IN LICENSE",
   "publishConfig": {
     "access": "public",
@@ -14,24 +14,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/interchain-kit/interchain-kit"
+    "url": "https://github.com/interchain-kit/trust-extension"
   },
   "bugs": {
-    "url": "https://github.com/interchain-kit/interchain-kit/issues"
+    "url": "https://github.com/interchain-kit/trust-extension/issues"
   },
   "scripts": {
     "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
     "clean": "rimraf dist/**",
     "prepare": "npm run build",
     "build": "npm run clean; tsc; tsc -p tsconfig.esm.json; npm run copy",
+    "build:dev": "npm run clean; tsc --declarationMap; tsc -p tsconfig.esm.json; npm run copy",
     "lint": "eslint . --fix",
     "test": "jest",
     "test:watch": "jest --watch"
   },
   "keywords": [],
   "dependencies": {
-    "@interchain-kit/core": "0.0.1-beta.24",
-    "@keplr-wallet/provider-extension": "^0.12.102"
+    "@interchain-kit/core": "0.0.1-beta.22"
   },
-  "gitHead": "0c66e771b9fb5e32d4f13f0e62ce65542ecbaeff"
+  "gitHead": "4f812e296043ff768200bc125b31b31570257616"
 }

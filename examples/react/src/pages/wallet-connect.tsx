@@ -1,6 +1,6 @@
 import { WCWallet } from "@interchain-kit/core";
 import {
-  useActiveWallet,
+  useCurrentWallet,
   useChain,
   useWalletManager,
 } from "@interchain-kit/react";
@@ -9,13 +9,13 @@ import { useEffect, useRef, useState } from "react";
 const WalletConnect = () => {
   const walletManager = useWalletManager();
 
-  const activeWallet = useActiveWallet() as WCWallet;
+  const currentWallet = useCurrentWallet() as WCWallet;
 
   const { address } = useChain("cosmoshub");
 
   const [pairings, setPairings] = useState<any[]>([]);
 
-  console.log(activeWallet?.session);
+  console.log(currentWallet?.session);
 
   console.log(pairings);
 
@@ -36,20 +36,20 @@ const WalletConnect = () => {
 
   return (
     <div>
-      <p>current wallet: {activeWallet?.option?.name}</p>
-      <pre>{JSON.stringify(activeWallet?.session?.peer, null, 4)}</pre>
+      <p>current wallet: {currentWallet?.option?.name}</p>
+      <pre>{JSON.stringify(currentWallet?.session?.peer, null, 4)}</pre>
       <p>address: {address}</p>
-      <p>topic: {activeWallet?.session?.topic}</p>
+      <p>topic: {currentWallet?.session?.topic}</p>
       <button
         onClick={() =>
-          setPairings(activeWallet.signClient.core.pairing.getPairings())
+          setPairings(currentWallet.signClient.core.pairing.getPairings())
         }
       >
         get pairings
       </button>
       <button
         onClick={() =>
-          walletManager.disconnect(activeWallet?.option?.name as string)
+          walletManager.disconnect(currentWallet?.option?.name as string)
         }
       >
         disconnect

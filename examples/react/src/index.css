@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 table {
     border-collapse: collapse;
     border: 1px solid black;
@@ -7,4 +11,9 @@ table {
 td, th {
     padding:1px;
     border: 1px solid black;
+}
+
+.app {
+    display: flex;
+    justify-content: center;
 }

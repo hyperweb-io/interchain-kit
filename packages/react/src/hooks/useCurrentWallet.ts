@@ -2,16 +2,16 @@ import { useEffect } from "react"
 import { useWalletManager } from "./useWalletManager"
 import { useWalletModal } from "../modal"
 
-export const useActiveWallet = () => {
+export const useCurrentWallet = () => {
   const walletManager = useWalletManager()
   const { open } = useWalletModal()
 
   useEffect(() => {
-    if (!walletManager.activeWalletName) {
+    if (!walletManager.currentWalletName) {
       open()
     }
-  }, [walletManager.activeWalletName])
+  }, [walletManager.currentWalletName])
 
 
-  return walletManager.getActiveWallet()
+  return walletManager.getCurrentWallet()
 }

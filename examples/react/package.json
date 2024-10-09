@@ -2,7 +2,7 @@
   "name": "@interchain-kit/react-examples",
   "author": "cosmology-tech <developers@cosmology.zone>",
   "description": "cosmos-kit wallet connector core package",
-  "version": "0.0.1-beta.22",
+  "version": "0.0.1-beta.24",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,31 +11,40 @@
     "preview": "vite preview",
     "starship": "starship --config ./starship/configs/config.yaml"
   },
+  "postcss": {
+    "plugins": {
+      "tailwindcss": {},
+      "autoprefixer": {}
+    }
+  },
   "dependencies": {
     "@chain-registry/v2": "^1.65.15",
     "@chain-registry/v2-types": "^0.49.15",
     "@cosmjs/crypto": "^0.32.4",
     "@cosmjs/proto-signing": "^0.32.4",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@interchain-kit/coin98-extension": "0.0.1-beta.22",
-    "@interchain-kit/core": "0.0.1-beta.22",
-    "@interchain-kit/keplr-extension": "0.0.1-beta.22",
-    "@interchain-kit/keplr-mobile": "0.0.1-beta.22",
-    "@interchain-kit/leap-extension": "0.0.1-beta.22",
-    "@interchain-kit/leap-mobile": "0.0.1-beta.22",
-    "@interchain-kit/ledger": "0.0.1-beta.22",
-    "@interchain-kit/mock-wallet": "0.0.1-beta.22",
-    "@interchain-kit/okx-extension": "0.0.1-beta.22",
-    "@interchain-kit/react": "0.0.1-beta.22",
-    "@interchain-ui/react": "^1.23.31",
+    "@interchain-kit/coin98-extension": "0.0.1-beta.24",
+    "@interchain-kit/core": "0.0.1-beta.24",
+    "@interchain-kit/keplr-extension": "0.0.1-beta.24",
+    "@interchain-kit/keplr-mobile": "0.0.1-beta.24",
+    "@interchain-kit/leap-extension": "0.0.1-beta.24",
+    "@interchain-kit/leap-mobile": "0.0.1-beta.24",
+    "@interchain-kit/ledger": "0.0.1-beta.24",
+    "@interchain-kit/mock-wallet": "0.0.1-beta.24",
+    "@interchain-kit/okx-extension": "0.0.1-beta.24",
+    "@interchain-kit/react": "0.0.1-beta.24",
+    "@interchain-ui/react": "^1.25.2",
+    "autoprefixer": "^10.4.20",
     "axios": "^1.7.3",
     "node-fetch": "^3.3.2",
+    "postcss": "^8.4.47",
     "qrcode.react": "^3.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-qr-code": "^2.0.15",
     "react-router-dom": "^6.26.1",
     "stream-browserify": "^3.0.0",
+    "tailwindcss": "^3.4.13",
     "vite-plugin-fs": "^1.1.0"
   },
   "devDependencies": {
@@ -52,5 +61,5 @@
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
   },
-  "gitHead": "4f812e296043ff768200bc125b31b31570257616"
+  "gitHead": "0c66e771b9fb5e32d4f13f0e62ce65542ecbaeff"
 }

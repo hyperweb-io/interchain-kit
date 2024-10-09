@@ -15,17 +15,19 @@ yarn add @interchain-kit/react
 
 ## Usage
 ### Setup
+#### import chain registry info that you need
 ```js
 import { ChainProvider, useChain } from "@interchain-kit/react";
-import { assetLists, chains } from "@chain-registry/v2";
 import { keplrWallet } from "@interchain-kit/keplr-extension";
 import { ThemeProvider } from "@interchain-ui/react";
 import "@interchain-ui/react/styles";
 
-const chainName = 'cosmoshub'
+import { chain as junoChain, assetList as junoAssetList } from "@chain-registry/v2/mainnet/juno";
+import { chain as osmosisChain,assetList as osmosisAssetList } from "@chain-registry/v2/mainnet/osmosis";
+import { chain as cosmoshubChain, assetList as cosmoshubAssetList } from "@chain-registry/v2/mainnet/cosmoshub";
 
 const Show = () => {
-  const {address} = useChain(chainName);
+  const {address} = useChain('osmosis');
   // will show cosmoshub address from what you selected wallet in modal
   return <div>{address}</div>;
 };
@@ -34,8 +36,42 @@ function App() {
   return (
     <ThemeProvider>
       <ChainProvider
-        chains={chains.filter((c) => c.chainName === chainName)}
-        assetLists={assetLists.filter((c) => c.chainName === chainName)}
+        chains={[osmosisChain, junoChain, cosmoshubChain]}
+        assetLists={[osmosisAssetList, junoAssetList, cosmoshubAssetList]}
+        wallets={[keplrWallet]}
+        signerOptions={{}}
+        endpointOptions={{}}
+      >
+        <Show />
+      </ChainProvider>
+    </ThemeProvider>
+  );
+}
+
+export default App;
+```
+
+#### or import all chain registry
+```js
+import { ChainProvider, useChain } from "@interchain-kit/react";
+import { keplrWallet } from "@interchain-kit/keplr-extension";
+import { ThemeProvider } from "@interchain-ui/react";
+import "@interchain-ui/react/styles";
+import { chains, assetLists } from '@chain-registry/v2/mainnet'
+ 
+
+const Show = () => {
+  const {address} = useChain('osmosis');
+  // will show cosmoshub address from what you selected wallet in modal
+  return <div>{address}</div>;
+};
+
+function App() {
+  return (
+    <ThemeProvider>
+      <ChainProvider
+        chains={chains}
+        assetLists={assetLists}
         wallets={[keplrWallet]}
         signerOptions={{}}
         endpointOptions={{}}
@@ -103,9 +139,9 @@ function App() {
 export default App;
 ```
 
-### useActiveWallet
+### useCurrentWallet
 ```js
-const wallet = useActiveWallet()
+const wallet = useCurrentWallet()
 
 console.log(wallet) // current connected wallet
 

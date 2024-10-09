@@ -1,5 +1,5 @@
 export * from './useWalletManager'
-export * from './useActiveWallet'
+export * from './useCurrentWallet'
 export * from './useAccount'
 export * from './useChain'
 export * from './useConnect'

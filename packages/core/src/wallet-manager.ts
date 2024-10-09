@@ -16,7 +16,7 @@ export class WalletManager {
   chains: Chain[] = []
   assetLists: AssetList[] = []
   wallets: BaseWallet[] = []
-  activeWalletName: string | undefined
+  currentWalletName: string | undefined
   signerOptions: SignerOptions | undefined
   endpointOptions: EndpointOptions | undefined
   rpcEndpoint: Record<string, string | HttpEndpoint> = {}
@@ -41,6 +41,7 @@ export class WalletManager {
   }
 
   async init() {
+    await this.initRpcEndpoint()
     await Promise.all(this.wallets.map(async (wallet) => wallet.init()))
   }
 
@@ -67,7 +68,7 @@ export class WalletManager {
 
     const chainIds: string[] = this.chains.map(chain => chain.chainId)
 
-    this.activeWalletName = walletName
+    this.currentWalletName = walletName
 
     wallet.errorMessage = ''
     wallet.walletState = WalletState.Connecting
@@ -95,8 +96,8 @@ export class WalletManager {
     wallet.walletState = WalletState.Disconnected
   }
 
-  getActiveWallet() {
-    return this.wallets.find(wallet => wallet.option.name === this.activeWalletName)
+  getCurrentWallet() {
+    return this.wallets.find(wallet => wallet.option.name === this.currentWalletName)
   }
 
   addChain(chain: Chain) {
@@ -118,31 +119,46 @@ export class WalletManager {
   }
 
   getRpcEndpoint = async (wallet: BaseWallet, chainName: string) => {
+    const cacheKey = `${chainName}`
+    const cachedRpcEndpoint = this.rpcEndpoint[cacheKey]
+    if (cachedRpcEndpoint) {
+      return cachedRpcEndpoint
+    }
+
     const chain = this.getChainByName(chainName)
 
     const providerRpcEndpoints = this.endpointOptions?.endpoints?.[chain.chainName]?.rpc || []
-    const walletRpcEndpoints = wallet?.option?.endpoints?.[chain.chainName]?.rpc || []
+    // const walletRpcEndpoints = wallet?.option?.endpoints?.[chain.chainName]?.rpc || []
     const chainRpcEndpoints = chain.apis.rpc.map(url => url.address)
 
     if (providerRpcEndpoints?.[0] && await isValidRpcEndpoint(providerRpcEndpoints[0])) {
-      return providerRpcEndpoints[0]
+      this.rpcEndpoint[cacheKey] = providerRpcEndpoints[0]
     }
 
-    if (walletRpcEndpoints?.[0] && await isValidRpcEndpoint(providerRpcEndpoints[0])) {
-      return walletRpcEndpoints[0]
-    }
+    // if (walletRpcEndpoints?.[0] && await isValidRpcEndpoint(providerRpcEndpoints[0])) {
+    //   this.rpcEndpoint[cacheKey] = walletRpcEndpoints[0]
+    // }
 
     if (chainRpcEndpoints[0] && await isValidRpcEndpoint(chainRpcEndpoints[0])) {
-      return chainRpcEndpoints[0]
+      this.rpcEndpoint[cacheKey] = chainRpcEndpoints[0]
     }
 
-    const validRpcEndpoint = await getValidRpcEndpoint([...providerRpcEndpoints, ...walletRpcEndpoints, ...chainRpcEndpoints])
+    const validRpcEndpoint = await getValidRpcEndpoint([...providerRpcEndpoints, ...chainRpcEndpoints])
 
     if (validRpcEndpoint === '') {
       throw new NoValidRpcEndpointFound()
     }
 
+    this.rpcEndpoint[cacheKey] = validRpcEndpoint
     return validRpcEndpoint
+  }
+
+  initRpcEndpoint = async () => {
+    const promises = []
+    for (const chain of this.chains) {
+      promises.push(this.getRpcEndpoint(null, chain.chainName))
+    }
+    await Promise.all(promises)
   }
 
   getPreferSignType(chainName: string) {

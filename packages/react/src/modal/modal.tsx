@@ -12,7 +12,7 @@ import {
   WalletListHeader,
 } from "./views";
 import { useWalletModal } from "./provider";
-import { useActiveWallet } from "../hooks";
+import { useCurrentWallet } from "../hooks";
 import { useEffect, useState } from "react";
 import { WalletState, WCWallet } from "@interchain-kit/core";
 
@@ -24,7 +24,7 @@ const defaultModalView = {
 export const WalletModal = () => {
   const { modalIsOpen, open, close } = useWalletModal();
 
-  const activeWallet = useActiveWallet();
+  const currentWallet = useCurrentWallet();
 
   const [modalView, setModalView] = useState(defaultModalView);
 
@@ -32,22 +32,25 @@ export const WalletModal = () => {
 
   useEffect(() => {
     switch (true) {
-      case activeWallet?.option?.mode === "wallet-connect":
-        setModalView({ header: <QRCodeHeader />, content: <QRCodeContent /> });
+      case currentWallet?.option?.mode === "wallet-connect":
+        setModalView({
+          header: <QRCodeHeader onBack={gotoWalletList} />,
+          content: <QRCodeContent />,
+        });
         break;
-      case activeWallet?.walletState === WalletState.Connecting:
+      case currentWallet?.walletState === WalletState.Connecting:
         setModalView({
           header: <ConnectingHeader onBack={gotoWalletList} />,
           content: <ConnectingContent />,
         });
         break;
-      case activeWallet?.walletState === WalletState.Connected:
+      case currentWallet?.walletState === WalletState.Connected:
         setModalView({
           header: <ConnectedHeader onBack={gotoWalletList} />,
           content: <ConnectedContent />,
         });
         break;
-      case activeWallet?.walletState === WalletState.Reject:
+      case currentWallet?.walletState === WalletState.Reject:
         setModalView({
           header: <RejectHeader onBack={gotoWalletList} />,
           content: <RejectContent />,
@@ -56,7 +59,7 @@ export const WalletModal = () => {
       default:
         setModalView(defaultModalView);
     }
-  }, [activeWallet, activeWallet?.walletState]);
+  }, [currentWallet, currentWallet?.walletState]);
 
   return (
     <ConnectModal
