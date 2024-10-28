@@ -1,24 +1,40 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useChain } from '@interchain-kit/vue';
+import { computed, ref, inject } from 'vue'
+import { useChain, useInterchainClient, useCurrentWallet, useAccount, useConnect, OPEN_MODAL_KEY} from '@interchain-kit/vue';
 import { coins } from "@cosmjs/amino";
 
+const open = inject<() => void>(OPEN_MODAL_KEY);
 const chainName = ref('osmosistestnet')
 const { 
-  logoUrl, openView, connect, disconnect, wallet, address, 
-  status, username, message, chain, getSigningCosmosClient, rpcEndpoint,
-  queryClient,
+  logoUrl, 
+  chain,
+  rpcEndpoint
 } = useChain(chainName);
+const currentWallet = useCurrentWallet()
+
+const walletName = computed(() => {
+  return currentWallet.value?.option?.name;
+})
+const { queryClient, signingCosmosClient } = useInterchainClient(chainName, walletName)
+const account = useAccount(chainName, walletName)
+const { connect, disconnect } = useConnect(walletName)
 
 const recipientAddress = ref('')
 const amount = ref('')
 const isSending = ref(false)
 const balance = ref('0')
+const handleConnect = () => {
+  if (!currentWallet.value) {
+    typeof open === 'function' && open()
+    return
+  }
+  connect.value()
+}
 
 const getBalance = async() => {
-  if (queryClient.value && address.value) {
+  if (queryClient.value && account.value?.address) {
     const {balance: bc} =  await queryClient.value.balance({
-      address: address.value,
+      address: account.value?.address,
       denom: chain.value.staking?.stakingTokens[0].denom as string,
     })
     if (bc?.amount) {
@@ -39,11 +55,10 @@ const handleSendToken = async() => {
 
   try {
     isSending.value = true
-    let signingCosmosClient = await getSigningCosmosClient.value()
-    const tx = await signingCosmosClient.helpers.send(
-      address.value,
+    const tx = await signingCosmosClient.value.helpers.send(
+      account.value?.address || '',
       {
-        fromAddress: address.value,
+        fromAddress: account.value?.address || '',
         toAddress: recipientAddress.value,
         amount: [
           { denom, amount: amount.value },
@@ -77,14 +92,14 @@ const handleSendToken = async() => {
     </select>
     logo: <img :src="logoUrl" alt="" style="width: 30px;" />
     <div>rpcEndpoint: {{ rpcEndpoint }}</div>
-    <div>address: {{ address }}</div>
+    <div>address: {{ account?.address }}</div>
     <div>balance: {{ balance }} <button @click="getBalance">getBalance</button></div>
-    <div>walletStatus: {{ status  }}</div>
-    <div>username: {{ username }}</div>
-    <div>message: {{ message }}</div>
-    <button @click="openView">openView</button>
-    <button v-if="status !== 'Connected'" @click="connect">connect</button>
-    <button v-if="status === 'Connected'" @click="disconnect">disconnect</button>
+    <div>walletStatus: {{ currentWallet?.walletState  }}</div>
+    <div>username: {{ account?.username }}</div>
+    <div>message: {{ currentWallet?.message }}</div>
+    <!-- <button @click="openView">openView</button> -->
+    <button v-if="currentWallet?.status !== 'Connected'" @click="handleConnect">connect</button>
+    <button v-if="currentWallet?.status === 'Connected'" @click="disconnect">disconnect</button>
     <div>
       <div>amount: <input v-model="amount" type="text" /></div>
       <div>recipient address: <input v-model="recipientAddress" type="text" style="width: 400px;" /></div>

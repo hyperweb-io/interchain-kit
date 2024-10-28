@@ -29,7 +29,7 @@ export function useInterchainClient(chainName: Ref<string>, walletName: Ref<stri
 		if (wallet && chainToShow && wallet?.walletState === WalletState.Connected) {
 			try {
 				isLoading.value = true;
-				rpcEndpoint.value = await walletManager.getRpcEndpoint(wallet, chainName.value);
+				rpcEndpoint.value = await walletManager.getRpcEndpoint(chainName.value);
 				queryClient.value = await walletManager.getQueryClient(walletName.value, chainName.value);
 				signingClient.value = await walletManager.getSigningClient(walletName.value, chainName.value);
 				signingCosmosClient.value = await walletManager.getSigningCosmosClient(walletName.value, chainName.value);

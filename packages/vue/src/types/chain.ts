@@ -1,12 +1,9 @@
-import { AssetList,Chain } from '@chain-registry/v2-types';
-import { BaseWallet, WalletState } from '@interchain-kit/core';
-import { InjSigningClient } from '@interchainjs/injective/signing-client';
-import { HttpEndpoint } from '@interchainjs/types';
+import { AssetList, Chain } from '@chain-registry/v2-types';
+import { WalletState } from '@interchain-kit/core';
 import { CosmosSigningClient } from 'interchainjs/cosmos';
 import { CosmWasmSigningClient } from 'interchainjs/cosmwasm';
-import { RpcQuery } from 'interchainjs/query/rpc';
-import { SigningClient } from 'interchainjs/signing-client';
 import { ComputedRef, Ref } from 'vue';
+import { HttpEndpoint } from "@cosmjs/stargate"
 
 export type CosmosKitUseChainReturnType = {
   connect: () => void
@@ -25,15 +22,6 @@ export type UseChainReturnType = {
   logoUrl: Ref<string | undefined>
   chain: Ref<Chain>
   assetList: Ref<AssetList>
-  address: ComputedRef<string>
-  wallet: Ref<BaseWallet>
   rpcEndpoint: Ref<string | HttpEndpoint>
-  queryClient: Ref<RpcQuery>
-  signingClient: Ref<SigningClient | InjSigningClient | null>
-  signingCosmosClient: Ref<CosmosSigningClient | null>
-  signingCosmWasmClient: Ref<CosmWasmSigningClient>
-  signingInjectiveClient: Ref<InjSigningClient>
-  isLoading: Ref<boolean>
-  error: Ref<unknown>
 }
 

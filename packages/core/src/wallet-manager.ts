@@ -143,7 +143,7 @@ export class WalletManager {
     return chain
   }
 
-  getRpcEndpoint = async (wallet: BaseWallet, chainName: string) => {
+  getRpcEndpoint = async (chainName: string) => {
     const cacheKey = `${chainName}`
     const cachedRpcEndpoint = this.rpcEndpoint[cacheKey]
     if (cachedRpcEndpoint) {
@@ -175,7 +175,7 @@ export class WalletManager {
   initRpcEndpoint = async () => {
     const promises = []
     for (const chain of this.chains) {
-      promises.push(this.getRpcEndpoint(null, chain.chainName))
+      promises.push(this.getRpcEndpoint(chain.chainName))
     }
     await Promise.all(promises)
   }
@@ -216,14 +216,14 @@ export class WalletManager {
 
   async getQueryClient(walletName: string, chainName: ChainName) {
     const wallet = this.getWalletByName(walletName)
-    const rpc = await this.getRpcEndpoint(wallet, chainName)
+    const rpc = await this.getRpcEndpoint(chainName)
     return new RpcQuery(rpc)
   }
 
   async getInterchainSignerOptions(walletName: string, chainName: string) {
     const wallet = this.getWalletByName(walletName)
     const chain = this.getChainByName(chainName)
-    const rpcEndpoint = await this.getRpcEndpoint(wallet, chainName)
+    const rpcEndpoint = await this.getRpcEndpoint(chainName)
     const offlineSigner = this.getOfflineSigner(wallet, chainName)
     const signerOptions = this.getSignerOptions(chainName)
     const preferredSignType = this.getPreferSignType(chainName) as 'amino' | 'direct'
