@@ -1320,24 +1320,13 @@
     "@noble/hashes" "^1.3.1"
     ethers "^6.5.1"
 
-"@interchainjs/auth@^0.0.1-beta.10":
-  version "0.0.1-beta.10"
-  resolved "https://registry.yarnpkg.com/@interchainjs/auth/-/auth-0.0.1-beta.10.tgz#870aa326e445e86a44763addf2c1307a8d56613a"
-  integrity sha512-EPJutXjysp2JP6wK7zDn1zdc13hGn13bgudlx1Mh7mbNw0ENpW+IXPaXeBCu7VhZ7fB8JPnmsJO3jLlG0oMXYw==
+"@interchainjs/auth@^0.0.1-beta.34":
+  version "0.0.1-beta.34"
+  resolved "https://registry.yarnpkg.com/@interchainjs/auth/-/auth-0.0.1-beta.34.tgz#5c730c740c812d4077392dae7aa56c14721d7127"
+  integrity sha512-au0kcx1Jjm5G6QQRy0wSRuctbHICY/PmIscRtJj3Jg1lMvzSpUq3g3FX2rRsH7PXopsq3mgPojqYt1bpI9Wjdw==
   dependencies:
-    "@interchainjs/types" "^0.0.1-beta.9"
-    "@interchainjs/utils" "^0.0.1-beta.9"
-    "@noble/curves" "^1.1.0"
-    "@noble/hashes" "^1.3.1"
-    ethers "^6.5.1"
-
-"@interchainjs/auth@^0.0.1-beta.16":
-  version "0.0.1-beta.16"
-  resolved "https://registry.yarnpkg.com/@interchainjs/auth/-/auth-0.0.1-beta.16.tgz#06387a899c6021ac4b157851b394a158ee5bb062"
-  integrity sha512-62kaKiHQ65AHVjsrGZ6znoRXaz7nKq0FK673ZNkTAzCUVzrn2j8x+Ei+NcZsFxSZtnsKK2ST9ynyUuR5ely0Og==
-  dependencies:
-    "@interchainjs/types" "^0.0.1-beta.15"
-    "@interchainjs/utils" "^0.0.1-beta.15"
+    "@interchainjs/types" "^0.0.1-beta.34"
+    "@interchainjs/utils" "^0.0.1-beta.34"
     "@noble/curves" "^1.1.0"
     "@noble/hashes" "^1.3.1"
     ethers "^6.5.1"
@@ -1366,6 +1355,14 @@
     "@interchainjs/types" "^0.0.1-beta.9"
     "@interchainjs/utils" "^0.0.1-beta.9"
 
+"@interchainjs/cosmos-types@^0.0.1-beta.34":
+  version "0.0.1-beta.34"
+  resolved "https://registry.yarnpkg.com/@interchainjs/cosmos-types/-/cosmos-types-0.0.1-beta.34.tgz#2f058be310ddf7e5ed4ec1f3e64a7ffac59a4000"
+  integrity sha512-7EbXF4fHbT/l4PJEj2sD4n/krwlYK7oT2mwzGe6lrU+ynaoekDtwTslijjoq8yGD7MHcIlcSYnPM0HVYnEF1Cg==
+  dependencies:
+    "@interchainjs/types" "^0.0.1-beta.34"
+    "@interchainjs/utils" "^0.0.1-beta.34"
+
 "@interchainjs/cosmos@0.0.1-alpha.31":
   version "0.0.1-alpha.31"
   resolved "https://registry.yarnpkg.com/@interchainjs/cosmos/-/cosmos-0.0.1-alpha.31.tgz#49a2a693a4f3500b7c16d8476d8ebe4e1b83707b"
@@ -1381,32 +1378,17 @@
     "@noble/hashes" "^1.3.1"
     decimal.js "^10.4.3"
 
-"@interchainjs/cosmos@0.0.1-beta.20", "@interchainjs/cosmos@^0.0.1-beta.20":
-  version "0.0.1-beta.20"
-  resolved "https://registry.yarnpkg.com/@interchainjs/cosmos/-/cosmos-0.0.1-beta.20.tgz#c855d384c52b4ec4afbe9576d63a655931858638"
-  integrity sha512-ya6UEekkODXozFKCLmlacJkEi7+AsUkQ0wH62qSN76g8YXumO0HeZNEYMv07pvjRmObesjF/iF24BX0sZqY6Mg==
+"@interchainjs/cosmos@0.0.1-beta.34", "@interchainjs/cosmos@^0.0.1-beta.12", "@interchainjs/cosmos@^0.0.1-beta.20":
+  version "0.0.1-beta.34"
+  resolved "https://registry.yarnpkg.com/@interchainjs/cosmos/-/cosmos-0.0.1-beta.34.tgz#f6f0b23581b5bb1992308983a909190833d06ccd"
+  integrity sha512-LA0L/WCaWW4umZremdZotGmqlQIIVXAILTEwdGDrzxcdVGOBo47NJ+jgq6O0FQQUrIdZEBMqZnZQ4VOna0OWag==
   dependencies:
     "@chain-registry/v2" "^1.65.6"
     "@chain-registry/v2-types" "^0.49.6"
-    "@interchainjs/auth" "^0.0.1-beta.16"
-    "@interchainjs/cosmos-types" "^0.0.1-beta.17"
-    "@interchainjs/types" "^0.0.1-beta.15"
-    "@interchainjs/utils" "^0.0.1-beta.15"
-    "@noble/curves" "^1.1.0"
-    "@noble/hashes" "^1.3.1"
-    decimal.js "^10.4.3"
-
-"@interchainjs/cosmos@^0.0.1-beta.12":
-  version "0.0.1-beta.12"
-  resolved "https://registry.yarnpkg.com/@interchainjs/cosmos/-/cosmos-0.0.1-beta.12.tgz#f78f5e3271df9a80f528bce5be0d00209d964a79"
-  integrity sha512-fFOTlc7QhbabQronZXES5CJG8v1iIZiNKqKufyLboTeeHsnXOtm8/WTaLq5bqrz4UJJICkIv0jzukMdEIxejPw==
-  dependencies:
-    "@chain-registry/v2" "^1.65.6"
-    "@chain-registry/v2-types" "^0.49.6"
-    "@interchainjs/auth" "^0.0.1-beta.10"
-    "@interchainjs/cosmos-types" "^0.0.1-beta.9"
-    "@interchainjs/types" "^0.0.1-beta.9"
-    "@interchainjs/utils" "^0.0.1-beta.9"
+    "@interchainjs/auth" "^0.0.1-beta.34"
+    "@interchainjs/cosmos-types" "^0.0.1-beta.34"
+    "@interchainjs/types" "^0.0.1-beta.34"
+    "@interchainjs/utils" "^0.0.1-beta.34"
     "@noble/curves" "^1.1.0"
     "@noble/hashes" "^1.3.1"
     decimal.js "^10.4.3"
@@ -1451,6 +1433,13 @@
   dependencies:
     decimal.js "^10.4.3"
 
+"@interchainjs/types@^0.0.1-beta.34":
+  version "0.0.1-beta.34"
+  resolved "https://registry.yarnpkg.com/@interchainjs/types/-/types-0.0.1-beta.34.tgz#4bff95f19ffa3d02422ea797229519feb84f09ca"
+  integrity sha512-mDX7eDZTXX98v5PiLLqATN9TkZjVqPvIR4KkzzKXFW5l8skDBo4SGmwTTfssjO2yPx+xhEGhtNw/BApBbzLcVg==
+  dependencies:
+    decimal.js "^10.4.3"
+
 "@interchainjs/types@^0.0.1-beta.9":
   version "0.0.1-beta.9"
   resolved "https://registry.yarnpkg.com/@interchainjs/types/-/types-0.0.1-beta.9.tgz#d8676d2b2e74aca356afa215c1f9e90892ca9eed"
@@ -1472,6 +1461,14 @@
   integrity sha512-j/OelV+lKOTMhM54SnBEgZIsYqjdk1NBavFkd8G2t8yvHmKvA6msWeA8Ppg5scwOvWV7buXrwL293+tNpzveDw==
   dependencies:
     "@interchainjs/types" "^0.0.1-beta.15"
+    bech32 "^2.0.0"
+
+"@interchainjs/utils@^0.0.1-beta.34":
+  version "0.0.1-beta.34"
+  resolved "https://registry.yarnpkg.com/@interchainjs/utils/-/utils-0.0.1-beta.34.tgz#46348066939148548988719ca9b196249a45c32e"
+  integrity sha512-craTCYvyvLgDFynLILPJusuoLYmkkp9By1mpNYejLlknf173m10w9CD3KmwGoWeRr+1vzszH8K4trQvUwPxUSw==
+  dependencies:
+    "@interchainjs/types" "^0.0.1-beta.34"
     bech32 "^2.0.0"
 
 "@interchainjs/utils@^0.0.1-beta.9":

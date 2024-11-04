@@ -34,7 +34,7 @@
     "@chain-registry/v2": "^1.71.1",
     "@chain-registry/v2-keplr": "^0.0.2",
     "@chain-registry/v2-types": "^0.53.0",
-    "@interchainjs/cosmos": "0.0.1-beta.20",
+    "@interchainjs/cosmos": "0.0.1-beta.34",
     "@interchainjs/cosmos-types": "0.0.1-beta.17",
     "@ledgerhq/hw-app-cosmos": "^6.30.0",
     "@ledgerhq/hw-transport": "^6.31.0",
