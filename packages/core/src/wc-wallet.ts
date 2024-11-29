@@ -25,7 +25,13 @@ export class WCWallet extends BaseWallet {
 
   walletConnectOption: SignClientTypes.Options
 
-  constructor(option?: Wallet, walletConnectOption?: SignClientTypes.Options) {
+  constructor({
+    option,
+    walletConnectOption,
+  }: {
+    option?: Wallet,
+    walletConnectOption?: SignClientTypes.Options
+  } = {}) {
     const defaultWalletConnectOption: Wallet = {
       name: 'WalletConnect',
       prettyName: 'Wallet Connect',
