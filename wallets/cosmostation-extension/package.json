@@ -32,7 +32,7 @@
   },
   "keywords": [],
   "dependencies": {
-    "@interchain-kit/core": "0.0.1-beta.22"
+    "@interchain-kit/core": "0.2.207"
   },
   "gitHead": "fd54de0f490b6ac590ccf29f8b3d2a2226a66ec1"
 }
