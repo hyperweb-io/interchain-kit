@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/station-extension",
-  "version": "0.2.208",
+  "version": "0.2.209",
   "author": "Hyperweb <developers@hyperweb.io>",
   "description": "interchain-kit wallet connector",
   "main": "index.js",

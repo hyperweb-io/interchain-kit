@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/react",
-  "version": "0.2.208",
+  "version": "0.2.209",
   "author": "Hyperweb <developers@hyperweb.io>",
   "description": "interchain-kit wallet connector react package",
   "main": "index.js",
@@ -34,7 +34,7 @@
   "keywords": [],
   "dependencies": {
     "@chain-registry/v2-types": "^0.53.40",
-    "@interchain-kit/core": "0.2.208",
+    "@interchain-kit/core": "0.2.209",
     "@interchain-ui/react": "1.26.3",
     "@interchainjs/cosmos": "1.10.1",
     "@interchainjs/cosmos-types": "1.10.1",
@@ -48,18 +48,18 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "jest-environment-jsdom": "^29.7.0",
-    "babel-jest": "^29.7.0",
-    "ts-jest": "^29.3.0",
-    "@babel/preset-env": "^7.26.9",
-    "@babel/core": "^7.26.10",
     "@babel/cli": "^7.27.0",
-    "@babel/preset-typescript": "^7.26.10",
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
     "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.10",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^15.0.0",
-    "@testing-library/jest-dom": "^6.6.3"
+    "@testing-library/react-hooks": "^8.0.1",
+    "babel-jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-jest": "^29.3.0"
   },
   "gitHead": "74ba6aca78de888649b4a23726e96dd0ad2b6827"
 }

@@ -2,7 +2,7 @@
   "name": "@interchain-kit/react-examples",
   "author": "Hyperweb <developers@hyperweb.io>",
   "description": "interchain-kit wallet connector core package",
-  "version": "0.2.208",
+  "version": "0.2.209",
   "type": "module",
   "private": true,
   "scripts": {
@@ -25,7 +25,7 @@
     "@cosmjs/proto-signing": "^0.32.4",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@interchain-kit/coin98-extension": "^0.1.0",
-    "@interchain-kit/compass-extension": "0.2.208",
+    "@interchain-kit/compass-extension": "0.2.209",
     "@interchain-kit/core": "^0.1.0",
     "@interchain-kit/cosmos-extension-metamask": "^0.1.0",
     "@interchain-kit/keplr-extension": "^0.1.0",

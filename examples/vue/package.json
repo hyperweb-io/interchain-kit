@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/vue-examples",
-  "version": "0.2.208",
+  "version": "0.2.209",
   "type": "module",
   "private": true,
   "scripts": {
