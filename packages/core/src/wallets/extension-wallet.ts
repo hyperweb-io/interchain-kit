@@ -8,7 +8,7 @@ export class ExtensionWallet extends MultiChainWallet {
     try {
       const walletIdentify = await getClientFromExtension(this.info.walletIdentifyKey)
 
-      const client = await getClientFromExtension(this.info.windowKey)
+      this.client = await getClientFromExtension(this.info.windowKey)
 
       await super.init();
 
