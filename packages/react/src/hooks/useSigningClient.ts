@@ -11,7 +11,10 @@ export const useSigningClient = (chainName: string, walletName: string) => {
     queryKey: `signing-client-${chainName}-${walletName}`,
     queryFn: async () => {
       await getRpcEndpoint(walletName, chainName)
-      return getSigningClient(walletName, chainName)
+      const currentWalletState = getChainWalletState(walletName, chainName)?.walletState;
+      if(currentWalletState === WalletState.Connected) {
+        return getSigningClient(walletName, chainName);
+      }
     },
     enabled: chainWalletState?.walletState === WalletState.Connected,
     disableCache: true,
