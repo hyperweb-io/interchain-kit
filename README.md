@@ -29,11 +29,11 @@ Get started quickly by using [create-interchain-app](https://github.com/hyperweb
 
 ## ⚙️ Configuration
 
-Check out [our docs here](https://docs.hyperweb.io/interchain-kit#get-started) to configure Interchain Kit.
+Check out [our docs here](https://docs.hyperweb.io/cosmos-kit/beta) to configure Interchain Kit.
 
 ## ⚛️ InterchainJS Signers
 
-If you want to get a interchainjs signer, [here are docs for our hooks](https://docs.hyperweb.io/interchain-kit/hooks)
+If you want to get a interchainjs signer, [here are docs for our hooks](https://docs.hyperweb.io/cosmos-kit/beta/get-started)
 
 ## 🖼️ Supported Frameworks
 
