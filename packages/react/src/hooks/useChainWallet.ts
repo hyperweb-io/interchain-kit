@@ -3,11 +3,11 @@ import { UseChainWalletReturnType } from "../types/chain"
 import { useSigningClient } from "./useSigningClient"
 
 export const useChainWallet = (chainName: string, walletName: string): UseChainWalletReturnType => {
-  const { assetLists, disconnect, setCurrentChainName, setCurrentWalletName, getChainByName, getWalletByName, getChainWalletState, getChainLogoUrl, connect, getSigningClient, getRpcEndpoint, getAccount, getStatefulWalletByName } = useWalletManager()
+  const { assetLists, disconnect, setCurrentChainName, setCurrentWalletName, getChainByName, getChainWalletState, getChainLogoUrl, connect, getSigningClient, getRpcEndpoint, getAccount, getChainWalletByName } = useWalletManager()
 
   const chain = getChainByName(chainName)
 
-  const wallet = getStatefulWalletByName(walletName)
+  const wallet = getChainWalletByName(walletName, chainName)
 
   const assetList = assetLists.find(a => a.chainName === chainName)
 

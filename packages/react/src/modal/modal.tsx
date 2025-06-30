@@ -22,15 +22,16 @@ import {
   ThemeProvider,
   ThemeProviderProps,
 } from "@interchain-ui/react";
-import { StatefulWallet } from "../store/stateful-wallet";
 import { useWalletManager } from "../hooks";
 import { transferToWalletUISchema } from "../utils";
 import { ChainWalletState } from "../store";
+import { WalletController } from "@interchain-kit/store/wallet-controller";
+import { useWalletModal } from "../contexts";
 
 export type WalletModalProps = {
   isOpen: boolean;
-  wallets: StatefulWallet[];
-  currentWallet?: StatefulWallet;
+  wallets: WalletController[];
+  currentWallet?: WalletController;
   open: () => void;
   close: () => void;
 };
@@ -53,26 +54,26 @@ export const InterchainWalletModal = ({
 }: InterchainWalletModalProps) => {
   const [shouldShowList, setShouldShowList] = useState(false);
 
+  const { modalIsOpen: isOpen, open, close } = useWalletModal();
+
   const {
-    modalIsOpen: isOpen,
     walletConnectQRCodeUri,
-    wallets: statefulWallets,
+    wallets: walletControllers,
     getChainWalletState,
     currentWalletName,
     currentChainName,
-    openModal: open,
-    closeModal: close,
     chains,
     setCurrentWalletName,
     getDownloadLink,
     getEnv,
   } = useWalletManager();
 
-  const [walletToConnect, setWalletToConnect] = useState<StatefulWallet | null>(
-    null
-  );
+  const [walletToConnect, setWalletToConnect] =
+    useState<WalletController | null>(null);
 
-  const walletsForUI = statefulWallets.map((w) => transferToWalletUISchema(w));
+  const walletsForUI = walletControllers.map((w) =>
+    transferToWalletUISchema(w)
+  );
 
   const chainNameToConnect = currentChainName || chains[0].chainName;
 
@@ -80,7 +81,7 @@ export const InterchainWalletModal = ({
     (chain) => chain.chainName === chainNameToConnect
   );
 
-  const currentWallet = statefulWallets.find(
+  const currentWallet = walletControllers.find(
     (w) => w.info.name === currentWalletName
   );
 
@@ -96,7 +97,7 @@ export const InterchainWalletModal = ({
     walletToShow.disconnect(chainToConnect.chainId);
   };
 
-  const onSelectWallet = (wallet: StatefulWallet) => {
+  const onSelectWallet = (wallet: WalletController) => {
     setWalletToConnect(wallet);
     setShouldShowList(false);
     return wallet.connect(chainToConnect.chainId);
@@ -153,7 +154,7 @@ export type WalletModalElementProps = {
   wallets: InterchainUIWalletType[];
   username: string;
   address: string;
-  currentWallet?: StatefulWallet;
+  currentWallet?: WalletController;
   isConnecting: boolean;
   isConnected: boolean;
   isRejected: boolean;
@@ -163,7 +164,7 @@ export type WalletModalElementProps = {
   open: () => void;
   close: () => void;
   disconnect: () => void;
-  onSelectWallet: (wallet: StatefulWallet) => void;
+  onSelectWallet: (wallet: WalletController) => void;
   onBack: () => void;
   onReconnect: () => void;
   getDownloadLink: (walletName: string) => DownloadInfo;
@@ -347,15 +348,16 @@ export const ModalRenderer = ({
     return null;
   }
 
-  const { modalIsOpen, openModal, closeModal, wallets, currentWalletName } =
-    useWalletManager();
+  const { wallets, currentWalletName } = useWalletManager();
+
+  const { modalIsOpen, open, close } = useWalletModal();
 
   return (
     <ProvidedWalletModal
       wallets={wallets}
       isOpen={modalIsOpen}
-      open={openModal}
-      close={closeModal}
+      open={open}
+      close={close}
       currentWallet={wallets.find((w) => w.info.name === currentWalletName)}
     />
   );

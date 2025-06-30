@@ -17,6 +17,8 @@ export interface DownloadInfo extends DappEnv {
   link: string;
 }
 
+export type WalletName = string
+
 export type WalletMode =
   | 'ledger'
   | 'extension'

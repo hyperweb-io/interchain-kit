@@ -1,8 +1,9 @@
 import { useWalletManager } from "./useWalletManager"
 import { useAsync } from "./useAsync"
 import { WalletState } from "@interchain-kit/core"
+import { UseSigningClientHookReturnType } from "../types"
 
-export const useSigningClient = (chainName: string, walletName: string) => {
+export const useSigningClient = (chainName: string, walletName: string): UseSigningClientHookReturnType => {
   const { getSigningClient, getChainWalletState, getRpcEndpoint, isReady } = useWalletManager()
 
   const chainWalletState = getChainWalletState(walletName, chainName)

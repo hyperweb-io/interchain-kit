@@ -4,14 +4,14 @@ import {
   BaseWallet,
   SignerOptions,
   EndpointOptions,
-  WalletManager,
+  Config,
 } from "@interchain-kit/core";
 import { AssetList, Chain } from "@chain-registry/types";
-import { ModalRenderer, WalletModalProps } from "./modal";
-import { createInterchainStore, InterchainStore } from "./store";
-import { StoreApi } from "zustand";
+import { WalletModalProps } from "./modal";
+import { WalletStoreManager } from "@interchain-kit/store";
+import { WalletModalProvider } from "./contexts";
 
-type InterchainWalletContextType = StoreApi<InterchainStore>;
+type InterchainWalletContextType = WalletStoreManager;
 
 type InterchainWalletProviderProps = {
   chains: Chain[];
@@ -37,27 +37,27 @@ export const ChainProvider = ({
 }: InterchainWalletProviderProps) => {
   // const [_, forceRender] = useState({});
 
-  const walletManager = new WalletManager(
+  const config: Config = {
     chains,
     assetLists,
     wallets,
     signerOptions,
-    endpointOptions
-  );
+    endpointOptions,
+  };
 
-  const store = useRef(createInterchainStore(walletManager));
+  const walletManager = new WalletStoreManager(config);
+
+  const store = useRef(walletManager);
 
   useEffect(() => {
-    // walletManager.init();
-    store.current.getState().init();
+    store.current.init();
   }, []);
 
   return (
     <InterchainWalletContext.Provider value={store.current}>
-      {children}
-      {ProviderWalletModal && (
-        <ModalRenderer walletModal={ProviderWalletModal} />
-      )}
+      <WalletModalProvider walletModal={ProviderWalletModal}>
+        {children}
+      </WalletModalProvider>
     </InterchainWalletContext.Provider>
   );
 };

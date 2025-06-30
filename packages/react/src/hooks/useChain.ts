@@ -6,7 +6,7 @@ import { useWalletModal } from './useWalletModal';
 
 export const useChain = (chainName: string): UseChainReturnType => {
 
-  const { assetLists, currentWalletName, disconnect, setCurrentChainName, getChainByName, getWalletByName, getChainWalletState, getChainLogoUrl, connect, getSigningClient, getRpcEndpoint, getAccount, getStatefulWalletByName } = useWalletManager()
+  const { assetLists, currentWalletName, disconnect, setCurrentChainName, getChainByName, getChainWalletState, getChainLogoUrl, connect, getSigningClient, getRpcEndpoint, getAccount, getChainWalletByName } = useWalletManager()
 
   const chain = getChainByName(chainName)
 
@@ -15,7 +15,7 @@ export const useChain = (chainName: string): UseChainReturnType => {
   }
 
   const assetList = assetLists.find(a => a.chainName === chainName)
-  const wallet = getStatefulWalletByName(currentWalletName)
+  const wallet = getChainWalletByName(currentWalletName, chainName)
 
   const chainWalletStateToShow = getChainWalletState(currentWalletName, chainName)
   const { open, close } = useWalletModal()

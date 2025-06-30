@@ -1,10 +1,10 @@
+
 import { AssetList, Chain } from "@chain-registry/types";
-import { SignType, Wallet, WalletAccount, WalletEvents, WalletState } from "../types";
+import { Wallet, WalletAccount, WalletEvents } from "../types";
 import EventEmitter from "events";
-import { IGenericOfflineSigner } from "@interchainjs/types";
 
 
-export abstract class BaseWallet {
+export abstract class BaseWallet<TSignData, TSignResponse, IGenericOfflineSigner> {
   info: Wallet
 
   events: EventEmitter<WalletEvents> = new EventEmitter()
@@ -44,12 +44,16 @@ export abstract class BaseWallet {
   }
 
   abstract init(): Promise<void>
+
   abstract connect(chainId: Chain['chainId']): Promise<void>
+
   abstract disconnect(chainId: Chain['chainId']): Promise<void>
+
   abstract getAccount(chainId: Chain['chainId']): Promise<WalletAccount>
 
   abstract getOfflineSigner(chainId: Chain['chainId']): Promise<IGenericOfflineSigner>
-  abstract getOfflineSigner(chainId: Chain['chainId'], preferredSignType: SignType): Promise<IGenericOfflineSigner>
+
+  abstract sign(chainId: Chain['chainId'], data: TSignData): Promise<TSignResponse>
 
   abstract addSuggestChain(chainId: Chain['chainId']): Promise<void>
 

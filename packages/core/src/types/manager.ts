@@ -1,8 +1,9 @@
 import { HttpEndpoint } from '@interchainjs/types';
-import { Chain } from "@chain-registry/types";
+import { AssetList, Chain } from "@chain-registry/types";
 import { ChainName } from './chain'
 import { SignType } from "./common";
 import { SigningOptions as InterchainSigningOptions } from '@interchainjs/cosmos/types/signing-client'
+import { BaseWallet } from '../wallets';
 
 export interface SignerOptions {
   signing?: (chain: Chain | ChainName) => InterchainSigningOptions | undefined;
@@ -21,4 +22,13 @@ export interface EndpointOptions {
 export enum WalletManagerState {
   Initializing = 'Initializing',
   Initialized = 'Initialized',
+}
+
+
+export interface Config {
+  chains: Chain[],
+  assetLists: AssetList[],
+  wallets: BaseWallet[],
+  signerOptions?: SignerOptions,
+  endpointOptions?: EndpointOptions,
 }

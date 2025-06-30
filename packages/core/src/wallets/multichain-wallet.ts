@@ -1,19 +1,19 @@
 
 import { AssetList, Chain } from '@chain-registry/types';
-import { SignType, Wallet, WalletAccount } from '../types';
+import { MultiSignDoc, MultiSignResponse, SignType, Wallet, WalletAccount } from '../types';
 import { BaseWallet } from './base-wallet';
-import { CosmosWallet } from './cosmos-wallet';
-import { isInstanceOf } from '../utils';
+import { IGenericOfflineSigner } from '@interchainjs/types';
 
-export class MultiChainWallet extends BaseWallet {
+export class MultiChainWallet<
+  TSignData extends MultiSignDoc = any,
+  TSignResponse extends MultiSignResponse = any,
+  TOfflineSigner = IGenericOfflineSigner
+> extends BaseWallet<TSignData, TSignResponse, TOfflineSigner> {
 
-  networkWalletMap: Map<Chain['chainType'], BaseWallet> = new Map()
+  networkWalletMap: Map<Chain['chainType'], BaseWallet<TSignData, TSignResponse, TOfflineSigner>> = new Map()
 
-  constructor(info?: Wallet, networkWalletMap?: Map<Chain['chainType'], BaseWallet>) {
+  constructor(info?: Wallet, networkWalletMap?: Map<Chain['chainType'], BaseWallet<TSignData, TSignResponse, TOfflineSigner>>) {
     super(info);
-
-    // this.networkWalletMap.set('cosmos', new CosmosWallet(info));
-    // this.networkWalletMap.set('eip155', new EthereumWallet(info));
 
     if (networkWalletMap) {
       networkWalletMap.forEach((wallet, key) => {
@@ -24,7 +24,7 @@ export class MultiChainWallet extends BaseWallet {
     }
   }
 
-  setNetworkWallet(chainType: Chain['chainType'], wallet: BaseWallet): void {
+  setNetworkWallet(chainType: Chain['chainType'], wallet: BaseWallet<TSignData, TSignResponse, TOfflineSigner>): void {
     this.networkWalletMap.set(chainType, wallet);
   }
 
@@ -74,6 +74,11 @@ export class MultiChainWallet extends BaseWallet {
     }
     return wallet;
   }
+  async sign(chainId: Chain['chainId'], signData: TSignData): Promise<TSignResponse> {
+    const chain = this.getChainById(chainId);
+    const networkWallet = this.getWalletByChainType(chain.chainType);
+    return networkWallet.sign(chainId, signData);
+  }
   async connect(chainId: Chain['chainId']): Promise<void> {
     const chain = this.getChainById(chainId);
     const networkWallet = this.getWalletByChainType(chain.chainType);
@@ -95,9 +100,6 @@ export class MultiChainWallet extends BaseWallet {
   async getOfflineSigner(chainId: Chain['chainId'], preferSignType?: SignType) {
     const chain = this.getChainById(chainId);
     const networkWallet = this.getWalletByChainType(chain.chainType);
-    if (isInstanceOf(networkWallet, CosmosWallet) && preferSignType) {
-      return networkWallet.getOfflineSigner(chainId, preferSignType);
-    }
     return networkWallet.getOfflineSigner(chainId);
   }
   async addSuggestChain(chainId: string): Promise<void> {
