@@ -1,7 +1,10 @@
 type Listener<T> = (state: T) => void;
+type Selector<T, S> = (state: T) => S;
+type SelectorListener<S> = (selected: S) => void;
 
 export class ObservableState<T extends object> {
   private listeners: Set<Listener<T>> = new Set();
+  private selectorListeners: Set<{ selector: Selector<T, any>, listener: SelectorListener<any>, prev: any }> = new Set();
   private _state: T;
   public proxy: T;
 
@@ -28,9 +31,24 @@ export class ObservableState<T extends object> {
     return () => this.listeners.delete(listener);
   }
 
+  subscribeWithSelector<S>(selector: Selector<T, S>, listener: SelectorListener<S>) {
+    let prev = selector(this._state);
+    const wrapper = { selector, listener, prev };
+    this.selectorListeners.add(wrapper);
+    listener(prev);
+    return () => this.selectorListeners.delete(wrapper);
+  }
+
   notify() {
     for (const listener of this.listeners) {
       listener(this._state);
+    }
+    for (const wrapper of this.selectorListeners) {
+      const next = wrapper.selector(this._state);
+      if (next !== wrapper.prev) {
+        wrapper.prev = next;
+        wrapper.listener(next);
+      }
     }
   }
 }

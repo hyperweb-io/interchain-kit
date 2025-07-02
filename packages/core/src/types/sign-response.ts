@@ -1,13 +1,25 @@
-import { AminoSignResponse, DirectSignResponse, StdSignature } from "@interchainjs/cosmos";
+import { AminoSignResponse, DirectSignResponse, StdSignature } from '@interchainjs/cosmos';
 
-//cosmos sign response types
-export type ArbitrarySignResponse = StdSignature
+// 定义签名响应的基础接口
+export interface BaseSignResponse {
+    success: boolean;
+    error?: string;
+}
 
-export type CosmosSignResponse = AminoSignResponse | DirectSignResponse | ArbitrarySignResponse;
+// Cosmos 签名响应类型
+export interface CosmosSignResponse extends BaseSignResponse {
+    method: 'cosmos_amino' | 'cosmos_direct' | 'cosmos_arbitrary';
+    result?: AminoSignResponse | DirectSignResponse | StdSignature;
+}
 
+// 以太坊签名响应类型
+export interface EthereumSignResponse extends BaseSignResponse {
+    method: 'ethereum_message' | 'ethereum_transaction';
+    result?: {
+        signature?: string;
+        transactionHash?: string;
+    };
+}
 
-//eth sign response types
-export type EthSignResponse = string | Uint8Array | Record<string, any>;
-
-//multi-sign response types
-export type MultiSignResponse = CosmosSignResponse | EthSignResponse;
+// 通用签名响应类型（用于多链钱包）
+export type GenericSignResponse = CosmosSignResponse | EthereumSignResponse;

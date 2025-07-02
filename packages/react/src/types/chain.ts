@@ -4,7 +4,7 @@ import { BaseWallet, WalletState } from '@interchain-kit/core';
 
 import { ChainWallet } from '../store/chain-wallet';
 import { StatefulWallet } from '../store/stateful-wallet';
-import { ChainWalletController } from '@interchain-kit/store/chain-wallet-controller';
+import { ChainWalletStore } from '@interchain-kit/store';
 import { SigningClient } from '@interchainjs/cosmos';
 
 export type CosmosKitUseChainReturnType = {
@@ -23,7 +23,7 @@ export type UseChainReturnType = {
   chain: Chain,
   assetList: AssetList,
   address: string,
-  wallet: ChainWalletController,
+  wallet: ChainWalletStore,
   rpcEndpoint: string | HttpEndpoint | unknown
   getSigningClient: () => Promise<SigningClient>
 

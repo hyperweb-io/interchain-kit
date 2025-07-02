@@ -1,36 +1,61 @@
-import { Chain, AssetList } from '@chain-registry/types';
-import { HttpEndpoint } from '@interchainjs/types';
-import { Config, DownloadInfo, EndpointOptions, SignerOptions, SignType, WalletManager, WalletName } from "@interchain-kit/core";
-import { ObservableState } from "./utils/observable-state";
-import { WalletController } from "./wallet-controller";
-import { ChainWalletState, WalletStoreManagerState } from './types';
-import { ChainWalletController } from "./chain-wallet-controller";
-import { SigningOptions as InterchainSigningOptions } from '@interchainjs/cosmos/types/signing-client';
+import { AssetList, Chain } from '@chain-registry/types';
+import { Config, DownloadInfo, EndpointOptions, SignerOptions, SignType, WalletManager, WalletName, WalletState } from '@interchain-kit/core';
 import { SigningClient } from '@interchainjs/cosmos/signing-client';
 import { ICosmosGenericOfflineSigner } from '@interchainjs/cosmos/types';
+import { SigningOptions as InterchainSigningOptions } from '@interchainjs/cosmos/types/signing-client';
+import { HttpEndpoint } from '@interchainjs/types';
+
+import { ChainWalletStore } from './chain-wallet-store';
+import { ChainWalletState, WalletStoreManagerState } from './types';
+import { ObservableState } from './utils/observable-state';
+import { WalletStore } from './wallet-store';
 
 export class WalletStoreManager {
   walletManager: WalletManager;
-  walletControllers: Map<WalletName, WalletController> = new Map<WalletName, WalletController>();
-  state: ObservableState<WalletStoreManagerState> = new ObservableState<WalletStoreManagerState>({ isReady: false, currentWalletName: '', currentChainName: '' });
-  config: Config
-  chains: Chain[] = []
+  WalletStores: Map<WalletName, WalletStore> = new Map<WalletName, WalletStore>();
+  state: ObservableState<WalletStoreManagerState>;
+  config: Config;
+  chains: Chain[] = [];
   assetLists: AssetList[];
-  wallets: WalletController[] = []
+  wallets: WalletStore[] = [];
 
   constructor(config: Config) {
     this.walletManager = new WalletManager(config.chains, config.assetLists, config.wallets, config.signerOptions, config.endpointOptions);
     this.config = config;
-    this.chains = config.chains
-    this.assetLists = config.assetLists
+    this.chains = config.chains;
+    this.assetLists = config.assetLists;
+
+    // 构建初始 state 树
+    const initialState: WalletStoreManagerState = {
+      isReady: false,
+      currentWalletName: '',
+      currentChainName: '',
+      wallets: {},
+    };
+    // 遍历 config.wallets 和 config.chains 填充 wallets 字段
+    config.wallets.forEach(wallet => {
+      initialState.wallets[wallet.info.name] = {
+        walletState: WalletState.NotExist,
+        errorMessage: undefined,
+        chains: {},
+      };
+      config.chains.forEach(chain => {
+        initialState.wallets[wallet.info.name].chains[chain.chainName] = {
+          walletState: WalletState.NotExist,
+          account: null,
+          errorMessage: undefined,
+        };
+      });
+    });
+    this.state = new ObservableState(initialState);
 
     config.wallets.forEach((wallet) => {
       wallet.setChainMap(config.chains);
       wallet.setAssetLists(config.assetLists);
-      const walletController = new WalletController(wallet, config.chains, this.walletManager);
-      this.walletControllers.set(wallet.info.name, walletController);
+      const walletController = new WalletStore(wallet, config.chains, this.walletManager);
+      this.WalletStores.set(wallet.info.name, walletController);
       this.wallets.push(walletController);
-    })
+    });
   }
 
   subscribe(listener: (state: WalletStoreManagerState) => void): () => void {
@@ -60,7 +85,7 @@ export class WalletStoreManager {
     return this.state.proxy.currentChainName;
   }
 
-  setCurrentWalletName(name: WalletName) {
+  setCurrentWalletName(name: string) {
     this.state.proxy.currentWalletName = name;
   }
 
@@ -68,16 +93,27 @@ export class WalletStoreManager {
     this.state.proxy.currentChainName = chainName;
   }
 
-  getChainWalletState(walletName: WalletName, chainName: string) {
-    const chainWallet = this.getChainWalletByName(walletName, chainName);
-    return chainWallet?.state.proxy || {} as ChainWalletState
+  setWalletState(walletName: string, walletState: WalletState) {
+    this.state.proxy.wallets[walletName].walletState = walletState;
   }
 
-  getWalletByName(name: WalletName): WalletController | undefined {
-    const wallet = this.walletControllers.get(name);
+  setChainWalletState(walletName: string, chainName: string, chainState: Partial<ChainWalletState>) {
+    Object.assign(this.state.proxy.wallets[walletName].chains[chainName], chainState);
+  }
+
+  subscribeWithSelector<S>(selector: (state: WalletStoreManagerState) => S, listener: (selected: S) => void) {
+    return this.state.subscribeWithSelector(selector, listener);
+  }
+
+  getChainWalletState(walletName: WalletName, chainName: string) {
+    return this.state.proxy.wallets[walletName].chains[chainName];
+  }
+
+  getWalletByName(name: WalletName): WalletStore | undefined {
+    const wallet = this.WalletStores.get(name);
     return wallet;
   }
-  getChainWalletByName(walletName: WalletName, chainName: string): ChainWalletController | undefined {
+  getChainWalletByName(walletName: WalletName, chainName: string): ChainWalletStore | undefined {
     const wallet = this.getWalletByName(walletName);
     const chainWallet = wallet?.getChainWalletByChainName(chainName);
     return chainWallet;
@@ -99,15 +135,15 @@ export class WalletStoreManager {
     //dedupe
 
 
-    return this.getChainWalletByName(walletName, chainName)?.getRpcEndpoint()
+    return this.getChainWalletByName(walletName, chainName)?.getRpcEndpoint();
   }
 
   async getSigningClient(walletName: string, chainName: string): Promise<SigningClient> {
-    const rpcEndpoint = await this.getRpcEndpoint(walletName, chainName)
-    const offlineSigner = await this.getOfflineSigner(walletName, chainName) as ICosmosGenericOfflineSigner
-    const signerOptions = await this.getSignerOptions(chainName)
-    const signingClient = await SigningClient.connectWithSigner(rpcEndpoint, offlineSigner, signerOptions)
-    return signingClient
+    const rpcEndpoint = await this.getRpcEndpoint(walletName, chainName);
+    const offlineSigner = await this.getOfflineSigner(walletName, chainName) as ICosmosGenericOfflineSigner;
+    const signerOptions = await this.getSignerOptions(chainName);
+    const signingClient = await SigningClient.connectWithSigner(rpcEndpoint, offlineSigner, signerOptions);
+    return signingClient;
   }
 
 

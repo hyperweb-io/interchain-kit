@@ -1,22 +1,25 @@
-import { Chain } from "@chain-registry/types";
-import { WalletAccount } from "../types";
-import { BaseWallet } from "./base-wallet";
-import { delay, getClientFromExtension } from "../utils";
-import { EthereumNetwork } from "../types/ethereum";
+import { Chain } from '@chain-registry/types';
 import { IGenericOfflineSigner } from '@interchainjs/types';
-import { fromByteArray, toByteArray } from "base64-js";
+import { fromByteArray } from 'base64-js';
 
-export class EthereumWallet extends BaseWallet {
+import { WalletAccount } from '../types';
+import { EthereumNetwork } from '../types/ethereum';
+import { BaseSignRequest } from '../types/sign-request';
+import { BaseSignResponse } from '../types/sign-response';
+import { delay, getClientFromExtension } from '../utils';
+import { BaseWallet } from './base-wallet';
 
-  ethereum: any
+export class EthereumWallet extends BaseWallet<BaseSignRequest, BaseSignResponse, IGenericOfflineSigner> {
 
-  isSwitchingNetwork: boolean = false
+  ethereum: any;
+
+  isSwitchingNetwork: boolean = false;
 
   async init(): Promise<void> {
-    this.ethereum = await getClientFromExtension(this.info.ethereumKey)
+    this.ethereum = await getClientFromExtension(this.info.ethereumKey);
   }
-  async connect(chainId: Chain["chainId"]): Promise<void> {
-    let chainIdToHex = chainId.startsWith("0x") ? chainId : "0x" + parseInt(chainId, 10).toString(16);
+  async connect(chainId: Chain['chainId']): Promise<void> {
+    let chainIdToHex = chainId.startsWith('0x') ? chainId : '0x' + parseInt(chainId, 10).toString(16);
     try {
       // const accounts = await this.ethereum.request({
       //   method: "eth_requestAccounts",
@@ -27,48 +30,45 @@ export class EthereumWallet extends BaseWallet {
       //   params: [],
       // })
       await this.ethereum.request({
-        method: "wallet_switchEthereumChain",
+        method: 'wallet_switchEthereumChain',
         params: [{ chainId: chainIdToHex }],
-      })
+      });
     } catch (error) {
-      if (!(error as any).message.includes("reject")) {
-        await this.addSuggestChain(chainId as string)
+      if (!(error as any).message.includes('reject')) {
+        await this.addSuggestChain(chainId as string);
       }
     }
   }
-  async disconnect(chainId: Chain["chainId"]): Promise<void> {
+  async disconnect(chainId: Chain['chainId']): Promise<void> {
     // throw new Error("Method not implemented.");
-    console.log('eth disconnect')
-    return new Promise((resolve, reject) => { resolve() })
+    console.log('eth disconnect');
+    return new Promise((resolve, reject) => { resolve(); });
   }
   async switchChain(chainId: string): Promise<void> {
-    if (!chainId.startsWith("0x")) {
-      chainId = "0x" + parseInt(chainId, 10).toString(16);
+    if (!chainId.startsWith('0x')) {
+      chainId = '0x' + parseInt(chainId, 10).toString(16);
     }
     if (this.isSwitchingNetwork) {
-      while (true) {
-        await delay(10)
-        if (!this.isSwitchingNetwork) {
-          break
-        }
+      while (this.isSwitchingNetwork) {
+        await delay(10);
       }
     } else {
       try {
-        this.isSwitchingNetwork = true
+        this.isSwitchingNetwork = true;
         await this.ethereum.request({
-          method: "wallet_switchEthereumChain",
+          method: 'wallet_switchEthereumChain',
           params: [{ chainId }],
-        })
+        });
       } catch (error) {
-
+        // ignore
       } finally {
-        this.isSwitchingNetwork = false
+        this.isSwitchingNetwork = false;
       }
     }
   }
-  async getAccount(chainId: Chain["chainId"]): Promise<WalletAccount> {
-    await this.switchChain(chainId)
-    const accounts = await this.ethereum.request({ method: 'eth_requestAccounts', params: [{ chainId }] })
+  async getAccount(chainId: Chain['chainId']): Promise<WalletAccount> {
+    await this.switchChain(chainId);
+    const accounts = await this.ethereum.request({ method: 'eth_requestAccounts', params: [{ chainId }] });
 
     return {
       address: accounts[0],
@@ -77,16 +77,16 @@ export class EthereumWallet extends BaseWallet {
       isNanoLedger: false,
       isSmartContract: false,
       username: 'ethereum'
-    }
+    };
   }
-  async getOfflineSigner(chainId: Chain["chainId"]): Promise<IGenericOfflineSigner> {
-    await this.switchChain(chainId)
-    return {} as IGenericOfflineSigner
+  async getOfflineSigner(chainId: Chain['chainId']): Promise<IGenericOfflineSigner> {
+    await this.switchChain(chainId);
+    return {} as IGenericOfflineSigner;
   }
   async addSuggestChain(chainId: string): Promise<void> {
-    const chainIdToHex = chainId.startsWith("0x") ? chainId : "0x" + parseInt(chainId, 10).toString(16);
-    const chain = this.getChainById(chainId)
-    const assetList = this.getAssetListByChainId(chainId)
+    const chainIdToHex = chainId.startsWith('0x') ? chainId : '0x' + parseInt(chainId, 10).toString(16);
+    const chain = this.getChainById(chainId);
+    const assetList = this.getAssetListByChainId(chainId);
     const network: EthereumNetwork = {
       chainId: chainIdToHex,
       chainName: chain.chainName,
@@ -97,24 +97,24 @@ export class EthereumWallet extends BaseWallet {
         decimals: assetList.assets[0].denomUnits.find(unit => unit.denom === 'eth').exponent
       },
       blockExplorerUrls: chain.explorers.map(explorer => explorer.url)
-    }
+    };
     try {
       await this.ethereum.request({
-        method: "wallet_addEthereumChain",
+        method: 'wallet_addEthereumChain',
         params: [network],
       });
       console.log(`Network ${network.chainName} added successfully.`);
     } catch (error) {
-      if ((error as any).message.includes("is not a function")) {
-        return
+      if ((error as any).message.includes('is not a function')) {
+        return;
       }
       console.error(`Failed to add network: ${(error as any).message}`);
       throw error;
     }
   }
   async getProvider(chainId: string) {
-    await this.switchChain(chainId)
-    return this.ethereum
+    await this.switchChain(chainId);
+    return this.ethereum;
   }
 
   async sendTransaction(transactionParameters: any) {
@@ -130,13 +130,13 @@ export class EthereumWallet extends BaseWallet {
 
   async signMessage(message: string) {
     if (!this.ethereum) {
-      throw new Error("MetaMask is not installed");
+      throw new Error('MetaMask is not installed');
     }
 
     try {
       // Request account access
       const accounts = await this.ethereum.request({
-        method: "eth_requestAccounts",
+        method: 'eth_requestAccounts',
       });
       const account = accounts[0];
 
@@ -145,15 +145,51 @@ export class EthereumWallet extends BaseWallet {
 
       // Sign the message
       const signature = await this.ethereum.request({
-        method: "personal_sign",
+        method: 'personal_sign',
         params: [hexMessage, account],
       });
 
-      console.log("Signature:", signature);
+      console.log('Signature:', signature);
       return signature;
     } catch (error) {
-      console.error("Error signing message:", error);
+      console.error('Error signing message:', error);
       throw error;
+    }
+  }
+
+  // 新增：实现 sign 方法
+  async sign(chainId: Chain['chainId'], data: BaseSignRequest & { method: string;[key: string]: any }): Promise<BaseSignResponse> {
+    await this.switchChain(chainId);
+    try {
+      if (data.method === 'ethereum_message') {
+        const signature = await this.signMessage(data.data);
+        return {
+          success: true,
+          method: 'ethereum_message',
+          result: {
+            signature
+          }
+        } as any;
+      } else if (data.method === 'ethereum_transaction') {
+        const txHash = await this.sendTransaction(data.data);
+        return {
+          success: true,
+          method: 'ethereum_transaction',
+          result: {
+            transactionHash: txHash
+          }
+        } as any;
+      } else {
+        return {
+          success: false,
+          error: 'Unsupported sign method',
+        };
+      }
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error?.message || String(error),
+      };
     }
   }
 }

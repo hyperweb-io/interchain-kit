@@ -1,14 +1,16 @@
-
-import { AminoGenericOfflineSigner, AminoSignResponse, DirectGenericOfflineSigner, DirectSignResponse, ICosmosGenericOfflineSigner, StdSignature } from "@interchainjs/cosmos/types/wallet";
-import { BaseWallet } from "./base-wallet";
-import { BroadcastMode, CosmosSignDoc, CosmosSignResponse, SignType, WalletAccount } from '../types';
-import { getClientFromExtension } from '../utils';
 import { chainRegistryChainToKeplr } from '@chain-registry/keplr';
 import { Chain } from '@chain-registry/types';
 import { CosmosAminoDoc, CosmosDirectDoc } from '@interchainjs/cosmos';
-import { isCosmosAminoDoc, isCosmosArbitraryDoc, isCosmosDirectDoc } from "../utils/sign-doc";
+import { AminoGenericOfflineSigner, AminoSignResponse, DirectGenericOfflineSigner, DirectSignResponse, ICosmosGenericOfflineSigner, StdSignature } from '@interchainjs/cosmos/types/wallet';
 
-export class CosmosWallet extends BaseWallet<CosmosSignDoc, CosmosSignResponse, ICosmosGenericOfflineSigner> {
+import { BroadcastMode, SignType, WalletAccount } from '../types';
+import { CosmosSignRequest } from '../types/sign-request';
+import { CosmosSignResponse } from '../types/sign-response';
+import { getClientFromExtension } from '../utils';
+import { isCosmosAminoDoc, isCosmosArbitraryDoc, isCosmosDirectDoc } from '../utils/sign-doc';
+import { BaseWallet } from './base-wallet';
+
+export class CosmosWallet extends BaseWallet<CosmosSignRequest, CosmosSignResponse, ICosmosGenericOfflineSigner> {
 
   preferredSignType: SignType = 'amino';
 
@@ -22,22 +24,22 @@ export class CosmosWallet extends BaseWallet<CosmosSignDoc, CosmosSignResponse, 
 
   bindingEvent() {
     window.addEventListener(this.info.keystoreChange, () => {
-      this.events.emit('accountChanged', () => { })
-    })
+      this.events.emit('accountChanged', () => { });
+    });
   }
   async init(): Promise<void> {
-    this.bindingEvent()
-    this.client = await getClientFromExtension(this.info.cosmosKey)
+    this.bindingEvent();
+    this.client = await getClientFromExtension(this.info.cosmosKey);
   }
 
   async connect(chainId: string): Promise<void> {
     try {
-      await this.client.enable(chainId)
+      await this.client.enable(chainId);
     } catch (error) {
       if (!(error as any).message.includes(`rejected`)) {
-        await this.addSuggestChain(chainId)
+        await this.addSuggestChain(chainId);
       } else {
-        throw error
+        throw error;
       }
     }
   }
@@ -62,72 +64,118 @@ export class CosmosWallet extends BaseWallet<CosmosSignDoc, CosmosSignResponse, 
       return new AminoGenericOfflineSigner({
         getAccounts: async () => [account],
         signAmino: async (signer, signDoc) => {
-          return this.signAmino(chainId, signer, signDoc)
+          return this.signAmino(chainId, signer, signDoc);
         }
-      })
+      });
     }
 
     if (this.preferredSignType === 'amino') {
       return new AminoGenericOfflineSigner({
         getAccounts: async () => [await this.getAccount(chainId)],
         signAmino: async (signer, signDoc) => {
-          return this.signAmino(chainId, signer, signDoc)
+          return this.signAmino(chainId, signer, signDoc);
         }
-      })
+      });
     } else {
       return new DirectGenericOfflineSigner({
         getAccounts: async () => [await this.getAccount(chainId)],
         signDirect: async (signer, signDoc) => {
-          return this.signDirect(chainId, signer, signDoc)
+          return this.signDirect(chainId, signer, signDoc);
         }
-      })
+      });
     }
   }
 
-  async sign(chainId: Chain['chainId'], data: CosmosSignDoc): Promise<CosmosSignResponse> {
-    const account = await this.getAccount(chainId);
+  async sign(chainId: Chain['chainId'], request: CosmosSignRequest): Promise<CosmosSignResponse> {
+    try {
+      const signerAddress = request.signerAddress || (await this.getAccount(chainId)).address;
 
-    if (isCosmosAminoDoc(data)) {
-      return this.signAmino(chainId, account.address, data);
-    }
-    if (isCosmosDirectDoc(data)) {
-      return this.signDirect(chainId, account.address, data);
-    }
-    if (isCosmosArbitraryDoc(data)) {
-      return this.signArbitrary(chainId, account.address, data);
+      let result;
+      switch (request.method) {
+        case 'cosmos_amino':
+          if (!isCosmosAminoDoc(request.data)) {
+            return {
+              success: false,
+              error: 'Invalid amino sign data',
+              method: request.method
+            };
+          }
+          result = await this.signAmino(chainId, signerAddress, request.data);
+          break;
+        case 'cosmos_direct':
+          if (!isCosmosDirectDoc(request.data)) {
+            return {
+              success: false,
+              error: 'Invalid direct sign data',
+              method: request.method
+            };
+          }
+          result = await this.signDirect(chainId, signerAddress, request.data);
+          break;
+        case 'cosmos_arbitrary':
+          if (!isCosmosArbitraryDoc(request.data)) {
+            return {
+              success: false,
+              error: 'Invalid arbitrary sign data',
+              method: request.method
+            };
+          }
+          result = await this.signArbitrary(chainId, signerAddress, request.data);
+          break;
+        default:
+          return {
+            success: false,
+            error: `Unsupported sign method: ${request.method}`,
+            method: request.method
+          };
+      }
+
+      return {
+        success: true,
+        method: request.method,
+        result: {
+          signed: result
+        }
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        method: request.method
+      };
     }
   }
 
-  async signAmino(chainId: string, signer: string, signDoc: CosmosAminoDoc): Promise<AminoSignResponse> {
-    return this.client.signAmino(chainId, signer, signDoc)
+  private async signAmino(chainId: string, signer: string, signDoc: CosmosAminoDoc): Promise<AminoSignResponse> {
+    return this.client.signAmino(chainId, signer, signDoc);
   }
 
-  async signDirect(chainId: string, signer: string, signDoc: CosmosDirectDoc): Promise<DirectSignResponse> {
-    return this.client.signDirect(chainId, signer, signDoc)
+  private async signDirect(chainId: string, signer: string, signDoc: CosmosDirectDoc): Promise<DirectSignResponse> {
+    return this.client.signDirect(chainId, signer, signDoc);
   }
 
-  async signArbitrary(chainId: string, signer: string, data: string | Uint8Array): Promise<StdSignature> {
-    return this.client.signArbitrary(chainId, signer, data)
+  private async signArbitrary(chainId: string, signer: string, data: string | Uint8Array): Promise<StdSignature> {
+    return this.client.signArbitrary(chainId, signer, data);
   }
 
   verifyArbitrary(chainId: string, signer: string, data: string | Uint8Array): Promise<boolean> {
-    return this.client.verifyArbitrary(chainId, signer, data)
+    return this.client.verifyArbitrary(chainId, signer, data);
   }
 
   async sendTx(chainId: string, tx: Uint8Array, mode: BroadcastMode): Promise<Uint8Array> {
-    return this.client.sendTx(chainId, tx, mode)
+    return this.client.sendTx(chainId, tx, mode);
   }
   async addSuggestChain(chainId: string): Promise<void> {
-    const chain = this.getChainById(chainId)
-    const chainInfo = chainRegistryChainToKeplr(chain, this.assetLists)
+    const chain = this.getChainById(chainId);
+    const chainInfo = chainRegistryChainToKeplr(chain, this.assetLists);
     try {
-      await this.client.experimentalSuggestChain(chainInfo)
+      await this.client.experimentalSuggestChain(chainInfo);
     } catch (error) {
-      console.log('add suggest chain error', error)
-      throw error
+      console.log('add suggest chain error', error);
+      throw error;
     }
   }
   async getProvider() {
-    return this.client
+    return this.client;
   }
 }

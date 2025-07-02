@@ -1,115 +1,122 @@
-
-import { AssetList, Chain } from '@chain-registry/types';
-import { MultiSignDoc, MultiSignResponse, SignType, Wallet, WalletAccount } from '../types';
-import { BaseWallet } from './base-wallet';
+import { Chain } from '@chain-registry/types';
 import { IGenericOfflineSigner } from '@interchainjs/types';
 
-export class MultiChainWallet<
-  TSignData extends MultiSignDoc = any,
-  TSignResponse extends MultiSignResponse = any,
-  TOfflineSigner = IGenericOfflineSigner
-> extends BaseWallet<TSignData, TSignResponse, TOfflineSigner> {
+import { WalletAccount } from '../types';
+import { GenericSignRequest } from '../types/sign-request';
+import { GenericSignResponse } from '../types/sign-response';
+import { BaseWallet } from './base-wallet';
 
-  networkWalletMap: Map<Chain['chainType'], BaseWallet<TSignData, TSignResponse, TOfflineSigner>> = new Map()
+// 导入子钱包实现
 
-  constructor(info?: Wallet, networkWalletMap?: Map<Chain['chainType'], BaseWallet<TSignData, TSignResponse, TOfflineSigner>>) {
-    super(info);
+// 定义通用钱包类型
+export type GenericWallet = BaseWallet<GenericSignRequest, GenericSignResponse, IGenericOfflineSigner>;
 
-    if (networkWalletMap) {
-      networkWalletMap.forEach((wallet, key) => {
-        if (this.networkWalletMap.has(key)) {
-          this.networkWalletMap.set(key, wallet);
-        }
-      })
-    }
+// 定义钱包映射类型 - 使用更具体的类型
+export type WalletMap = Record<Chain['chainType'], GenericWallet>;
+
+export class UniWallet<TWalletMap extends WalletMap = WalletMap> extends BaseWallet<GenericSignRequest, GenericSignResponse, any> {
+  private walletMap: Partial<TWalletMap> = {};
+
+  /**
+   * 注册特定链类型的钱包
+   */
+  setNetworkWallet<K extends Chain['chainType']>(chainType: K, wallet: TWalletMap[K]) {
+    this.walletMap[chainType] = wallet;
   }
 
-  setNetworkWallet(chainType: Chain['chainType'], wallet: BaseWallet<TSignData, TSignResponse, TOfflineSigner>): void {
-    this.networkWalletMap.set(chainType, wallet);
+  /**
+   * 根据链类型获取对应的钱包
+   */
+  getWalletByChainType<K extends Chain['chainType']>(chainType: K): TWalletMap[K] | undefined {
+    return this.walletMap[chainType];
   }
 
-  setChainMap(chains: Chain[]): void {
-    this.chainMap = new Map(chains.map(chain => [chain.chainId, chain]))
-    this.networkWalletMap.forEach(wallet => {
-      wallet.setChainMap(chains)
-    })
+  /**
+   * 根据 Chain 对象获取对应的钱包
+   */
+  getWalletByChain(chain: Chain): BaseWallet<any, any, any> | undefined {
+    return this.walletMap[chain.chainType as keyof TWalletMap] as BaseWallet<any, any, any> | undefined;
   }
 
-  addChain(chain: Chain): void {
-    this.chainMap.set(chain.chainId, chain);
-    this.networkWalletMap.forEach(wallet => {
-      wallet.addChain(chain)
-    })
-  }
-
-  setAssetLists(assetLists: AssetList[]): void {
-    this.networkWalletMap.forEach(wallet => {
-      wallet.setAssetLists(assetLists)
-    })
-  }
-
+  /**
+   * 初始化所有注册的钱包
+   */
   async init(): Promise<void> {
-    const wallets = Array.from(this.networkWalletMap.values());
-
-    wallets.forEach(wallet => {
-      wallet.events.on('accountChanged', () => {
-        this.events.emit('accountChanged', () => {
-
-        });
-      })
-    })
-
-
-    try {
-      await Promise.all(wallets.map(async wallet => wallet.init()))
-    } catch (error) {
-      console.log('Error initializing wallets:', error);
-      // throw error
+    for (const wallet of Object.values(this.walletMap)) {
+      if (wallet) await wallet.init();
     }
   }
-  getWalletByChainType(chainType: Chain['chainType']) {
-    const wallet = this.networkWalletMap.get(chainType);
-    if (!wallet) {
-      throw new Error(`Unsupported chain type: "${chainType}"`);
-    }
-    return wallet;
-  }
-  async sign(chainId: Chain['chainId'], signData: TSignData): Promise<TSignResponse> {
-    const chain = this.getChainById(chainId);
-    const networkWallet = this.getWalletByChainType(chain.chainType);
-    return networkWallet.sign(chainId, signData);
-  }
+
+  /**
+   * 连接到指定链 - 自动路由到对应的钱包
+   */
   async connect(chainId: Chain['chainId']): Promise<void> {
     const chain = this.getChainById(chainId);
-    const networkWallet = this.getWalletByChainType(chain.chainType);
-    await networkWallet.connect(chainId);
+    const wallet = this.getWalletByChain(chain);
+    if (!wallet) throw new Error(`No wallet for chainType: ${chain.chainType}`);
+    await wallet.connect(chainId);
   }
+
+  /**
+   * 断开与指定链的连接
+   */
   async disconnect(chainId: Chain['chainId']): Promise<void> {
     const chain = this.getChainById(chainId);
-    const networkWallet = this.getWalletByChainType(chain.chainType);
-    await networkWallet.disconnect(chainId);
+    const wallet = this.getWalletByChain(chain);
+    if (wallet) await wallet.disconnect(chainId);
   }
+
+  /**
+   * 获取指定链的账户信息
+   */
   async getAccount(chainId: Chain['chainId']): Promise<WalletAccount> {
     const chain = this.getChainById(chainId);
-    const networkWallet = this.getWalletByChainType(chain.chainType);
-    if (!networkWallet) {
-      return Promise.reject(new Error('Unsupported chain type'))
-    }
-    return networkWallet.getAccount(chainId);
+    const wallet = this.getWalletByChain(chain);
+    if (!wallet) throw new Error(`No wallet for chainType: ${chain.chainType}`);
+    return wallet.getAccount(chainId);
   }
-  async getOfflineSigner(chainId: Chain['chainId'], preferSignType?: SignType) {
+
+  /**
+   * 获取指定链的离线签名器
+   */
+  async getOfflineSigner(chainId: Chain['chainId']): Promise<any> {
     const chain = this.getChainById(chainId);
-    const networkWallet = this.getWalletByChainType(chain.chainType);
-    return networkWallet.getOfflineSigner(chainId);
+    const wallet = this.getWalletByChain(chain);
+    if (!wallet) throw new Error(`No wallet for chainType: ${chain.chainType}`);
+    return wallet.getOfflineSigner(chainId);
   }
-  async addSuggestChain(chainId: string): Promise<void> {
-    const chain = this.chainMap.get(chainId);
-    const networkWallet = this.getWalletByChainType(chain.chainType);
-    return networkWallet.addSuggestChain(chainId);
-  }
-  getProvider(chainId: string) {
+
+  /**
+   * 添加建议的链到钱包
+   */
+  async addSuggestChain(chainId: Chain['chainId']): Promise<void> {
     const chain = this.getChainById(chainId);
-    const networkWallet = this.getWalletByChainType(chain.chainType);
-    return networkWallet.getProvider(chainId);
+    const wallet = this.getWalletByChain(chain);
+    if (!wallet) throw new Error(`No wallet for chainType: ${chain.chainType}`);
+    await wallet.addSuggestChain(chainId);
+  }
+
+  /**
+   * 获取指定链的 provider
+   */
+  async getProvider(chainId: Chain['chainId']): Promise<any> {
+    const chain = this.getChainById(chainId);
+    const wallet = this.getWalletByChain(chain);
+    if (!wallet) throw new Error(`No wallet for chainType: ${chain.chainType}`);
+    return wallet.getProvider(chainId);
+  }
+
+  /**
+   * 签名操作 - 自动路由到对应的钱包
+   */
+  async sign(chainId: Chain['chainId'], data: GenericSignRequest): Promise<GenericSignResponse> {
+    const chain = this.getChainById(chainId);
+    const wallet = this.getWalletByChainType(chain.chainType);
+    if (!wallet) throw new Error(`No wallet for chainType: ${chain.chainType}`);
+
+    // 如果没有找到方法对应的钱包，使用链类型对应的钱包
+    return wallet.sign(chainId, data);
   }
 }
+
+export const MultiChainWallet = UniWallet;
