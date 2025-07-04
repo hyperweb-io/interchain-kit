@@ -1,2 +1,0 @@
-import { AminoGenericOfflineSigner, DirectGenericOfflineSigner, OfflineAminoSigner, OfflineDirectSigner } from '@interchainjs/cosmos/types';
-export type InterchainKitOfflineSigner = OfflineDirectSigner | OfflineAminoSigner;

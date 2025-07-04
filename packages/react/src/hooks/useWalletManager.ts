@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { useInterchainWalletContext } from '../provider';
 import { useForceUpdate } from './useForceUpdate';
 
@@ -7,18 +8,72 @@ function bindAllMethods<T extends object>(obj: T): T {
 
   const boundObj = { ...obj };
 
-  Object.getOwnPropertyNames(Object.getPrototypeOf(obj)).forEach((key) => {
-    const value = (obj as any)[key];
-    if (typeof value === 'function' && key !== 'constructor') {
-      (boundObj as any)[key] = value.bind(obj);
+  // 获取所有属性描述符（包括 getter/setter）
+  const allPropertyNames = [
+    ...Object.getOwnPropertyNames(obj),
+    ...Object.getOwnPropertySymbols(obj)
+  ];
+
+  allPropertyNames.forEach((key) => {
+    const descriptor = Object.getOwnPropertyDescriptor(obj, key);
+
+    if (descriptor) {
+      // 处理 getter
+      if (descriptor.get) {
+        Object.defineProperty(boundObj, key, {
+          ...descriptor,
+          get: descriptor.get.bind(obj)
+        });
+      }
+      // 处理 setter
+      else if (descriptor.set) {
+        Object.defineProperty(boundObj, key, {
+          ...descriptor,
+          set: descriptor.set.bind(obj)
+        });
+      }
+      // 处理普通函数
+      else if (typeof descriptor.value === 'function') {
+        (boundObj as any)[key] = descriptor.value.bind(obj);
+      }
     }
   });
 
-  Object.entries(obj).forEach(([key, value]) => {
-    if (typeof value === 'function') {
-      (boundObj as any)[key] = value.bind(obj);
-    }
-  });
+  // 处理原型链上的方法
+  const prototype = Object.getPrototypeOf(obj);
+  if (prototype && prototype !== Object.prototype) {
+    const prototypePropertyNames = [
+      ...Object.getOwnPropertyNames(prototype),
+      ...Object.getOwnPropertySymbols(prototype)
+    ];
+
+    prototypePropertyNames.forEach((key) => {
+      if (key === 'constructor') return;
+
+      const descriptor = Object.getOwnPropertyDescriptor(prototype, key);
+
+      if (descriptor) {
+        // 处理原型上的 getter
+        if (descriptor.get) {
+          Object.defineProperty(boundObj, key, {
+            ...descriptor,
+            get: descriptor.get.bind(obj)
+          });
+        }
+        // 处理原型上的 setter
+        else if (descriptor.set) {
+          Object.defineProperty(boundObj, key, {
+            ...descriptor,
+            set: descriptor.set.bind(obj)
+          });
+        }
+        // 处理原型上的普通函数
+        else if (typeof descriptor.value === 'function') {
+          (boundObj as any)[key] = descriptor.value.bind(obj);
+        }
+      }
+    });
+  }
 
   return boundObj;
 }
@@ -28,22 +83,8 @@ export const useWalletManager = () => {
   const forceUpdate = useForceUpdate();
   useEffect(() => {
     const unsubscribeWM = walletManager.subscribe(() => forceUpdate());
+    return () => unsubscribeWM();
+  }, []);
 
-    const unsubscribeWalletControllers: (() => void)[] = [];
-    const unsubscribeChainWalletControllers: (() => void)[] = [];
-
-    walletManager.wallets.forEach((wallet) => {
-      wallet.chainWallets.forEach((chainWallet) => {
-        const chainUnsubscribe = chainWallet.subscribe(() => forceUpdate());
-        unsubscribeChainWalletControllers.push(chainUnsubscribe);
-      });
-    });
-
-    return () => {
-      unsubscribeWM();
-      unsubscribeWalletControllers.forEach((unsubscribe) => unsubscribe());
-      unsubscribeChainWalletControllers.forEach((unsubscribe) => unsubscribe());
-    };
-  }, [])
   return bindAllMethods(walletManager);
 };

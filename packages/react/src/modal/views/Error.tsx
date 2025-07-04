@@ -1,13 +1,14 @@
-import { ConnectModalHead, ConnectModalStatus } from "@interchain-ui/react";
-import { StatefulWallet } from "../../store/stateful-wallet"; // Adjust the import path as needed
-import { getWalletInfo } from "../../utils";
+import { WalletStore } from '@interchain-kit/store';
+import { ConnectModalHead, ConnectModalStatus } from '@interchain-ui/react';
+
+import { getWalletInfo } from '../../utils';
 
 export const ErrorHeader = ({
   wallet,
   close,
   onBack,
 }: {
-  wallet: StatefulWallet;
+  wallet: WalletStore;
   close: () => void;
   onBack: () => void;
 }) => {
@@ -26,14 +27,14 @@ export const ErrorContent = ({
   wallet,
   onBack,
 }: {
-  wallet: StatefulWallet;
+  wallet: WalletStore;
   onBack: () => void;
 }) => {
   return (
     <ConnectModalStatus
       status="Error"
       wallet={getWalletInfo(wallet)}
-      contentHeader={"Oops! Something wrong..."}
+      contentHeader={'Oops! Something wrong...'}
       contentDesc={wallet.errorMessage}
       onChangeWallet={onBack}
     />

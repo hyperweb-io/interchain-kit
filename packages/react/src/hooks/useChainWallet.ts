@@ -1,26 +1,26 @@
-import { useWalletManager } from "./useWalletManager"
-import { UseChainWalletReturnType } from "../types/chain"
-import { useSigningClient } from "./useSigningClient"
+import { UseChainWalletReturnType } from '../types/chain';
+import { useSigningClient } from './useSigningClient';
+import { useWalletManager } from './useWalletManager';
 
 export const useChainWallet = (chainName: string, walletName: string): UseChainWalletReturnType => {
-  const { assetLists, disconnect, setCurrentChainName, setCurrentWalletName, getChainByName, getChainWalletState, getChainLogoUrl, connect, getSigningClient, getRpcEndpoint, getAccount, getChainWalletByName } = useWalletManager()
+  const { assetLists, disconnect, setCurrentChainName, setCurrentWalletName, getChainByName, getChainWalletState, getChainLogoUrl, connect, getSigningClient, getRpcEndpoint, getChainWalletByName } = useWalletManager();
 
-  const chain = getChainByName(chainName)
+  const chain = getChainByName(chainName);
 
-  const wallet = getChainWalletByName(walletName, chainName)
+  const wallet = getChainWalletByName(walletName, chainName);
 
-  const assetList = assetLists.find(a => a.chainName === chainName)
+  const assetList = assetLists.find(a => a.chainName === chainName);
 
-  const chainWalletStateToShow = getChainWalletState(walletName, chainName)
+  const chainWalletStateToShow = getChainWalletState(walletName, chainName);
 
-  const { signingClient, isLoading: isSigningClientLoading, error: signingClientError } = useSigningClient(chainName, walletName)
+  const { signingClient, isLoading: isSigningClientLoading, error: signingClientError } = useSigningClient(chainName, walletName);
 
   return {
     //for migration cosmos kit
     connect: async () => {
-      setCurrentWalletName(walletName)
-      setCurrentChainName(chainName)
-      await connect(walletName, chainName)
+      setCurrentWalletName(walletName);
+      setCurrentChainName(chainName);
+      await connect(walletName, chainName);
     },
     disconnect: () => disconnect(walletName, chainName),
     getRpcEndpoint: () => getRpcEndpoint(walletName, chainName),
@@ -42,5 +42,5 @@ export const useChainWallet = (chainName: string, walletName: string): UseChainW
     signingClientError,
 
     rpcEndpoint: chainWalletStateToShow?.rpcEndpoint,
-  }
-}
+  };
+};

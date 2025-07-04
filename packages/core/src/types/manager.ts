@@ -3,7 +3,7 @@ import { AssetList, Chain } from "@chain-registry/types";
 import { ChainName } from './chain'
 import { SignType } from "./common";
 import { SigningOptions as InterchainSigningOptions } from '@interchainjs/cosmos/types/signing-client'
-import { BaseWallet } from '../wallets';
+import { BaseWallet, UniWallet } from '../wallets';
 
 export interface SignerOptions {
   signing?: (chain: Chain | ChainName) => InterchainSigningOptions | undefined;
@@ -28,7 +28,7 @@ export enum WalletManagerState {
 export interface Config {
   chains: Chain[],
   assetLists: AssetList[],
-  wallets: BaseWallet[],
+  wallets: UniWallet[],
   signerOptions?: SignerOptions,
   endpointOptions?: EndpointOptions,
 }

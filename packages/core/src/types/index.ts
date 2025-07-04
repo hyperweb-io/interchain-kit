@@ -6,3 +6,4 @@ export * from './sign-request';
 export * from './sign-response';
 export * from './wallet';
 export * from './wallet-type';
+export * from './offline-signer';

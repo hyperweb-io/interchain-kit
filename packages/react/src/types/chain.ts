@@ -1,11 +1,8 @@
-import { HttpEndpoint } from '@interchainjs/types';
-import { Chain, AssetList } from '@chain-registry/types';
-import { BaseWallet, WalletState } from '@interchain-kit/core';
-
-import { ChainWallet } from '../store/chain-wallet';
-import { StatefulWallet } from '../store/stateful-wallet';
+import { AssetList, Chain } from '@chain-registry/types';
+import { WalletState } from '@interchain-kit/core';
 import { ChainWalletStore } from '@interchain-kit/store';
 import { SigningClient } from '@interchainjs/cosmos';
+import { HttpEndpoint } from '@interchainjs/types';
 
 export type CosmosKitUseChainReturnType = {
   connect: () => void

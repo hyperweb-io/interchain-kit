@@ -1,12 +1,13 @@
 import {
   createContext,
+  ReactElement,
+  ReactNode,
   useContext,
   useState,
-  ReactNode,
-  ReactElement,
-} from "react";
-import { WalletModalProps } from "../modal";
-import { useWalletManager } from "../hooks";
+} from 'react';
+
+import { useWalletManager } from '../hooks';
+import { WalletModalProps } from '../modal';
 
 interface WalletModalContextType {
   modalIsOpen: boolean;
@@ -44,9 +45,7 @@ export function WalletModalProvider({
           isOpen={modalIsOpen}
           open={openModal}
           close={closeModal}
-          currentWallet={getWalletByName(
-            currentWalletName
-          )?.getChainWalletByChainName(currentChainName)}
+          currentWallet={getWalletByName(currentWalletName)}
         />
       )}
     </WalletModalContext.Provider>
@@ -56,7 +55,7 @@ export function WalletModalProvider({
 export function useWalletModal() {
   const context = useContext(WalletModalContext);
   if (context === undefined) {
-    throw new Error("useWalletModal must be used within a WalletModalProvider");
+    throw new Error('useWalletModal must be used within a WalletModalProvider');
   }
   return context;
 }

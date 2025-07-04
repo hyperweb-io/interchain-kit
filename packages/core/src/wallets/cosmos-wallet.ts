@@ -3,7 +3,7 @@ import { Chain } from '@chain-registry/types';
 import { CosmosAminoDoc, CosmosDirectDoc } from '@interchainjs/cosmos';
 import { AminoGenericOfflineSigner, AminoSignResponse, DirectGenericOfflineSigner, DirectSignResponse, ICosmosGenericOfflineSigner, StdSignature } from '@interchainjs/cosmos/types/wallet';
 
-import { BroadcastMode, SignType, WalletAccount } from '../types';
+import { BroadcastMode, SignOptions, SignType, WalletAccount } from '../types';
 import { CosmosSignRequest } from '../types/sign-request';
 import { CosmosSignResponse } from '../types/sign-response';
 import { getClientFromExtension } from '../utils';
@@ -14,12 +14,21 @@ export class CosmosWallet extends BaseWallet<CosmosSignRequest, CosmosSignRespon
 
   preferredSignType: SignType = 'amino';
 
+  defaultSignOptions: SignOptions = {
+    disableBalanceCheck: true,
+    preferNoSetFee: true,
+    preferNoSetMemo: true
+  };
+
   setPreferredSignType(type: SignType) {
     this.preferredSignType = type;
   }
 
-  setSignOptions() {
-
+  setSignOptions(signOptions: SignOptions) {
+    this.defaultSignOptions = {
+      ...this.defaultSignOptions,
+      ...signOptions
+    };
   }
 
   bindingEvent() {
@@ -133,16 +142,11 @@ export class CosmosWallet extends BaseWallet<CosmosSignRequest, CosmosSignRespon
       return {
         success: true,
         method: request.method,
-        result: {
-          signed: result
-        }
+        result
       };
     } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-        method: request.method
-      };
+      console.log('sign error', error);
+      throw error;
     }
   }
 

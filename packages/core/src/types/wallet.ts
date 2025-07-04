@@ -1,7 +1,8 @@
 
-import { SignClientTypes } from "@walletconnect/types";
-import { DappEnv, OS } from "./common";
-import { EndpointOptions } from "./manager";
+import { SignClientTypes } from '@walletconnect/types';
+
+import { DappEnv, OS } from './common';
+import { EndpointOptions } from './manager';
 export interface Key {
   readonly name: string;
   readonly algo: string;
@@ -127,11 +128,11 @@ export interface SimpleAccount {
 
 
 export enum WalletState {
-  Disconnected = "Disconnected",
-  Connecting = "Connecting",
-  Connected = "Connected",
-  Rejected = "Rejected",
-  NotExist = "NotExist",
+  Disconnected = 'Disconnected',
+  Connecting = 'Connecting',
+  Connected = 'Connected',
+  Rejected = 'Rejected',
+  NotExist = 'NotExist',
 }
 
 export interface WalletEvents {

@@ -2,17 +2,17 @@
  * @jest-environment jsdom
  */
 
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { ChainNameNotExist, WalletState } from '@interchain-kit/core';
+import { ChainWalletState, WalletStore, WalletStoreManager } from '@interchain-kit/store';
+import { act, renderHook, waitFor } from '@testing-library/react';
+
+import { useWalletModal } from '../../src/contexts';
 import { useChain } from '../../src/hooks/useChain';
 import { useWalletManager } from '../../src/hooks/useWalletManager';
-import { ChainNameNotExist, WalletState } from '@interchain-kit/core';
-import { ChainWalletState, InterchainStore } from '../../src/store';
 import { MockWallet } from '../helpers/mock-wallet';
-import { StatefulWallet } from '../../src/store/stateful-wallet';
-import { useWalletModal } from '../../src/hooks';
 
 jest.mock('../../src/hooks/useWalletManager');
-jest.mock('../../src/hooks/useWalletModal.ts');
+jest.mock('../../src/contexts/wallet-modal');
 
 describe('useChain', () => {
   const mockChain = { chainName: 'test-chain', chainType: 'cosmos' as const };
@@ -21,30 +21,30 @@ describe('useChain', () => {
 
   const mockWallet = new MockWallet({ name: 'test-wallet', mode: 'extension', prettyName: 'Test Wallet' });
 
-  const statefulWallet = new StatefulWallet(mockWallet, () => ({} as InterchainStore))
+  const mockWalletStore = new WalletStore(
+    mockWallet as any,
+    [mockChain],
+    {} as any,
+    {} as WalletStoreManager
+  );
 
-
-  const mockWalletManager: jest.Mocked<InterchainStore> = {
+  const mockWalletManager: jest.Mocked<WalletStoreManager> = {
+    walletManager: {} as any,
+    WalletStores: new Map(),
+    state: {} as any,
+    config: {} as any,
     chains: [{ chainName: 'test-chain', chainType: 'cosmos' as const }],
     assetLists: [{ chainName: 'test-chain', assets: [] }],
-    wallets: [statefulWallet],
+    wallets: [mockWalletStore],
     currentWalletName: 'test-wallet',
     currentChainName: 'test-chain',
-    chainWalletState: [],
-    walletConnectQRCodeUri: '',
-    signerOptions: {},
-    signerOptionMap: {},
-    endpointOptions: {},
-    endpointOptionsMap: {},
-    preferredSignTypeMap: {},
     init: jest.fn(),
     connect: jest.fn(),
     disconnect: jest.fn(),
     addChains: jest.fn(),
     setCurrentChainName: jest.fn(),
     setCurrentWalletName: jest.fn(),
-    getChainByName: jest.fn().mockReturnValue({ name: 'test-chain' }),
-    getDraftChainWalletState: jest.fn(),
+    getChainByName: jest.fn().mockReturnValue(mockChain),
     updateChainWalletState: jest.fn(),
     getAssetListByName: jest.fn(),
     getPreferSignType: jest.fn(),
@@ -58,10 +58,11 @@ describe('useChain', () => {
     getAccount: jest.fn(),
     getEnv: jest.fn(),
     getDownloadLink: jest.fn(),
-    setWalletConnectQRCodeUri: jest.fn(),
     isReady: true,
-    modalIsOpen: false, openModal: jest.fn(), closeModal: jest.fn(), getStatefulWalletByName: jest.fn(),
-  }
+    subscribe: jest.fn(),
+    subscribeWithSelector: jest.fn(),
+    getChainWalletByName: jest.fn(),
+  };
 
   const mockWalletModal = {
     open: jest.fn(),
@@ -75,7 +76,7 @@ describe('useChain', () => {
   });
 
   it('should throw an error if chain does not exist', () => {
-    mockWalletManager.getChainByName.mockReturnValue(undefined);
+    mockWalletManager.getChainByName.mockReturnValue(null as any);
 
     expect(() => {
       renderHook(() => useChain('non-existent-chain'));
@@ -95,7 +96,7 @@ describe('useChain', () => {
 
     mockWalletManager.getChainByName.mockReturnValue(mockChain);
     mockWalletManager.getChainWalletState.mockReturnValue(mockChainWalletState);
-    mockWalletManager.getWalletByName.mockReturnValue(mockWallet);
+    mockWalletManager.getWalletByName.mockReturnValue(mockWalletStore);
 
     const { result } = renderHook(() => useChain('test-chain'));
 
@@ -105,7 +106,7 @@ describe('useChain', () => {
       expect(result.current.username).toBe('test-user');
       expect(result.current.address).toBe('test-address');
       expect(result.current.rpcEndpoint).toBe('http://localhost:26657');
-    })
+    });
 
 
   });
@@ -123,7 +124,7 @@ describe('useChain', () => {
     await waitFor(() => {
       expect(mockWalletManager.setCurrentChainName).toHaveBeenCalledWith('test-chain');
       expect(mockWalletModal.open).toHaveBeenCalled();
-    })
+    });
   });
 
   it('should call disconnect when disconnect is invoked', async () => {
@@ -139,7 +140,7 @@ describe('useChain', () => {
     await waitFor(() => {
 
       expect(mockWalletManager.disconnect).toHaveBeenCalledWith('test-wallet', 'test-chain');
-    })
+    });
 
   });
 
@@ -156,7 +157,7 @@ describe('useChain', () => {
     await waitFor(() => {
       expect(mockWalletManager.setCurrentChainName).toHaveBeenCalledWith('test-chain');
       expect(mockWalletModal.open).toHaveBeenCalled();
-    })
+    });
 
   });
 
@@ -172,6 +173,6 @@ describe('useChain', () => {
 
     await waitFor(() => {
       expect(mockWalletModal.close).toHaveBeenCalled();
-    })
+    });
   });
 });

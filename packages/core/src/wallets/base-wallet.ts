@@ -1,6 +1,7 @@
 import { AssetList, Chain } from '@chain-registry/types';
-import { Wallet, WalletAccount, WalletEvents } from '../types';
 import EventEmitter from 'events';
+
+import { Wallet, WalletAccount, WalletEvents } from '../types';
 import { BaseSignRequest } from '../types/sign-request';
 import { BaseSignResponse } from '../types/sign-response';
 

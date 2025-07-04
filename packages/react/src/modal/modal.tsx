@@ -1,3 +1,16 @@
+import { DownloadInfo, WalletState } from '@interchain-kit/core';
+import { isWalletConnectState, WalletStore } from '@interchain-kit/store';
+import {
+  ConnectModal,
+  ThemeProvider,
+  ThemeProviderProps,
+  Wallet as InterchainUIWalletType,
+} from '@interchain-ui/react';
+import { ReactElement, useMemo, useState } from 'react';
+
+import { useWalletModal } from '../contexts';
+import { useWalletManager } from '../hooks';
+import { transferToWalletUISchema } from '../utils';
 import {
   ConnectedContent,
   ConnectedHeader,
@@ -13,25 +26,12 @@ import {
   RejectHeader,
   WalletListContent,
   WalletListHeader,
-} from "./views";
-import { ReactElement, useMemo, useState } from "react";
-import { DownloadInfo, WalletState } from "@interchain-kit/core";
-import {
-  ConnectModal,
-  Wallet as InterchainUIWalletType,
-  ThemeProvider,
-  ThemeProviderProps,
-} from "@interchain-ui/react";
-import { useWalletManager } from "../hooks";
-import { transferToWalletUISchema } from "../utils";
-import { ChainWalletState } from "../store";
-import { WalletController } from "@interchain-kit/store/wallet-controller";
-import { useWalletModal } from "../contexts";
+} from './views';
 
 export type WalletModalProps = {
   isOpen: boolean;
-  wallets: WalletController[];
-  currentWallet?: WalletController;
+  wallets: WalletStore[];
+  currentWallet?: WalletStore;
   open: () => void;
   close: () => void;
 };
@@ -57,23 +57,20 @@ export const InterchainWalletModal = ({
   const { modalIsOpen: isOpen, open, close } = useWalletModal();
 
   const {
-    walletConnectQRCodeUri,
-    wallets: walletControllers,
+    wallets: walletStores,
     getChainWalletState,
     currentWalletName,
     currentChainName,
     chains,
-    setCurrentWalletName,
     getDownloadLink,
     getEnv,
   } = useWalletManager();
 
-  const [walletToConnect, setWalletToConnect] =
-    useState<WalletController | null>(null);
-
-  const walletsForUI = walletControllers.map((w) =>
-    transferToWalletUISchema(w)
+  const [walletToConnect, setWalletToConnect] = useState<WalletStore | null>(
+    null
   );
+
+  const walletsForUI = walletStores.map((w) => transferToWalletUISchema(w));
 
   const chainNameToConnect = currentChainName || chains[0].chainName;
 
@@ -81,23 +78,39 @@ export const InterchainWalletModal = ({
     (chain) => chain.chainName === chainNameToConnect
   );
 
-  const currentWallet = walletControllers.find(
+  const currentWallet = walletStores.find(
     (w) => w.info.name === currentWalletName
   );
 
   const walletToShow = walletToConnect || currentWallet;
 
-  const { account, errorMessage } =
-    getChainWalletState(
-      walletToConnect?.info?.name || currentWalletName,
-      currentChainName
-    ) || ({} as ChainWalletState);
+  const { account, errorMessage, walletState } = getChainWalletState(
+    walletToConnect?.info?.name || currentWalletName,
+    chainNameToConnect
+  );
+
+  const qrCodeUri = useMemo(() => {
+    if (!walletToShow?.info?.name || !chainToConnect?.chainName) return null;
+
+    const state = getChainWalletState(
+      walletToShow.info.name,
+      chainToConnect.chainName
+    );
+    if (isWalletConnectState(state)) {
+      return state.qrCodeUri;
+    }
+    return null;
+  }, [
+    walletToShow?.info?.name,
+    chainToConnect?.chainName,
+    getChainWalletState,
+  ]);
 
   const disconnect = () => {
-    walletToShow.disconnect(chainToConnect.chainId);
+    return walletToShow.disconnect(chainToConnect.chainId);
   };
 
-  const onSelectWallet = (wallet: WalletController) => {
+  const onSelectWallet = (wallet: WalletStore) => {
     setWalletToConnect(wallet);
     setShouldShowList(false);
     return wallet.connect(chainToConnect.chainId);
@@ -124,13 +137,13 @@ export const InterchainWalletModal = ({
         open={open}
         close={handleCloseModal}
         wallets={walletsForUI}
-        walletConnectQRCodeUri={walletConnectQRCodeUri}
+        walletConnectQRCodeUri={qrCodeUri}
         currentWallet={walletToShow}
-        isConnecting={walletToShow?.walletState === WalletState.Connecting}
-        isConnected={walletToShow?.walletState === WalletState.Connected}
-        isRejected={walletToShow?.walletState === WalletState.Rejected}
-        isDisconnected={walletToShow?.walletState === WalletState.Disconnected}
-        isNotExist={walletToShow?.walletState === WalletState.NotExist}
+        isConnecting={walletState === WalletState.Connecting}
+        isConnected={walletState === WalletState.Connected}
+        isRejected={walletState === WalletState.Rejected}
+        isDisconnected={walletState === WalletState.Disconnected}
+        isNotExist={walletState === WalletState.NotExist}
         errorMessage={errorMessage}
         onSelectWallet={(w) => onSelectWallet(w)}
         onBack={() => setShouldShowList(true)} // Add other required props with appropriate default or mock values
@@ -154,7 +167,7 @@ export type WalletModalElementProps = {
   wallets: InterchainUIWalletType[];
   username: string;
   address: string;
-  currentWallet?: WalletController;
+  currentWallet?: WalletStore;
   isConnecting: boolean;
   isConnected: boolean;
   isRejected: boolean;
@@ -164,7 +177,7 @@ export type WalletModalElementProps = {
   open: () => void;
   close: () => void;
   disconnect: () => void;
-  onSelectWallet: (wallet: WalletController) => void;
+  onSelectWallet: (wallet: WalletStore) => void;
   onBack: () => void;
   onReconnect: () => void;
   getDownloadLink: (walletName: string) => DownloadInfo;
@@ -209,7 +222,7 @@ export const WalletModalElement = ({
   const { header, content } = useMemo(() => {
     if (
       shouldShowList ||
-      (isDisconnected && currentWallet.errorMessage === "")
+      (isDisconnected && currentWallet.errorMessage === '')
     ) {
       return {
         header: <WalletListHeader close={close} />,
@@ -224,7 +237,7 @@ export const WalletModalElement = ({
     if (
       currentWallet &&
       walletConnectQRCodeUri &&
-      currentWallet.info.name === "WalletConnect"
+      currentWallet.info.name === 'WalletConnect'
     ) {
       return {
         header: (

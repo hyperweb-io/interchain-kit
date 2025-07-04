@@ -47,8 +47,7 @@
     "jest-transform-stub": "^2.0.0",
     "postcss": "^8.5.6",
     "postcss-cli": "^11.0.1",
-    "postcss-import": "^16.1.1",
-    "zustand": "^5.0.3"
+    "postcss-import": "^16.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.27.0",

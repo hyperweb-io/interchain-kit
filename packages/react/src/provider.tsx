@@ -1,22 +1,23 @@
-import React, { ReactElement, useEffect, useRef } from "react";
-import { createContext, useContext } from "react";
+import { AssetList, Chain } from '@chain-registry/types';
 import {
-  BaseWallet,
-  SignerOptions,
-  EndpointOptions,
   Config,
-} from "@interchain-kit/core";
-import { AssetList, Chain } from "@chain-registry/types";
-import { WalletModalProps } from "./modal";
-import { WalletStoreManager } from "@interchain-kit/store";
-import { WalletModalProvider } from "./contexts";
+  EndpointOptions,
+  SignerOptions,
+  UniWallet,
+} from '@interchain-kit/core';
+import { WalletStoreManager } from '@interchain-kit/store';
+import React, { ReactElement, useEffect, useRef } from 'react';
+import { createContext, useContext } from 'react';
+
+import { WalletModalProvider } from './contexts';
+import { WalletModalProps } from './modal';
 
 type InterchainWalletContextType = WalletStoreManager;
 
 type InterchainWalletProviderProps = {
   chains: Chain[];
   assetLists: AssetList[];
-  wallets: BaseWallet[];
+  wallets: UniWallet[];
   signerOptions?: SignerOptions;
   endpointOptions?: EndpointOptions;
   children: React.ReactNode;
@@ -66,7 +67,7 @@ export const useInterchainWalletContext = () => {
   const context = useContext(InterchainWalletContext);
   if (!context) {
     throw new Error(
-      "useInterChainWalletContext must be used within a InterChainProvider"
+      'useInterChainWalletContext must be used within a InterChainProvider'
     );
   }
   return context;

@@ -1,28 +1,30 @@
 import { renderHook } from '@testing-library/react';
+
 import { useWalletManager } from '../../src/hooks/useWalletManager';
 import { useInterchainWalletContext } from '../../src/provider';
-import { useStore } from 'zustand';
 
 jest.mock('../../src/provider', () => ({
-    useInterchainWalletContext: jest.fn(),
+  useInterchainWalletContext: jest.fn(),
 }));
 
-jest.mock('zustand', () => ({
-    useStore: jest.fn(),
+jest.mock('../../src/hooks/useForceUpdate', () => ({
+  useForceUpdate: jest.fn(() => jest.fn()),
 }));
 
 describe('useWalletManager', () => {
-    it('should return the result of useStore with the store from useInterchainWalletContext', () => {
-        const mockStore = {};
-        const mockResult = { wallet: 'mockWallet' };
+  it('should return the result of bindAllMethods with the walletManager from useInterchainWalletContext', () => {
+    const mockWalletManager = {
+      subscribe: jest.fn(() => jest.fn()), // mock subscribe returns unsubscribe function
+      getChainByName: jest.fn(),
+    };
 
-        (useInterchainWalletContext as jest.Mock).mockReturnValue(mockStore);
-        (useStore as jest.Mock).mockReturnValue(mockResult);
+    (useInterchainWalletContext as jest.Mock).mockReturnValue(mockWalletManager);
 
-        const { result } = renderHook(() => useWalletManager());
+    const { result } = renderHook(() => useWalletManager());
 
-        expect(useInterchainWalletContext).toHaveBeenCalled();
-        expect(useStore).toHaveBeenCalledWith(mockStore);
-        expect(result.current).toBe(mockResult);
-    });
+    expect(useInterchainWalletContext).toHaveBeenCalled();
+    expect(mockWalletManager.subscribe).toHaveBeenCalled();
+    expect(result.current).toBeDefined();
+    expect(typeof result.current.getChainByName).toBe('function');
+  });
 });

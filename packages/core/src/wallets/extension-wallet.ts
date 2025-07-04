@@ -1,5 +1,5 @@
 import { SignOptions } from '../types';
-import { clientNotExistError, getClientFromExtension, isInstanceOf } from '../utils';
+import { clientNotExistError, getClientFromExtension } from '../utils';
 import { CosmosWallet } from './cosmos-wallet';
 import { MultiChainWallet, WalletMap } from './multichain-wallet';
 
@@ -17,10 +17,8 @@ export class ExtensionWallet extends MultiChainWallet<WalletMap> {
   }
 
   setSignOptions(options: SignOptions) {
-    const wallet = this.getWalletByChainType('cosmos');
-    if (isInstanceOf(wallet, CosmosWallet)) {
-      wallet.setSignOptions();
-    }
+    const wallet = this.getWalletOfType(CosmosWallet);
+    wallet.setSignOptions(options);
   }
 
 }

@@ -1,12 +1,13 @@
-import { ConnectModalHead, ConnectModalStatus } from "@interchain-ui/react";
-import { BaseWallet } from "@interchain-kit/core";
+import { BaseWallet } from '@interchain-kit/core';
+import { WalletStore } from '@interchain-kit/store';
+import { ConnectModalHead, ConnectModalStatus } from '@interchain-ui/react';
 
 export const ConnectingHeader = ({
   wallet,
   close,
   onBack,
 }: {
-  wallet: BaseWallet;
+  wallet: WalletStore;
   close: () => void;
   onBack: () => void;
 }) => {
@@ -28,9 +29,9 @@ export const ConnectingContent = ({ wallet }: { wallet: BaseWallet }) => {
     info: { prettyName, mode },
   } = wallet;
 
-  let title = "Requesting Connection";
+  let title = 'Requesting Connection';
   let desc: string =
-    mode === "wallet-connect"
+    mode === 'wallet-connect'
       ? `Approve ${prettyName} connection request on your mobile.`
       : `Open the ${prettyName} browser extension to connect your wallet.`;
 
