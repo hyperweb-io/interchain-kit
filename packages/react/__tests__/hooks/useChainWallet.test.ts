@@ -25,12 +25,11 @@ describe('useChainWallet', () => {
     {} as any,
     {} as WalletStoreManager
   );
-
   const mockChainWallet = new ChainWalletStore(
+    mockWalletStore as any,
     { chainName: 'test-chain', chainType: 'cosmos' as const },
-    mockWallet,
     {} as any,
-    {} as WalletStoreManager
+    {} as WalletStoreManager,
   );
 
   const mockWalletManager: jest.Mocked<WalletStoreManager> = {
@@ -38,6 +37,9 @@ describe('useChainWallet', () => {
     WalletStores: new Map(),
     state: {} as any,
     config: {} as any,
+    walletConnectQRCodeUri: '',
+    setWalletConnectQRCodeUri: jest.fn(),
+    clearWalletConnectQRCodeUri: jest.fn(),
     chains: [{ chainName: 'test-chain', chainType: 'cosmos' as const }],
     assetLists: [{ chainName: 'test-chain', assets: [] }],
     wallets: [mockWalletStore],

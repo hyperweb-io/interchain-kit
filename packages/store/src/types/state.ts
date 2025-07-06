@@ -3,26 +3,13 @@ import { WalletAccount, WalletName, WalletState } from '@interchain-kit/core';
 import { HttpEndpoint } from '@interchainjs/types';
 
 // 基础状态类型
-export type BaseChainWalletState = {
+export type ChainWalletState = {
   chainName: Chain['chainName']
   walletName: string
   walletState: WalletState
   rpcEndpoint: string | HttpEndpoint
   account: WalletAccount
   errorMessage: string | null
-}
-
-// WalletConnect 特定的状态
-export type WalletConnectChainWalletState = BaseChainWalletState & {
-  qrCodeUri: string | null
-}
-
-// 通用状态类型（使用联合类型）
-export type ChainWalletState = BaseChainWalletState | WalletConnectChainWalletState
-
-// 类型守卫：检查是否是 WalletConnect 钱包状态
-export function isWalletConnectState(state: ChainWalletState): state is WalletConnectChainWalletState {
-  return 'qrCodeUri' in state;
 }
 
 export type WalletStoreState = {
@@ -34,6 +21,7 @@ export type WalletStoreManagerState = {
   currentWalletName: WalletName
   currentChainName: Chain['chainName']
   chainWalletStates: ChainWalletState[]
+  walletConnectQRCodeUri: string
 }
 
 // 专门用于 WalletConnect 的状态

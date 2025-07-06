@@ -1,5 +1,5 @@
 import { DownloadInfo, WalletState } from '@interchain-kit/core';
-import { isWalletConnectState, WalletStore } from '@interchain-kit/store';
+import { WalletStore } from '@interchain-kit/store';
 import {
   ConnectModal,
   ThemeProvider,
@@ -64,6 +64,7 @@ export const InterchainWalletModal = ({
     chains,
     getDownloadLink,
     getEnv,
+    walletConnectQRCodeUri,
   } = useWalletManager();
 
   const [walletToConnect, setWalletToConnect] = useState<WalletStore | null>(
@@ -88,23 +89,6 @@ export const InterchainWalletModal = ({
     walletToConnect?.info?.name || currentWalletName,
     chainNameToConnect
   );
-
-  const qrCodeUri = useMemo(() => {
-    if (!walletToShow?.info?.name || !chainToConnect?.chainName) return null;
-
-    const state = getChainWalletState(
-      walletToShow.info.name,
-      chainToConnect.chainName
-    );
-    if (isWalletConnectState(state)) {
-      return state.qrCodeUri;
-    }
-    return null;
-  }, [
-    walletToShow?.info?.name,
-    chainToConnect?.chainName,
-    getChainWalletState,
-  ]);
 
   const disconnect = () => {
     return walletToShow.disconnect(chainToConnect.chainId);
@@ -137,7 +121,7 @@ export const InterchainWalletModal = ({
         open={open}
         close={handleCloseModal}
         wallets={walletsForUI}
-        walletConnectQRCodeUri={qrCodeUri}
+        walletConnectQRCodeUri={walletConnectQRCodeUri}
         currentWallet={walletToShow}
         isConnecting={walletState === WalletState.Connecting}
         isConnected={walletState === WalletState.Connected}

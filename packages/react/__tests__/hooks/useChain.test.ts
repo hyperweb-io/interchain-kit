@@ -33,6 +33,9 @@ describe('useChain', () => {
     WalletStores: new Map(),
     state: {} as any,
     config: {} as any,
+    walletConnectQRCodeUri: '',
+    setWalletConnectQRCodeUri: jest.fn(),
+    clearWalletConnectQRCodeUri: jest.fn(),
     chains: [{ chainName: 'test-chain', chainType: 'cosmos' as const }],
     assetLists: [{ chainName: 'test-chain', assets: [] }],
     wallets: [mockWalletStore],
@@ -62,6 +65,7 @@ describe('useChain', () => {
     subscribe: jest.fn(),
     subscribeWithSelector: jest.fn(),
     getChainWalletByName: jest.fn(),
+
   };
 
   const mockWalletModal = {

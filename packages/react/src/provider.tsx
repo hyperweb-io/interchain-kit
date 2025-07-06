@@ -36,8 +36,6 @@ export const ChainProvider = ({
   children,
   walletModal: ProviderWalletModal,
 }: InterchainWalletProviderProps) => {
-  // const [_, forceRender] = useState({});
-
   const config: Config = {
     chains,
     assetLists,
@@ -46,9 +44,11 @@ export const ChainProvider = ({
     endpointOptions,
   };
 
-  const walletManager = new WalletStoreManager(config);
+  const store = useRef(null);
 
-  const store = useRef(walletManager);
+  if (!store.current) {
+    store.current = new WalletStoreManager(config);
+  }
 
   useEffect(() => {
     store.current.init();

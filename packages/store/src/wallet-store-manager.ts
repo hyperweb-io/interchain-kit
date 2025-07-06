@@ -1,11 +1,12 @@
 import { AssetList, Chain } from '@chain-registry/types';
-import { Config, DownloadInfo, EndpointOptions, GenericSignRequest, GenericSignResponse, SignerOptions, SignType, WalletAccount, WalletManager, WalletName, WalletState } from '@interchain-kit/core';
+import { Config, DownloadInfo, EndpointOptions, SignerOptions, SignType, WalletManager, WalletName, WalletState } from '@interchain-kit/core';
 import { SigningClient } from '@interchainjs/cosmos/signing-client';
 import { ICosmosGenericOfflineSigner } from '@interchainjs/cosmos/types';
 import { SigningOptions as InterchainSigningOptions } from '@interchainjs/cosmos/types/signing-client';
 import { HttpEndpoint } from '@interchainjs/types';
 
-import { ChainWalletState, isWalletConnectState, WalletStoreManagerState } from './types';
+import { ChainWalletStore } from './chain-wallet-store';
+import { ChainWalletState, WalletStoreManagerState } from './types';
 import { findChainWalletState, updateChainWalletState } from './utils/flat-state-utils';
 import { ObservableState } from './utils/observable-state';
 import { WalletStore } from './wallet-store';
@@ -40,7 +41,6 @@ export class WalletStoreManager {
             account: null,
             errorMessage: undefined,
             rpcEndpoint: '',
-            qrCodeUri: null  // WalletConnect 钱包特有的字段
           });
         } else {
           // 普通钱包使用基础状态
@@ -61,6 +61,7 @@ export class WalletStoreManager {
       currentWalletName: '',
       currentChainName: '',
       chainWalletStates,
+      walletConnectQRCodeUri: '',
     };
 
     this.state = new ObservableState(initialState);
@@ -80,7 +81,7 @@ export class WalletStoreManager {
 
   async init(): Promise<void> {
     await Promise.all(
-      this.wallets.map(async (walletController) => walletController.init())
+      this.wallets.map(async (walletStore) => await walletStore.init())
     );
 
     await this.walletManager.init();
@@ -98,6 +99,10 @@ export class WalletStoreManager {
 
   get currentChainName(): Chain['chainName'] {
     return this.state.proxy.currentChainName;
+  }
+
+  get walletConnectQRCodeUri(): string | null {
+    return this.state.proxy.walletConnectQRCodeUri;
   }
 
   setCurrentWalletName(name: string) {
@@ -126,50 +131,37 @@ export class WalletStoreManager {
     return wallet;
   }
 
-  getChainWalletByName(walletName: WalletName, chainName: string): WalletStore | undefined {
-    const wallet = this.getWalletByName(walletName);
-    return wallet;
+  getChainWalletByName(walletName: string, chainName: string): ChainWalletStore {
+    const chainWallet = this.getWalletByName(walletName).getChainWalletByChainName(chainName);
+    if (!chainWallet) {
+      throw new Error(`Chain wallet with name ${chainName} not found`);
+    }
+    return chainWallet;
   }
 
   async connect(walletName: string, chainName: string) {
-    const wallet = this.getChainWalletByName(walletName, chainName);
-    const chain = this.getChainByName(chainName);
-    if (wallet && chain) {
-      return wallet.connect(chain.chainId);
-    }
+    const chainWallet = this.getChainWalletByName(walletName, chainName);
+    await chainWallet.connect();
   }
 
   async disconnect(walletName: string, chainName: string) {
-    const wallet = this.getChainWalletByName(walletName, chainName);
-    const chain = this.getChainByName(chainName);
-    if (wallet && chain) {
-      return wallet.disconnect(chain.chainId);
-    }
+    const chainWallet = this.getChainWalletByName(walletName, chainName);
+    await chainWallet.disconnect();
   }
 
   async getAccount(walletName: string, chainName: string) {
-    const wallet = this.getChainWalletByName(walletName, chainName);
-    const chain = this.getChainByName(chainName);
-    if (wallet && chain) {
-      return wallet.getAccount(chain.chainId);
-    }
+    const chainWallet = this.getChainWalletByName(walletName, chainName);
+    return chainWallet.getAccount();
   }
 
   async getOfflineSigner(walletName: string, chainName: string) {
-    const wallet = this.getChainWalletByName(walletName, chainName);
-    const chain = this.getChainByName(chainName);
-    if (wallet && chain) {
-      return wallet.getOfflineSigner(chain.chainId);
-    }
+    const chainWallet = this.getChainWalletByName(walletName, chainName);
+    return chainWallet.getOfflineSigner();
   }
 
   async getRpcEndpoint(walletName: string, chainName: string): Promise<string | HttpEndpoint> {
-    const wallet = this.getChainWalletByName(walletName, chainName);
-    const chain = this.getChainByName(chainName);
-    if (wallet && chain) {
-      return wallet.getRpcEndpoint(chain.chainId);
-    }
-    throw new Error(`Wallet ${walletName} or chain ${chainName} not found`);
+    const chainWallet = this.getChainWalletByName(walletName, chainName);
+    return chainWallet.getRpcEndpoint();
   }
 
   async getSigningClient(walletName: string, chainName: string): Promise<SigningClient> {
@@ -178,6 +170,14 @@ export class WalletStoreManager {
     const signerOptions = await this.getSignerOptions(chainName);
     const signingClient = await SigningClient.connectWithSigner(rpcEndpoint, offlineSigner, signerOptions);
     return signingClient;
+  }
+
+  setWalletConnectQRCodeUri(uri: string) {
+    this.state.proxy.walletConnectQRCodeUri = uri;
+  }
+
+  clearWalletConnectQRCodeUri() {
+    this.state.proxy.walletConnectQRCodeUri = null;
   }
 
   //util function just delegate from walletManager
@@ -211,128 +211,5 @@ export class WalletStoreManager {
 
   getDownloadLink(walletName: string): DownloadInfo {
     return this.walletManager.getDownloadLink(walletName);
-  }
-
-  // 简单的 QR code URI 获取方法
-  getQRCodeUri(walletName: string, chainName: string): string | null {
-    const state = this.getChainWalletState(walletName, chainName);
-    if (isWalletConnectState(state)) {
-      return state.qrCodeUri;
-    }
-    return null;
-  }
-
-  // 简单的 QR code URI 设置方法
-  setQRCodeUri(walletName: string, chainName: string, uri: string | null): void {
-    const state = this.getChainWalletState(walletName, chainName);
-    if (isWalletConnectState(state)) {
-      this.updateChainWalletState(walletName, chainName, { qrCodeUri: uri });
-    }
-  }
-
-  // 链钱包连接方法
-  async connectChainWallet(walletName: string, chainName: string): Promise<void> {
-    const wallet = this.getWalletByName(walletName);
-    const chain = this.getChainByName(chainName);
-
-    if (!wallet || !chain) {
-      throw new Error(`Wallet ${walletName} or chain ${chainName} not found`);
-    }
-
-    const walletState = this.getChainWalletState(walletName, chainName)?.walletState;
-    if (walletState === WalletState.NotExist) {
-      return;
-    }
-
-    this.updateChainWalletState(walletName, chainName, { walletState: WalletState.Connecting });
-
-    // 如果是 WalletConnect 钱包，设置 QR code URI 回调
-    if (wallet.info.mode === 'wallet-connect' && 'setOnPairingUriCreatedCallback' in wallet) {
-      (wallet as any).setOnPairingUriCreatedCallback((uri: string) => {
-        this.setQRCodeUri(walletName, chainName, uri);
-      });
-    }
-
-    await wallet.connect(chain.chainId);
-    this.updateChainWalletState(walletName, chainName, { walletState: WalletState.Connected });
-
-    // 连接成功后清空 QR code URI
-    if (wallet.info.mode === 'wallet-connect') {
-      this.setQRCodeUri(walletName, chainName, null);
-    }
-
-    await this.getAccount(walletName, chainName);
-  }
-
-  // 链钱包断开连接方法
-  async disconnectChainWallet(walletName: string, chainName: string): Promise<void> {
-    const wallet = this.getWalletByName(walletName);
-    const chain = this.getChainByName(chainName);
-
-    if (!wallet || !chain) {
-      throw new Error(`Wallet ${walletName} or chain ${chainName} not found`);
-    }
-
-    try {
-      await wallet.disconnect(chain.chainId);
-      this.updateChainWalletState(walletName, chainName, { walletState: WalletState.Disconnected });
-
-      // 断开连接时清空 QR code URI
-      if (wallet.info.mode === 'wallet-connect') {
-        this.setQRCodeUri(walletName, chainName, null);
-      }
-    } catch (error) {
-      this.updateChainWalletState(walletName, chainName, {
-        errorMessage: error instanceof Error ? error.message : String(error)
-      });
-      console.error(`Error disconnecting for chain ${chainName}:`, error);
-    }
-  }
-
-  // 获取链钱包账户
-  async getChainWalletAccount(walletName: string, chainName: string): Promise<WalletAccount> {
-    const wallet = this.getWalletByName(walletName);
-    const chain = this.getChainByName(chainName);
-
-    if (!wallet || !chain) {
-      throw new Error(`Wallet ${walletName} or chain ${chainName} not found`);
-    }
-
-    try {
-      const existedAccount = this.getChainWalletState(walletName, chainName)?.account;
-      if (existedAccount) {
-        return existedAccount;
-      }
-      const account = await wallet.getAccount(chain.chainId);
-      this.updateChainWalletState(walletName, chainName, { account });
-      return account;
-    } catch (error) {
-      this.updateChainWalletState(walletName, chainName, {
-        errorMessage: error instanceof Error ? error.message : String(error)
-      });
-      console.error(`Error getting account for chain ${chainName}:`, error);
-      throw error;
-    }
-  }
-
-  // 链钱包签名方法
-  async signChainWallet(walletName: string, chainName: string, data: GenericSignRequest): Promise<GenericSignResponse> {
-    const wallet = this.getWalletByName(walletName);
-    const chain = this.getChainByName(chainName);
-
-    if (!wallet || !chain) {
-      throw new Error(`Wallet ${walletName} or chain ${chainName} not found`);
-    }
-
-    try {
-      const result = await wallet.sign(chain.chainId, data);
-      return result;
-    } catch (error) {
-      this.updateChainWalletState(walletName, chainName, {
-        errorMessage: error instanceof Error ? error.message : String(error)
-      });
-      console.error(`Error signing for chain ${chainName}:`, error);
-      throw error;
-    }
   }
 }
