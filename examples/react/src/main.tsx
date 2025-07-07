@@ -1,58 +1,58 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
-import "@interchain-kit/react/styles.css";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+import '@interchain-kit/react/styles.css';
 
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from 'react-router-dom';
 
-import { ChainProvider, InterchainWalletModal } from "@interchain-kit/react";
+import { ChainProvider, InterchainWalletModal } from '@interchain-kit/react';
 
-import { assetLists, chains } from "chain-registry";
+import { assetLists, chains } from 'chain-registry';
 import {
   BaseWallet,
   ExtensionWallet,
   isInstanceOf,
-  WCWallet,
-} from "@interchain-kit/core";
-import { ninjiWallet } from "@interchain-kit/ninji-extension";
-import { finWallet } from "@interchain-kit/fin-extension";
-import { shellWallet } from "@interchain-kit/shell-extension";
-import { keplrWallet } from "@interchain-kit/keplr-extension";
-import { leapWallet } from "@interchain-kit/leap-extension";
-import { cosmostationWallet } from "@interchain-kit/cosmostation-extension";
-import { stationWallet } from "@interchain-kit/station-extension";
-import { galaxyStationWallet } from "@interchain-kit/galaxy-station-extension";
-import { okxWallet } from "@interchain-kit/okx-extension";
-import { coin98Wallet } from "@interchain-kit/coin98-extension";
-import { ledgerWallet } from "@interchain-kit/ledger";
-import { cosmosExtensionMetaMask } from "@interchain-kit/cosmos-extension-metamask";
-import { xdefiWallet } from "@interchain-kit/xdefi-extension";
-import { compassWallet } from "@interchain-kit/compass-extension";
-import { trustWallet } from "@interchain-kit/trust-extension";
-import { leapCosmosExtensionMetaMask } from "@interchain-kit/leap-cosmos-extension-metamask";
-import { xdefinWallet } from "@interchain-kit/xdefi-extension";
+  walletConnect,
+} from '@interchain-kit/core';
+import { ninjiWallet } from '@interchain-kit/ninji-extension';
+import { finWallet } from '@interchain-kit/fin-extension';
+import { shellWallet } from '@interchain-kit/shell-extension';
+import { keplrWallet } from '@interchain-kit/keplr-extension';
+import { leapWallet } from '@interchain-kit/leap-extension';
+import { cosmostationWallet } from '@interchain-kit/cosmostation-extension';
+import { stationWallet } from '@interchain-kit/station-extension';
+import { galaxyStationWallet } from '@interchain-kit/galaxy-station-extension';
+import { okxWallet } from '@interchain-kit/okx-extension';
+import { coin98Wallet } from '@interchain-kit/coin98-extension';
+import { ledgerWallet } from '@interchain-kit/ledger';
+import { cosmosExtensionMetaMask } from '@interchain-kit/cosmos-extension-metamask';
+import { xdefiWallet } from '@interchain-kit/xdefi-extension';
+import { compassWallet } from '@interchain-kit/compass-extension';
+import { trustWallet } from '@interchain-kit/trust-extension';
+import { leapCosmosExtensionMetaMask } from '@interchain-kit/leap-cosmos-extension-metamask';
+import { xdefinWallet } from '@interchain-kit/xdefi-extension';
 // import { MockWallet } from "@interchain-kit/mock-wallet";
-import { metaMaskWallet } from "@interchain-kit/metamask-extension";
-import { exodusWallet } from "@interchain-kit/exodus-extension";
-import { starshipChain, starshipChain1 } from "./utils/starship.ts";
-import { ThemeProvider } from "@interchain-ui/react";
-import { Chain } from "@chain-registry/types";
+import { metaMaskWallet } from '@interchain-kit/metamask-extension';
+import { exodusWallet } from '@interchain-kit/exodus-extension';
+import { starshipChain, starshipChain1 } from './utils/starship.ts';
+import { ThemeProvider } from '@interchain-ui/react';
+import { Chain } from '@chain-registry/types';
 import {
   createAssetListFromEthereumChainInfo,
   createChainFromEthereumChainInfo,
-} from "./utils/eth-test-net.ts";
+} from './utils/eth-test-net.ts';
 import {
   createStarshipChain,
   createStarshipAssetList,
-} from "./utils/osmo-test-net.ts";
-import { create } from "domain";
+} from './utils/osmo-test-net.ts';
+import { create } from 'domain';
 
 const chainNames: string[] = [
   // "injectivetestnet",
-  "osmosistestnet",
-  "osmosis",
-  "juno",
+  'osmosistestnet',
+  // 'osmosis',
+  // 'juno',
   // "cosmoshub",
   // "stargaze",
   // "noble",
@@ -63,19 +63,19 @@ const chainNames: string[] = [
 // const chainNames = ["osmosistestnet"];
 // const chainNames = ["cosmoshub"];
 
-const walletConnect = new WCWallet(undefined, {
+walletConnect.setWalletConnectOption({
   metadata: {
-    name: "Wallet Connect In React Example",
-    description: "test",
-    url: "#",
-    icons: ["https://walletconnect.com/walletconnect-logo.png"],
+    name: 'Wallet Connect In React Example',
+    description: 'test',
+    url: '#',
+    icons: ['https://walletconnect.com/walletconnect-logo.png'],
   },
 });
 
 const wallet1Mnemonic =
-  "among machine material tide surround boy ramp nuclear body hover among address";
+  'among machine material tide surround boy ramp nuclear body hover among address';
 const wallet2Mnemonic =
-  "angry tribe runway maze there alpha soft rate tell render fine pony";
+  'angry tribe runway maze there alpha soft rate tell render fine pony';
 
 // const _chains = chains.filter(c => chainNames.includes(c.chainName)).map(c => ({
 //   ...c, apis: {
@@ -86,52 +86,52 @@ const wallet2Mnemonic =
 // }))
 
 const bscethertestnet = {
-  chainId: "97",
+  chainId: '97',
   // chainId: "0x61",
-  chainName: "Binance Smart Chain Testnet",
+  chainName: 'Binance Smart Chain Testnet',
   nativeCurrency: {
-    name: "BSC Testnet",
-    symbol: "tBNB", // Native currency symbol
+    name: 'BSC Testnet',
+    symbol: 'tBNB', // Native currency symbol
     decimals: 18, // Native currency decimals
   },
-  rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545"],
-  blockExplorerUrls: ["https://testnet.bscscan.com"],
+  rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
+  blockExplorerUrls: ['https://testnet.bscscan.com'],
 };
 
 const goerliethereumtestnet = {
-  chainId: "0x5", // Goerli Testnet
-  chainName: "Goerli Testnet",
-  rpcUrls: ["https://rpc.goerli.mudit.blog/"],
+  chainId: '0x5', // Goerli Testnet
+  chainName: 'Goerli Testnet',
+  rpcUrls: ['https://rpc.goerli.mudit.blog/'],
   nativeCurrency: {
-    name: "Goerli ETH",
-    symbol: "ETH",
+    name: 'Goerli ETH',
+    symbol: 'ETH',
     decimals: 18,
   },
-  blockExplorerUrls: ["https://goerli.etherscan.io"],
+  blockExplorerUrls: ['https://goerli.etherscan.io'],
 };
 
 const sepoliaEthereumTestNet = {
-  chainId: "0xaa36a7", // Sepolia Testnet
-  chainName: "Sepolia Testnet",
-  rpcUrls: ["https://gateway.tenderly.co/public/sepolia"],
+  chainId: '0xaa36a7', // Sepolia Testnet
+  chainName: 'Sepolia Testnet',
+  rpcUrls: ['https://gateway.tenderly.co/public/sepolia'],
   nativeCurrency: {
-    name: "Sepolia ETH",
-    symbol: "USDC",
+    name: 'Sepolia ETH',
+    symbol: 'USDC',
     decimals: 18,
   },
-  blockExplorerUrls: ["https://goerli.etherscan.io"],
+  blockExplorerUrls: ['https://goerli.etherscan.io'],
 };
 
 const HOLESKY_TESTNET = {
-  chainId: "17000", // 17000 | 0x4268
-  chainName: "HoleskyTestNet",
-  rpcUrls: ["https://ethereum-holesky.publicnode.com"],
+  chainId: '17000', // 17000 | 0x4268
+  chainName: 'HoleskyTestNet',
+  rpcUrls: ['https://ethereum-holesky.publicnode.com'],
   nativeCurrency: {
-    name: "HoleskyETH",
-    symbol: "ETH",
+    name: 'HoleskyETH',
+    symbol: 'ETH',
     decimals: 18,
   },
-  blockExplorerUrls: ["https://holesky.etherscan.io"],
+  blockExplorerUrls: ['https://holesky.etherscan.io'],
 };
 
 const _chains = [
@@ -168,11 +168,11 @@ const _assetLists = [
 //   name: "mock2",
 // });
 
-if (isInstanceOf(keplrWallet, ExtensionWallet)) {
-  keplrWallet.setSignOptions({
-    preferNoSetFee: false,
-  });
-}
+// if (isInstanceOf(keplrWallet, ExtensionWallet)) {
+//   keplrWallet.setSignOptions({
+//     preferNoSetFee: false,
+//   });
+// }
 
 const _wallets: BaseWallet[] = [
   // mock1Wallet,
@@ -200,7 +200,7 @@ const _wallets: BaseWallet[] = [
   // ninjiWallet,
 ];
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
   <ChainProvider
     chains={_chains}
@@ -208,23 +208,23 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     assetLists={_assetLists}
     walletModal={() => (
       <InterchainWalletModal
-        modalThemeProviderProps={{ defaultTheme: "light" }}
+        modalThemeProviderProps={{ defaultTheme: 'light' }}
       />
     )}
     signerOptions={{
       signing: (chainName) => {
         return {
           broadcast: {
-            checkTx: chainName === "osmosistestnet",
-            deliverTx: chainName === "osmosistestnet",
-            timeoutMs: chainName === "osmosistestnet" ? 20000 : 10000,
+            checkTx: chainName === 'osmosistestnet',
+            deliverTx: chainName === 'osmosistestnet',
+            timeoutMs: chainName === 'osmosistestnet' ? 20000 : 10000,
           },
           gasPrice:
-            chainName === "osmosistestnet" ? "0.025uosmo" : "0.025uatom",
+            chainName === 'osmosistestnet' ? '0.025uosmo' : '0.025uatom',
         };
       },
       preferredSignType: (chainName) => {
-        return chainName === "osmosistestnet" ? "amino" : "direct";
+        return chainName === 'osmosistestnet' ? 'amino' : 'direct';
       },
     }}
     endpointOptions={{

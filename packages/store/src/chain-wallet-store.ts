@@ -1,5 +1,5 @@
 import { Chain } from '@chain-registry/types';
-import { BaseWallet, CosmosSignRequest, GenericOfflineSigner, GenericSignRequest, GenericSignResponse, UniWallet, WalletAccount, WalletManager, WalletState } from '@interchain-kit/core';
+import { BaseWallet, CosmosSignRequest, GenericOfflineSigner, GenericSignRequest, GenericSignResponse, UniWallet, WalletAccount, WalletManager, WalletState, WCWallet } from '@interchain-kit/core';
 import { AminoGenericOfflineSigner, AminoSignResponse, DirectGenericOfflineSigner, DirectSignResponse } from '@interchainjs/cosmos/types/wallet';
 import { HttpEndpoint } from '@interchainjs/types';
 
@@ -23,11 +23,6 @@ export class ChainWalletStore extends BaseWallet<GenericSignRequest, GenericSign
   async init(): Promise<void> {
     try {
       await this.wallet.init();
-      this.storeManager.updateChainWalletState(
-        this.wallet.info.name,
-        this.chain.chainName,
-        { walletState: WalletState.Disconnected }
-      );
     } catch (error) {
       console.error(error);
       this.storeManager.updateChainWalletState(
@@ -39,6 +34,13 @@ export class ChainWalletStore extends BaseWallet<GenericSignRequest, GenericSign
 
   }
   async connect(): Promise<void> {
+
+    if (this.wallet instanceof WCWallet) {
+      this.wallet.setOnPairingUriCreatedCallback((uri) => {
+        this.storeManager.setWalletConnectQRCodeUri(uri);
+      });
+    }
+
 
     try {
       this.storeManager.updateChainWalletState(
@@ -77,9 +79,8 @@ export class ChainWalletStore extends BaseWallet<GenericSignRequest, GenericSign
   }
   async sign(chainId: string, data: GenericSignRequest): Promise<GenericSignResponse> {
     try {
-
       const signResponse = await this.wallet.sign(chainId, data);
-      return signResponse.result as GenericSignResponse;
+      return signResponse;
     } catch (error) {
       console.error(error);
       this.storeManager.updateChainWalletState(

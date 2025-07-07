@@ -9,43 +9,38 @@ import { BaseWallet } from './base-wallet';
 // 导入子钱包实现
 
 // 定义通用钱包类型
-export type GenericWallet = BaseWallet<GenericSignRequest, GenericSignResponse, GenericOfflineSigner>;
+export type GenericWallet = BaseWallet<GenericSignRequest, GenericSignResponse, GenericOfflineSigner>
 
 // 定义钱包映射类型 - 使用更具体的类型
-export type WalletMap = Record<Chain['chainType'], GenericWallet>;
+export type WalletMap = Map<Chain['chainType'], BaseWallet<GenericSignRequest, GenericSignResponse, GenericOfflineSigner>>
 
-export class UniWallet<TWalletMap extends WalletMap = WalletMap> extends BaseWallet<GenericSignRequest, GenericSignResponse, GenericOfflineSigner> {
-  networkWalletMap: Map<Chain['chainType'], GenericWallet> = new Map();
+export class UniWallet extends BaseWallet<GenericSignRequest, GenericSignResponse, GenericOfflineSigner> {
 
+  networkWalletMap: WalletMap = new Map();
 
-
-
-  /**
-   * 注册特定链类型的钱包
-   */
-  setNetworkWallet<K extends Chain['chainType']>(chainType: K, wallet: TWalletMap[K]) {
+  setNetworkWallet(chainType: Chain['chainType'], wallet: BaseWallet<GenericSignRequest, GenericSignResponse, GenericOfflineSigner>) {
     this.networkWalletMap.set(chainType, wallet);
   }
 
   /**
-   * 根据链类型获取对应的钱包
-   */
-  getWalletByChainType<K extends Chain['chainType']>(chainType: K): TWalletMap[K] | undefined {
+ * 根据链类型获取对应的钱包
+ */
+  getWalletByChainType<K extends Chain['chainType']>(chainType: K): GenericWallet | undefined {
     const wallet = this.networkWalletMap.get(chainType);
     if (!wallet) throw new Error(`Unsupported chain type`);
     return wallet;
   }
 
   /**
-   * 根据 Chain 对象获取对应的钱包
-   */
-  getWalletByChain(chain: Chain): BaseWallet<any, any, any> | undefined {
-    return this.networkWalletMap.get(chain.chainType) as BaseWallet<any, any, any> | undefined;
+ * 根据 Chain 对象获取对应的钱包
+ */
+  getWalletByChain(chain: Chain): GenericWallet | undefined {
+    return this.networkWalletMap.get(chain.chainType);
   }
 
   /**
-   * Override setChainMap to propagate to network wallets
-   */
+ * Override setChainMap to propagate to network wallets
+ */
   setChainMap(chains: Chain[]) {
     super.setChainMap(chains);
     // Propagate to all network wallets
@@ -62,8 +57,8 @@ export class UniWallet<TWalletMap extends WalletMap = WalletMap> extends BaseWal
   }
 
   /**
-   * Override addChain to propagate to network wallets
-   */
+ * Override addChain to propagate to network wallets
+ */
   addChain(chain: Chain) {
     super.addChain(chain);
     // Propagate to all network wallets
@@ -153,8 +148,8 @@ export class UniWallet<TWalletMap extends WalletMap = WalletMap> extends BaseWal
   }
 
   /**
-   * 根据参数 类型 获取钱包
-   */
+ * 根据参数 类型 获取钱包
+ */
   getWalletOfType<T>(
     WalletClass: new (...args: any[]) => T
   ): T | undefined {

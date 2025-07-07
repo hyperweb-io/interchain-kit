@@ -7,6 +7,7 @@ import { HttpEndpoint } from '@interchainjs/types';
 
 import { ChainWalletStore } from './chain-wallet-store';
 import { ChainWalletState, WalletStoreManagerState } from './types';
+import { INTERCHAIN_STORAGE_KEY, InterchainStorage } from './utils';
 import { findChainWalletState, updateChainWalletState } from './utils/flat-state-utils';
 import { ObservableState } from './utils/observable-state';
 import { WalletStore } from './wallet-store';
@@ -32,27 +33,14 @@ export class WalletStoreManager {
     // 初始化每个钱包的链状态
     config.wallets.forEach(wallet => {
       config.chains.forEach(chain => {
-        // 为 WalletConnect 钱包创建特殊状态
-        if (wallet.info.mode === 'wallet-connect') {
-          chainWalletStates.push({
-            walletName: wallet.info.name,
-            chainName: chain.chainName,
-            walletState: WalletState.NotExist,
-            account: null,
-            errorMessage: undefined,
-            rpcEndpoint: '',
-          });
-        } else {
-          // 普通钱包使用基础状态
-          chainWalletStates.push({
-            walletName: wallet.info.name,
-            chainName: chain.chainName,
-            walletState: WalletState.NotExist,
-            account: null,
-            errorMessage: undefined,
-            rpcEndpoint: ''
-          });
-        }
+        chainWalletStates.push({
+          walletName: wallet.info.name,
+          chainName: chain.chainName,
+          walletState: WalletState.Disconnected,
+          account: null,
+          errorMessage: undefined,
+          rpcEndpoint: '',
+        });
       });
     });
 
@@ -66,6 +54,17 @@ export class WalletStoreManager {
 
     this.state = new ObservableState(initialState);
 
+    // 监听状态变化，自动保存到 localStorage
+    // this.state.subscribe((state) => {
+    //   console.log(state);
+    //   InterchainStorage.set(INTERCHAIN_STORAGE_KEY, {
+    //     currentWalletName: state.currentWalletName,
+    //     currentChainName: state.currentChainName,
+    //     chainWalletStates: state.chainWalletStates,
+    //   });
+    // });
+
+
     config.wallets.forEach((wallet) => {
       wallet.setChainMap(config.chains);
       wallet.setAssetLists(config.assetLists);
@@ -75,11 +74,24 @@ export class WalletStoreManager {
     });
   }
 
+  restoreState() {
+    const state = InterchainStorage.get(INTERCHAIN_STORAGE_KEY);
+    if (state) {
+      this.state.proxy.chainWalletStates = state.chainWalletStates;
+      this.state.proxy.currentWalletName = state.currentWalletName;
+      this.state.proxy.currentChainName = state.currentChainName;
+    }
+  }
+
   subscribe(listener: (state: WalletStoreManagerState) => void): () => void {
     return this.state.subscribe(listener);
   }
 
   async init(): Promise<void> {
+
+    // this.restoreState();
+
+
     await Promise.all(
       this.wallets.map(async (walletStore) => await walletStore.init())
     );

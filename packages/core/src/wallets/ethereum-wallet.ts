@@ -1,15 +1,14 @@
 import { Chain } from '@chain-registry/types';
-import { IGenericOfflineSigner } from '@interchainjs/types';
 import { fromByteArray } from 'base64-js';
 
 import { WalletAccount } from '../types';
 import { EthereumNetwork } from '../types/ethereum';
-import { BaseSignRequest } from '../types/sign-request';
-import { BaseSignResponse } from '../types/sign-response';
+import { EthereumSignRequest } from '../types/sign-request';
+import { EthereumSignResponse } from '../types/sign-response';
 import { delay, getClientFromExtension } from '../utils';
 import { BaseWallet } from './base-wallet';
 
-export class EthereumWallet extends BaseWallet<BaseSignRequest, BaseSignResponse, IGenericOfflineSigner> {
+export class EthereumWallet extends BaseWallet<EthereumSignRequest, EthereumSignResponse, any> {
 
   ethereum: any;
 
@@ -79,9 +78,9 @@ export class EthereumWallet extends BaseWallet<BaseSignRequest, BaseSignResponse
       username: 'ethereum'
     };
   }
-  async getOfflineSigner(chainId: Chain['chainId']): Promise<IGenericOfflineSigner> {
+  async getOfflineSigner(chainId: Chain['chainId']) {
     await this.switchChain(chainId);
-    return {} as IGenericOfflineSigner;
+    return {} as any;
   }
   async addSuggestChain(chainId: string): Promise<void> {
     const chainIdToHex = chainId.startsWith('0x') ? chainId : '0x' + parseInt(chainId, 10).toString(16);
@@ -158,11 +157,11 @@ export class EthereumWallet extends BaseWallet<BaseSignRequest, BaseSignResponse
   }
 
   // 新增：实现 sign 方法
-  async sign(chainId: Chain['chainId'], data: BaseSignRequest & { method: string;[key: string]: any }): Promise<BaseSignResponse> {
+  async sign(chainId: Chain['chainId'], data: EthereumSignRequest): Promise<EthereumSignResponse> {
     await this.switchChain(chainId);
     try {
       if (data.method === 'ethereum_message') {
-        const signature = await this.signMessage(data.data);
+        const signature = await this.signMessage(data.data as string);
         return {
           success: true,
           method: 'ethereum_message',

@@ -1,9 +1,9 @@
 import { SignOptions } from '../types';
 import { clientNotExistError, getClientFromExtension } from '../utils';
 import { CosmosWallet } from './cosmos-wallet';
-import { MultiChainWallet, WalletMap } from './multichain-wallet';
+import { MultiChainWallet } from './multichain-wallet';
 
-export class ExtensionWallet extends MultiChainWallet<WalletMap> {
+export class ExtensionWallet extends MultiChainWallet {
   constructor(info: any) {
     super(info);
   }

@@ -150,15 +150,15 @@ export class CosmosWallet extends BaseWallet<CosmosSignRequest, CosmosSignRespon
     }
   }
 
-  private async signAmino(chainId: string, signer: string, signDoc: CosmosAminoDoc): Promise<AminoSignResponse> {
+  async signAmino(chainId: string, signer: string, signDoc: CosmosAminoDoc): Promise<AminoSignResponse> {
     return this.client.signAmino(chainId, signer, signDoc);
   }
 
-  private async signDirect(chainId: string, signer: string, signDoc: CosmosDirectDoc): Promise<DirectSignResponse> {
+  async signDirect(chainId: string, signer: string, signDoc: CosmosDirectDoc): Promise<DirectSignResponse> {
     return this.client.signDirect(chainId, signer, signDoc);
   }
 
-  private async signArbitrary(chainId: string, signer: string, data: string | Uint8Array): Promise<StdSignature> {
+  async signArbitrary(chainId: string, signer: string, data: string | Uint8Array): Promise<StdSignature> {
     return this.client.signArbitrary(chainId, signer, data);
   }
 

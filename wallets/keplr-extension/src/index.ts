@@ -1,16 +1,17 @@
-import { CosmosWallet, EthereumWallet, ExtensionWallet, selectWalletByPlatform, WCMobileWebWallet } from "@interchain-kit/core";
-import { keplrExtensionInfo } from "./registry";
+import { CosmosWallet, EthereumWallet, ExtensionWallet, selectWalletByPlatform, WCMobileWebWallet } from '@interchain-kit/core';
 
-export * from './registry'
+import { keplrExtensionInfo } from './registry';
 
-const web = new ExtensionWallet(keplrExtensionInfo)
-web.setNetworkWallet('cosmos', new CosmosWallet(keplrExtensionInfo))
-web.setNetworkWallet('eip155', new EthereumWallet(keplrExtensionInfo))
+export * from './registry';
+
+const web = new ExtensionWallet(keplrExtensionInfo);
+web.setNetworkWallet('cosmos', new CosmosWallet(keplrExtensionInfo));
+web.setNetworkWallet('eip155', new EthereumWallet(keplrExtensionInfo));
 
 const keplrWallet = selectWalletByPlatform({
   mobileBrowser: new WCMobileWebWallet(keplrExtensionInfo),
   inAppBrowser: web,
   desktopBrowser: web,
-}, keplrExtensionInfo)
+}, keplrExtensionInfo);
 
-export { keplrWallet }
+export { keplrWallet };

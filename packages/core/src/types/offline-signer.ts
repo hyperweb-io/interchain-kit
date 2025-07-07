@@ -1,3 +1,3 @@
 import { AminoGenericOfflineSigner, DirectGenericOfflineSigner } from '@interchainjs/cosmos';
 
-export type GenericOfflineSigner = AminoGenericOfflineSigner | DirectGenericOfflineSigner;
+export type GenericOfflineSigner = AminoGenericOfflineSigner | DirectGenericOfflineSigner 
