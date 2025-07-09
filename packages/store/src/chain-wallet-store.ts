@@ -66,6 +66,10 @@ export class ChainWalletStore extends BaseWallet<GenericSignRequest, GenericSign
   }
   async disconnect(): Promise<void> {
 
+    if (this.wallet instanceof WCWallet) {
+      this.storeManager.setWalletConnectQRCodeUri('');
+    }
+
     try {
       await this.wallet.disconnect(this.chain.chainId);
       this.storeManager.updateChainWalletState(

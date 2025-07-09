@@ -1,5 +1,6 @@
 import { AssetList, Chain } from '@chain-registry/types';
 import { Config, DownloadInfo, EndpointOptions, SignerOptions, SignType, WalletManager, WalletName, WalletState } from '@interchain-kit/core';
+import { ChainWalletState } from '@interchain-kit/store';
 import { SigningClient } from '@interchainjs/cosmos/signing-client';
 import { ICosmosGenericOfflineSigner } from '@interchainjs/cosmos/types';
 import { SigningOptions as InterchainSigningOptions } from '@interchainjs/cosmos/types/signing-client';
@@ -55,14 +56,14 @@ export class WalletStoreManager {
     this.state = new ObservableState(initialState);
 
     // 监听状态变化，自动保存到 localStorage
-    // this.state.subscribe((state) => {
-    //   console.log(state);
-    //   InterchainStorage.set(INTERCHAIN_STORAGE_KEY, {
-    //     currentWalletName: state.currentWalletName,
-    //     currentChainName: state.currentChainName,
-    //     chainWalletStates: state.chainWalletStates,
-    //   });
-    // });
+    this.state.subscribe((state) => {
+      console.log(state);
+      InterchainStorage.set(INTERCHAIN_STORAGE_KEY, {
+        currentWalletName: state.currentWalletName,
+        currentChainName: state.currentChainName,
+        chainWalletStates: state.chainWalletStates,
+      });
+    });
 
 
     config.wallets.forEach((wallet) => {
@@ -76,8 +77,23 @@ export class WalletStoreManager {
 
   restoreState() {
     const state = InterchainStorage.get(INTERCHAIN_STORAGE_KEY);
+
+    const lastChainWalletStateMap = new Map<string, ChainWalletState>(state.chainWalletStates.map((chainWalletState: ChainWalletState) => [chainWalletState.walletName + chainWalletState.chainName, chainWalletState]));
+
+    const oldChainWalletStateToRestore: ChainWalletState[] = [];
+    const newChainWalletStateToRestore: ChainWalletState[] = [];
+    this.state.proxy.chainWalletStates.forEach((chainWalletState: ChainWalletState) => {
+      const lastChainWalletState = lastChainWalletStateMap.get(chainWalletState.walletName + chainWalletState.chainName);
+      if (lastChainWalletState) {
+        oldChainWalletStateToRestore.push(lastChainWalletState);
+      } else {
+        newChainWalletStateToRestore.push(chainWalletState);
+      }
+    });
+
+
     if (state) {
-      this.state.proxy.chainWalletStates = state.chainWalletStates;
+      this.state.proxy.chainWalletStates = [...oldChainWalletStateToRestore, ...newChainWalletStateToRestore];
       this.state.proxy.currentWalletName = state.currentWalletName;
       this.state.proxy.currentChainName = state.currentChainName;
     }
@@ -89,7 +105,7 @@ export class WalletStoreManager {
 
   async init(): Promise<void> {
 
-    // this.restoreState();
+    this.restoreState();
 
 
     await Promise.all(
@@ -144,7 +160,7 @@ export class WalletStoreManager {
   }
 
   getChainWalletByName(walletName: string, chainName: string): ChainWalletStore {
-    const chainWallet = this.getWalletByName(walletName).getChainWalletByChainName(chainName);
+    const chainWallet = this.getWalletByName(walletName)?.getChainWalletByChainName(chainName);
     if (!chainWallet) {
       throw new Error(`Chain wallet with name ${chainName} not found`);
     }
