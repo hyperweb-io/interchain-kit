@@ -71,6 +71,16 @@ export class UniWallet extends BaseWallet<GenericSignRequest, GenericSignRespons
    * 初始化所有注册的钱包
    */
   async init(): Promise<void> {
+
+    let universalWallet = this
+
+    Array.from(this.networkWalletMap.values()).forEach(wallet => {
+      wallet.events.on('accountChanged', () => {
+        universalWallet.events.emit('accountChanged', () => { });
+      });
+    })
+
+
     for (const wallet of this.networkWalletMap.values()) {
       if (wallet) await wallet.init();
     }
@@ -138,7 +148,7 @@ export class UniWallet extends BaseWallet<GenericSignRequest, GenericSignRespons
   /**
    * 签名操作 - 自动路由到对应的钱包
    */
-  async sign(chainId: Chain['chainId'], data: GenericSignRequest): Promise<GenericSignResponse> {
+  async sign(chainId: Chain['chainId'], data: any): Promise<GenericSignResponse> {
     const chain = this.getChainById(chainId);
     const wallet = this.getWalletByChainType(chain.chainType);
     if (!wallet) throw new Error(`No wallet for chainType: ${chain.chainType}`);
@@ -153,6 +163,7 @@ export class UniWallet extends BaseWallet<GenericSignRequest, GenericSignRespons
   getWalletOfType<T>(
     WalletClass: new (...args: any[]) => T
   ): T | undefined {
+    console.log('getWa1lletOfType', this.networkWalletMap.values());
     for (const wallet of this.networkWalletMap.values()) {
       if (isInstanceOf(wallet, WalletClass)) {
         return wallet as T;

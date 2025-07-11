@@ -1,8 +1,9 @@
 import { Chain } from '@chain-registry/types';
-import { BaseWallet, CosmosSignRequest, GenericOfflineSigner, GenericSignRequest, GenericSignResponse, UniWallet, WalletAccount, WalletManager, WalletState, WCWallet } from '@interchain-kit/core';
+import { BaseWallet, clientNotExistError, CosmosAminoSignRequest, GenericOfflineSigner, GenericSignRequest, GenericSignResponse, UniWallet, WalletAccount, WalletManager, WalletState, WCWallet } from '@interchain-kit/core';
 import { AminoGenericOfflineSigner, AminoSignResponse, DirectGenericOfflineSigner, DirectSignResponse } from '@interchainjs/cosmos/types/wallet';
 import { HttpEndpoint } from '@interchainjs/types';
 
+import { ChainWalletState } from './types';
 import { WalletStoreManager } from './wallet-store-manager';
 
 
@@ -20,18 +21,26 @@ export class ChainWalletStore extends BaseWallet<GenericSignRequest, GenericSign
     this.storeManager = storeManager;
   }
 
+  updateState(chainWalletState: Partial<ChainWalletState>) {
+    this.storeManager.updateChainWalletState(
+      this.wallet.info.name,
+      this.chain.chainName,
+      chainWalletState
+    );
+  }
+
   async init(): Promise<void> {
     try {
       await this.wallet.init();
+      this.updateState({ walletState: WalletState.Disconnected, errorMessage: null });
     } catch (error) {
-      console.error(error);
-      this.storeManager.updateChainWalletState(
-        this.wallet.info.name,
-        this.chain.chainName,
-        { errorMessage: error instanceof Error ? error.message : String(error) }
-      );
+      if ((error as any).message === clientNotExistError.message) {
+        console.log('clientNotExistError', this.wallet.info.name, this.chain.chainName);
+        this.updateState({ walletState: WalletState.NotExist, errorMessage: null });
+      } else {
+        this.updateState({ errorMessage: error instanceof Error ? error.message : String(error) });
+      }
     }
-
   }
   async connect(): Promise<void> {
 
@@ -43,28 +52,26 @@ export class ChainWalletStore extends BaseWallet<GenericSignRequest, GenericSign
 
 
     try {
-      this.storeManager.updateChainWalletState(
-        this.wallet.info.name,
-        this.chain.chainName,
-        { walletState: WalletState.Connecting }
-      );
+      const walletState = this.storeManager.getChainWalletState(this.wallet.info.name, this.chain.chainName)?.walletState;
+      if (walletState === WalletState.NotExist) {
+        return;
+      }
+
 
       await this.wallet.connect(this.chain.chainId);
-
-      this.storeManager.updateChainWalletState(
-        this.wallet.info.name,
-        this.chain.chainName,
-        { walletState: WalletState.Connected }
-      );
+      await this.forceGetAccount();
+      this.updateState({ walletState: WalletState.Connected });
     } catch (error) {
-      this.storeManager.updateChainWalletState(
-        this.wallet.info.name,
-        this.chain.chainName,
-        { walletState: WalletState.Disconnected }
-      );
+      this.updateState({ walletState: WalletState.Disconnected });
     }
   }
   async disconnect(): Promise<void> {
+
+    const walletState = this.storeManager.getChainWalletState(this.wallet.info.name, this.chain.chainName)?.walletState;
+    if (walletState === WalletState.NotExist) {
+      return;
+    }
+
 
     if (this.wallet instanceof WCWallet) {
       this.storeManager.setWalletConnectQRCodeUri('');
@@ -72,11 +79,7 @@ export class ChainWalletStore extends BaseWallet<GenericSignRequest, GenericSign
 
     try {
       await this.wallet.disconnect(this.chain.chainId);
-      this.storeManager.updateChainWalletState(
-        this.wallet.info.name,
-        this.chain.chainName,
-        { walletState: WalletState.Disconnected }
-      );
+      this.updateState({ walletState: WalletState.Disconnected });
     } catch (error) {
       console.error(error);
     }
@@ -86,13 +89,7 @@ export class ChainWalletStore extends BaseWallet<GenericSignRequest, GenericSign
       const signResponse = await this.wallet.sign(chainId, data);
       return signResponse;
     } catch (error) {
-      console.error(error);
-      this.storeManager.updateChainWalletState(
-        this.wallet.info.name,
-        this.chain.chainName,
-        { errorMessage: error instanceof Error ? error.message : String(error) }
-      );
-      throw error;
+      this.updateState({ errorMessage: error instanceof Error ? error.message : String(error) });
     }
   }
 
@@ -102,9 +99,16 @@ export class ChainWalletStore extends BaseWallet<GenericSignRequest, GenericSign
       return existedAccount;
     }
     const account = await this.wallet.getAccount(this.chain.chainId);
-    this.storeManager.updateChainWalletState(this.wallet.info.name, this.chain.chainName, { account });
+    this.updateState({ account });
     return account;
   }
+
+  async forceGetAccount(): Promise<WalletAccount> {
+    const account = await this.wallet.getAccount(this.chain.chainId);
+    this.updateState({ account });
+    return account;
+  }
+
   async getOfflineSigner(): Promise<GenericOfflineSigner> {
     const preferSignType = this.walletManager.getPreferSignType(this.chain.chainName);
     if (this.chain.chainType === 'cosmos') {
@@ -112,7 +116,7 @@ export class ChainWalletStore extends BaseWallet<GenericSignRequest, GenericSign
         return new AminoGenericOfflineSigner({
           getAccounts: async () => [await this.getAccount()],
           signAmino: async (signerAddress, signDoc) => {
-            const doc: CosmosSignRequest = {
+            const doc: CosmosAminoSignRequest = {
               method: 'cosmos_amino',
               data: signDoc,
               chainId: this.chain.chainId,
@@ -152,7 +156,11 @@ export class ChainWalletStore extends BaseWallet<GenericSignRequest, GenericSign
       return existedRpcEndpoint;
     }
     const rpcEndpoint = await this.walletManager.getRpcEndpoint(this.wallet.info.name, this.chain.chainName);
-    this.storeManager.updateChainWalletState(this.wallet.info.name, this.chain.chainName, { rpcEndpoint });
+    this.updateState({ rpcEndpoint });
     return rpcEndpoint;
+  }
+
+  getWalletOfType<T extends BaseWallet>(type: new (...args: any[]) => T): T | undefined {
+    return this.wallet.getWalletOfType(type);
   }
 }

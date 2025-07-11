@@ -1,12 +1,13 @@
 import { Chain } from '@chain-registry/types';
 import { fromByteArray } from 'base64-js';
 
-import { WalletAccount } from '../types';
+import { EthereumMessageSignRequest, EthereumMessageSignResponse, EthereumTransactionSignRequest, EthereumTransactionSignResponse, WalletAccount } from '../types';
 import { EthereumNetwork } from '../types/ethereum';
-import { EthereumSignRequest } from '../types/sign-request';
-import { EthereumSignResponse } from '../types/sign-response';
 import { delay, getClientFromExtension } from '../utils';
 import { BaseWallet } from './base-wallet';
+
+type EthereumSignRequest = EthereumMessageSignRequest | EthereumTransactionSignRequest;
+type EthereumSignResponse = EthereumMessageSignResponse | EthereumTransactionSignResponse;
 
 export class EthereumWallet extends BaseWallet<EthereumSignRequest, EthereumSignResponse, any> {
 
@@ -20,19 +21,21 @@ export class EthereumWallet extends BaseWallet<EthereumSignRequest, EthereumSign
   async connect(chainId: Chain['chainId']): Promise<void> {
     let chainIdToHex = chainId.startsWith('0x') ? chainId : '0x' + parseInt(chainId, 10).toString(16);
     try {
-      // const accounts = await this.ethereum.request({
-      //   method: "eth_requestAccounts",
-      //   params: [{ chainId }],
-      // })
+      await this.switchChain(chainId);
+      const accounts = await this.ethereum.request({
+        method: 'eth_requestAccounts',
+        params: [{ chainId }],
+      });
       // const chainIdd = await this.ethereum.request({
       //   method: "eth_chainId",
       //   params: [],
       // })
-      await this.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: chainIdToHex }],
-      });
+      // await this.ethereum.request({
+      //   method: 'wallet_switchEthereumChain',
+      //   params: [{ chainId: chainIdToHex }],
+      // });
     } catch (error) {
+      console.log('error', error);
       if (!(error as any).message.includes('reject')) {
         await this.addSuggestChain(chainId as string);
       }

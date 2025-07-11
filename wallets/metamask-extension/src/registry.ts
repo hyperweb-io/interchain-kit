@@ -1,5 +1,6 @@
 
 import { Wallet } from '@interchain-kit/core';
+
 import { ICON } from './constant';
 
 export const MetaMaskExtensionInfo: Wallet = {

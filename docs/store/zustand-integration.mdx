@@ -1,0 +1,259 @@
+# Zustand Integration
+
+This guide demonstrates how to integrate `@interchain-kit/store` with Zustand for state management in React applications.
+
+## Installation
+
+First, install the required dependencies:
+
+```bash
+npm install @interchain-kit/store zustand
+```
+
+## Basic Setup
+
+Create a Zustand store that wraps the Interchain Kit store manager:
+
+```typescript
+// stores/wallet-store.ts
+import { create } from 'zustand';
+import { WalletStoreManager, Config } from '@interchain-kit/store';
+import { chains, wallets } from '@interchain-kit/core';
+
+interface WalletState {
+  // Interchain Kit store manager
+  storeManager: WalletStoreManager | null;
+  
+  // Zustand state
+  isLoading: boolean;
+  error: string | null;
+  
+  // Actions
+  initialize: (config: Config) => Promise<void>;
+  connect: (walletName: string, chainName: string) => Promise<void>;
+  disconnect: (walletName: string, chainName: string) => Promise<void>;
+  reset: () => void;
+}
+
+export const useWalletStore = create<WalletState>((set, get) => ({
+  storeManager: null,
+  isLoading: false,
+  error: null,
+
+  initialize: async (config: Config) => {
+    set({ isLoading: true, error: null });
+    
+    try {
+      const storeManager = new WalletStoreManager(config);
+      await storeManager.init();
+      
+      set({ 
+        storeManager, 
+        isLoading: false 
+      });
+    } catch (error) {
+      set({ 
+        error: error instanceof Error ? error.message : 'Failed to initialize wallet store',
+        isLoading: false 
+      });
+    }
+  },
+
+  connect: async (walletName: string, chainName: string) => {
+    const { storeManager } = get();
+    if (!storeManager) {
+      set({ error: 'Store manager not initialized' });
+      return;
+    }
+
+    set({ isLoading: true, error: null });
+    
+    try {
+      await storeManager.connect(walletName, chainName);
+      set({ isLoading: false });
+    } catch (error) {
+      set({ 
+        error: error instanceof Error ? error.message : 'Failed to connect wallet',
+        isLoading: false 
+      });
+    }
+  },
+
+  disconnect: async (walletName: string, chainName: string) => {
+    const { storeManager } = get();
+    if (!storeManager) return;
+
+    set({ isLoading: true, error: null });
+    
+    try {
+      await storeManager.disconnect(walletName, chainName);
+      set({ isLoading: false });
+    } catch (error) {
+      set({ 
+        error: error instanceof Error ? error.message : 'Failed to disconnect wallet',
+        isLoading: false 
+      });
+    }
+  },
+
+  reset: () => {
+    set({ 
+      storeManager: null, 
+      isLoading: false, 
+      error: null 
+    });
+  }
+}));
+```
+
+## React Component Usage
+
+Create a React component that uses the Zustand store:
+
+```typescript
+// components/WalletManager.tsx
+import React, { useEffect } from 'react';
+import { useWalletStore } from '../stores/wallet-store';
+import { chains, wallets } from '@interchain-kit/core';
+
+const WalletManager: React.FC = () => {
+  const { 
+    storeManager, 
+    isLoading, 
+    error, 
+    initialize, 
+    connect, 
+    disconnect 
+  } = useWalletStore();
+
+  useEffect(() => {
+    // Initialize the store on component mount
+    const config = {
+      chains: [chains.cosmoshub, chains.osmosis],
+      wallets: [wallets.keplr, wallets.cosmostation],
+      signerOptions: {
+        preferredSignType: () => 'amino',
+        signing: () => ({})
+      }
+    };
+    
+    initialize(config);
+  }, [initialize]);
+
+  const handleConnect = async () => {
+    await connect('keplr-extension', 'cosmoshub');
+  };
+
+  const handleDisconnect = async () => {
+    await disconnect('keplr-extension', 'cosmoshub');
+  };
+
+  if (isLoading) {
+    return <div>Loading wallet store...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return (
+    <div>
+      <h2>Wallet Manager</h2>
+      <button onClick={handleConnect}>Connect Keplr</button>
+      <button onClick={handleDisconnect}>Disconnect</button>
+      
+      {storeManager && (
+        <div>
+          <h3>Current State:</h3>
+          <p>Current Wallet: {storeManager.getState().currentWalletName}</p>
+          <p>Current Chain: {storeManager.getState().currentChainName}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default WalletManager;
+```
+
+## Advanced Usage with Selectors
+
+Use Zustand selectors for better performance:
+
+```typescript
+// hooks/useWalletState.ts
+import { useWalletStore } from '../stores/wallet-store';
+
+export const useWalletState = () => {
+  return useWalletStore((state) => ({
+    isLoading: state.isLoading,
+    error: state.error,
+    storeManager: state.storeManager
+  }));
+};
+
+export const useWalletConnection = () => {
+  return useWalletStore((state) => {
+    const storeManager = state.storeManager;
+    if (!storeManager) return null;
+    
+    const stateData = storeManager.getState();
+    return {
+      currentWallet: stateData.currentWalletName,
+      currentChain: stateData.currentChainName,
+      isConnected: stateData.chainWalletStates.some(
+        (chainState) => chainState.walletState === 'Connected'
+      )
+    };
+  });
+};
+```
+
+## Complete Example
+
+Here's a complete example showing how to use the wallet store in a React app:
+
+```typescript
+// App.tsx
+import React from 'react';
+import WalletManager from './components/WalletManager';
+import { useWalletConnection } from './hooks/useWalletState';
+
+const App: React.FC = () => {
+  const connection = useWalletConnection();
+
+  return (
+    <div>
+      <h1>Interchain Kit + Zustand Demo</h1>
+      
+      <WalletManager />
+      
+      {connection && (
+        <div>
+          <h3>Connection Status:</h3>
+          <p>Wallet: {connection.currentWallet || 'None'}</p>
+          <p>Chain: {connection.currentChain || 'None'}</p>
+          <p>Connected: {connection.isConnected ? 'Yes' : 'No'}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
+```
+
+## Benefits of Zustand Integration
+
+- **Simple API**: Zustand provides a minimal and intuitive API
+- **TypeScript Support**: Full TypeScript support out of the box
+- **Performance**: Automatic component re-rendering optimization
+- **DevTools**: Built-in Redux DevTools support
+- **Middleware**: Easy to add middleware for logging, persistence, etc.
+
+## Next Steps
+
+- Add persistence middleware to save wallet state to localStorage
+- Implement error boundaries for better error handling
+- Add loading states and optimistic updates
+- Create custom hooks for specific wallet operations 

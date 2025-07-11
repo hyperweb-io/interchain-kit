@@ -48,7 +48,13 @@ export class WalletManager {
   }
 
   async init() {
-    await Promise.all(this.wallets.map(async (wallet) => wallet.init()));
+    await Promise.all(this.wallets.map(async (wallet) => {
+      try {
+        await wallet.init();
+      } catch (error) {
+        console.log(wallet.info.name, 'init error', error);
+      }
+    }));
   }
 
   static async create(

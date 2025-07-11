@@ -1,0 +1,415 @@
+ # React Query Integration
+
+This guide demonstrates how to integrate `@interchain-kit/store` with React Query (TanStack Query) for efficient data fetching and caching in React applications.
+
+## Installation
+
+First, install the required dependencies:
+
+```bash
+npm install @interchain-kit/store @tanstack/react-query
+```
+
+## Basic Setup
+
+Set up React Query provider and create custom hooks for wallet operations:
+
+```typescript
+// providers/query-provider.tsx
+import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      cacheTime: 10 * 60 * 1000, // 10 minutes
+      retry: 3,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+export const QueryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
+};
+```
+
+## Custom Hooks
+
+Create custom hooks that integrate React Query with the Interchain Kit store:
+
+```typescript
+// hooks/useWalletStore.ts
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { WalletStoreManager, Config } from '@interchain-kit/store';
+import { chains, wallets } from '@interchain-kit/core';
+
+// Global store manager instance
+let storeManager: WalletStoreManager | null = null;
+
+// Initialize the store manager
+const initializeStore = async (config: Config): Promise<WalletStoreManager> => {
+  if (!storeManager) {
+    storeManager = new WalletStoreManager(config);
+    await storeManager.init();
+  }
+  return storeManager;
+};
+
+// Custom hooks
+export const useWalletStore = (config?: Config) => {
+  return useQuery({
+    queryKey: ['wallet-store'],
+    queryFn: () => initializeStore(config || {
+      chains: [chains.cosmoshub, chains.osmosis],
+      wallets: [wallets.keplr, wallets.cosmostation],
+      signerOptions: {
+        preferredSignType: () => 'amino',
+        signing: () => ({})
+      }
+    }),
+    staleTime: Infinity, // Store manager doesn't change often
+    cacheTime: Infinity,
+  });
+};
+
+export const useWalletConnection = (walletName: string, chainName: string) => {
+  return useQuery({
+    queryKey: ['wallet-connection', walletName, chainName],
+    queryFn: async () => {
+      if (!storeManager) throw new Error('Store manager not initialized');
+      
+      const state = storeManager.getState();
+      const chainWalletState = state.chainWalletStates.find(
+        (s) => s.walletName === walletName && s.chainName === chainName
+      );
+      
+      return {
+        walletName,
+        chainName,
+        state: chainWalletState?.walletState || 'Disconnected',
+        account: chainWalletState?.account || null,
+        error: chainWalletState?.errorMessage || null,
+      };
+    },
+    enabled: !!storeManager,
+    refetchInterval: 1000, // Poll every second for connection status
+  });
+};
+
+export const useWalletAccount = (walletName: string, chainName: string) => {
+  return useQuery({
+    queryKey: ['wallet-account', walletName, chainName],
+    queryFn: async () => {
+      if (!storeManager) throw new Error('Store manager not initialized');
+      return await storeManager.getAccount(walletName, chainName);
+    },
+    enabled: !!storeManager,
+    staleTime: 30 * 1000, // 30 seconds
+  });
+};
+
+export const useWalletBalance = (walletName: string, chainName: string) => {
+  return useQuery({
+    queryKey: ['wallet-balance', walletName, chainName],
+    queryFn: async () => {
+      if (!storeManager) throw new Error('Store manager not initialized');
+      const account = await storeManager.getAccount(walletName, chainName);
+      return account?.balance || [];
+    },
+    enabled: !!storeManager,
+    staleTime: 10 * 1000, // 10 seconds
+  });
+};
+
+// Mutations
+export const useConnectWallet = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async ({ walletName, chainName }: { walletName: string; chainName: string }) => {
+      if (!storeManager) throw new Error('Store manager not initialized');
+      return await storeManager.connect(walletName, chainName);
+    },
+    onSuccess: (_, { walletName, chainName }) => {
+      // Invalidate and refetch related queries
+      queryClient.invalidateQueries({ queryKey: ['wallet-connection', walletName, chainName] });
+      queryClient.invalidateQueries({ queryKey: ['wallet-account', walletName, chainName] });
+      queryClient.invalidateQueries({ queryKey: ['wallet-balance', walletName, chainName] });
+    },
+  });
+};
+
+export const useDisconnectWallet = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async ({ walletName, chainName }: { walletName: string; chainName: string }) => {
+      if (!storeManager) throw new Error('Store manager not initialized');
+      return await storeManager.disconnect(walletName, chainName);
+    },
+    onSuccess: (_, { walletName, chainName }) => {
+      // Invalidate and refetch related queries
+      queryClient.invalidateQueries({ queryKey: ['wallet-connection', walletName, chainName] });
+      queryClient.invalidateQueries({ queryKey: ['wallet-account', walletName, chainName] });
+      queryClient.invalidateQueries({ queryKey: ['wallet-balance', walletName, chainName] });
+    },
+  });
+};
+```
+
+## React Component Usage
+
+Create React components that use the React Query hooks:
+
+```typescript
+// components/WalletManager.tsx
+import React from 'react';
+import { useWalletStore, useConnectWallet, useDisconnectWallet } from '../hooks/useWalletStore';
+
+const WalletManager: React.FC = () => {
+  const { data: storeManager, isLoading: storeLoading, error: storeError } = useWalletStore();
+  const connectWallet = useConnectWallet();
+  const disconnectWallet = useDisconnectWallet();
+
+  const handleConnect = async () => {
+    await connectWallet.mutateAsync({ walletName: 'keplr-extension', chainName: 'cosmoshub' });
+  };
+
+  const handleDisconnect = async () => {
+    await disconnectWallet.mutateAsync({ walletName: 'keplr-extension', chainName: 'cosmoshub' });
+  };
+
+  if (storeLoading) {
+    return <div>Initializing wallet store...</div>;
+  }
+
+  if (storeError) {
+    return <div>Error initializing store: {storeError.message}</div>;
+  }
+
+  return (
+    <div>
+      <h2>Wallet Manager</h2>
+      <button 
+        onClick={handleConnect}
+        disabled={connectWallet.isPending}
+      >
+        {connectWallet.isPending ? 'Connecting...' : 'Connect Keplr'}
+      </button>
+      <button 
+        onClick={handleDisconnect}
+        disabled={disconnectWallet.isPending}
+      >
+        {disconnectWallet.isPending ? 'Disconnecting...' : 'Disconnect'}
+      </button>
+    </div>
+  );
+};
+
+export default WalletManager;
+```
+
+## Connection Status Component
+
+Create a component to display connection status:
+
+```typescript
+// components/ConnectionStatus.tsx
+import React from 'react';
+import { useWalletConnection } from '../hooks/useWalletStore';
+
+interface ConnectionStatusProps {
+  walletName: string;
+  chainName: string;
+}
+
+const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ walletName, chainName }) => {
+  const { 
+    data: connection, 
+    isLoading, 
+    error 
+  } = useWalletConnection(walletName, chainName);
+
+  if (isLoading) {
+    return <div>Loading connection status...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading connection: {error.message}</div>;
+  }
+
+  if (!connection) {
+    return <div>No connection data</div>;
+  }
+
+  return (
+    <div>
+      <h3>Connection Status</h3>
+      <p>Wallet: {connection.walletName}</p>
+      <p>Chain: {connection.chainName}</p>
+      <p>State: {connection.state}</p>
+      {connection.account && (
+        <p>Address: {connection.account.address}</p>
+      )}
+      {connection.error && (
+        <p>Error: {connection.error}</p>
+      )}
+    </div>
+  );
+};
+
+export default ConnectionStatus;
+```
+
+## Account Balance Component
+
+Create a component to display account balances:
+
+```typescript
+// components/AccountBalance.tsx
+import React from 'react';
+import { useWalletBalance } from '../hooks/useWalletStore';
+
+interface AccountBalanceProps {
+  walletName: string;
+  chainName: string;
+}
+
+const AccountBalance: React.FC<AccountBalanceProps> = ({ walletName, chainName }) => {
+  const { 
+    data: balances, 
+    isLoading, 
+    error 
+  } = useWalletBalance(walletName, chainName);
+
+  if (isLoading) {
+    return <div>Loading balances...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading balances: {error.message}</div>;
+  }
+
+  return (
+    <div>
+      <h3>Account Balances</h3>
+      {balances && balances.length > 0 ? (
+        <ul>
+          {balances.map((balance, index) => (
+            <li key={index}>
+              {balance.amount} {balance.denom}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No balances found</p>
+      )}
+    </div>
+  );
+};
+
+export default AccountBalance;
+```
+
+## Complete Example
+
+Here's a complete example showing how to use React Query with the wallet store:
+
+```typescript
+// App.tsx
+import React from 'react';
+import { QueryProvider } from './providers/query-provider';
+import WalletManager from './components/WalletManager';
+import ConnectionStatus from './components/ConnectionStatus';
+import AccountBalance from './components/AccountBalance';
+
+const App: React.FC = () => {
+  return (
+    <QueryProvider>
+      <div>
+        <h1>Interchain Kit + React Query Demo</h1>
+        
+        <WalletManager />
+        
+        <ConnectionStatus walletName="keplr-extension" chainName="cosmoshub" />
+        <AccountBalance walletName="keplr-extension" chainName="cosmoshub" />
+      </div>
+    </QueryProvider>
+  );
+};
+
+export default App;
+```
+
+## Advanced Usage with Optimistic Updates
+
+Implement optimistic updates for better UX:
+
+```typescript
+// hooks/useWalletStore.ts
+export const useConnectWalletOptimistic = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async ({ walletName, chainName }: { walletName: string; chainName: string }) => {
+      if (!storeManager) throw new Error('Store manager not initialized');
+      return await storeManager.connect(walletName, chainName);
+    },
+    onMutate: async ({ walletName, chainName }) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['wallet-connection', walletName, chainName] });
+      
+      // Snapshot the previous value
+      const previousConnection = queryClient.getQueryData(['wallet-connection', walletName, chainName]);
+      
+      // Optimistically update to the new value
+      queryClient.setQueryData(['wallet-connection', walletName, chainName], {
+        walletName,
+        chainName,
+        state: 'Connecting',
+        account: null,
+        error: null,
+      });
+      
+      // Return a context object with the snapshotted value
+      return { previousConnection };
+    },
+    onError: (err, { walletName, chainName }, context) => {
+      // If the mutation fails, use the context returned from onMutate to roll back
+      if (context?.previousConnection) {
+        queryClient.setQueryData(['wallet-connection', walletName, chainName], context.previousConnection);
+      }
+    },
+    onSettled: (_, __, { walletName, chainName }) => {
+      // Always refetch after error or success
+      queryClient.invalidateQueries({ queryKey: ['wallet-connection', walletName, chainName] });
+    },
+  });
+};
+```
+
+## Benefits of React Query Integration
+
+- **Automatic Caching**: Intelligent caching with configurable stale times
+- **Background Updates**: Automatic background refetching
+- **Optimistic Updates**: Immediate UI updates with rollback on error
+- **Error Handling**: Built-in error handling and retry logic
+- **Loading States**: Easy loading state management
+- **DevTools**: Excellent debugging support with React Query DevTools
+- **Performance**: Efficient data fetching with minimal network requests
+
+## Next Steps
+
+- Add infinite queries for paginated data
+- Implement prefetching for better UX
+- Add offline support with React Query's persistence
+- Create more specialized hooks for specific wallet operations
+- Add error boundaries and retry mechanisms

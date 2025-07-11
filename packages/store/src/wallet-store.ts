@@ -1,5 +1,5 @@
 import { Chain } from '@chain-registry/types';
-import { BaseWallet, GenericOfflineSigner, GenericSignRequest, GenericSignResponse, UniWallet, WalletAccount, WalletManager, WalletState } from '@interchain-kit/core';
+import { BaseSignResponse, BaseWallet, GenericOfflineSigner, GenericSignRequest, GenericSignResponse, UniWallet, WalletAccount, WalletManager, WalletState } from '@interchain-kit/core';
 
 import { ChainWalletStore } from './chain-wallet-store';
 import { calculateWalletState, getWalletErrorMessage } from './utils/flat-state-utils';
@@ -35,18 +35,11 @@ export class WalletStore extends BaseWallet<GenericSignRequest, GenericSignRespo
   }
 
   async init(): Promise<void> {
-
-    // this.wallet.events.on('accountChanged', () => {
-    //   console.log('accountChanged');
-    //   // 重新获取所有链的账户
-    //   this.chains.forEach(chain => {
-    //     this.getAccount(chain.chainId);
-    //   });
-    // });
-
     const chainWallets = Array.from(this.chainWallets.values());
+    this.wallet.events.on('accountChanged', async () => {
+      await Promise.all(chainWallets.map(cw => cw.forceGetAccount()))
+    })
     await Promise.all(chainWallets.map(async chainWallet => chainWallet.init()));
-
   }
 
   get walletState() {
@@ -76,7 +69,7 @@ export class WalletStore extends BaseWallet<GenericSignRequest, GenericSignRespo
     return this.getChainWalletByChainName(chain.chainName).getAccount();
   }
 
-  async sign(chainId: Chain['chainId'], data: GenericSignRequest): Promise<GenericSignResponse> {
+  async sign(chainId: Chain['chainId'], data: any): Promise<BaseSignResponse> {
     const chain = this.wallet.getChainById(chainId);
     return this.getChainWalletByChainName(chain.chainName).sign(chainId, data);
   }

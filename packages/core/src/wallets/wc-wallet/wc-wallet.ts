@@ -3,7 +3,7 @@ import { SessionTypes, SignClientTypes } from '@walletconnect/types';
 import UniversalProvider, { UniversalProviderOpts } from '@walletconnect/universal-provider';
 
 import { WalletConnectIcon } from '../../constant';
-import { GenericOfflineSigner, GenericSignRequest, GenericSignResponse, Wallet } from '../../types';
+import { GenericOfflineSigner, Wallet } from '../../types';
 import { UniWallet } from '../multichain-wallet';
 import { WCCosmosWallet } from './wc-cosmos-wallet';
 import { WCEthereumWallet } from './wc-ethereum-wallet';
@@ -140,7 +140,7 @@ export class WCWallet extends UniWallet {
     throw new Error(`No wallet found for chain type: ${chain.chainType}`);
   }
 
-  async sign(chainId: Chain['chainId'], data: GenericSignRequest): Promise<GenericSignResponse> {
+  async sign(chainId: Chain['chainId'], data: any): Promise<BaseSignResponse> {
     const chain = this.getChainById(chainId);
     const wallet = this.getWalletByChainType(chain.chainType);
 

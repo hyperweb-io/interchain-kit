@@ -1,0 +1,412 @@
+ # MobX Integration
+
+This guide demonstrates how to integrate `@interchain-kit/store` with MobX for state management in React applications.
+
+## Installation
+
+First, install the required dependencies:
+
+```bash
+npm install @interchain-kit/store mobx mobx-react-lite
+```
+
+## Basic Setup
+
+Create a MobX store that wraps the Interchain Kit store manager:
+
+```typescript
+// stores/wallet-store.ts
+import { makeAutoObservable, runInAction } from 'mobx';
+import { WalletStoreManager, Config } from '@interchain-kit/store';
+import { chains, wallets } from '@interchain-kit/core';
+
+class WalletStore {
+  // Interchain Kit store manager
+  storeManager: WalletStoreManager | null = null;
+  
+  // MobX observable state
+  isLoading = false;
+  error: string | null = null;
+  
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  // Actions
+  async initialize(config: Config) {
+    this.isLoading = true;
+    this.error = null;
+    
+    try {
+      const storeManager = new WalletStoreManager(config);
+      await storeManager.init();
+      
+      runInAction(() => {
+        this.storeManager = storeManager;
+        this.isLoading = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error instanceof Error ? error.message : 'Failed to initialize wallet store';
+        this.isLoading = false;
+      });
+    }
+  }
+
+  async connect(walletName: string, chainName: string) {
+    if (!this.storeManager) {
+      this.error = 'Store manager not initialized';
+      return;
+    }
+
+    this.isLoading = true;
+    this.error = null;
+    
+    try {
+      await this.storeManager.connect(walletName, chainName);
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error instanceof Error ? error.message : 'Failed to connect wallet';
+        this.isLoading = false;
+      });
+    }
+  }
+
+  async disconnect(walletName: string, chainName: string) {
+    if (!this.storeManager) return;
+
+    this.isLoading = true;
+    this.error = null;
+    
+    try {
+      await this.storeManager.disconnect(walletName, chainName);
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error instanceof Error ? error.message : 'Failed to disconnect wallet';
+        this.isLoading = false;
+      });
+    }
+  }
+
+  reset() {
+    this.storeManager = null;
+    this.isLoading = false;
+    this.error = null;
+  }
+
+  // Computed values
+  get currentWallet() {
+    return this.storeManager?.getState().currentWalletName || null;
+  }
+
+  get currentChain() {
+    return this.storeManager?.getState().currentChainName || null;
+  }
+
+  get isConnected() {
+    if (!this.storeManager) return false;
+    
+    const state = this.storeManager.getState();
+    return state.chainWalletStates.some(
+      (chainState) => chainState.walletState === 'Connected'
+    );
+  }
+
+  get connectedAccounts() {
+    if (!this.storeManager) return [];
+    
+    const state = this.storeManager.getState();
+    return state.chainWalletStates
+      .filter((chainState) => chainState.walletState === 'Connected')
+      .map((chainState) => ({
+        walletName: chainState.walletName,
+        chainName: chainState.chainName,
+        account: chainState.account
+      }));
+  }
+}
+
+// Create a singleton instance
+export const walletStore = new WalletStore();
+```
+
+## React Component Usage
+
+Create a React component that uses the MobX store:
+
+```typescript
+// components/WalletManager.tsx
+import React, { useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
+import { walletStore } from '../stores/wallet-store';
+import { chains, wallets } from '@interchain-kit/core';
+
+const WalletManager: React.FC = observer(() => {
+  useEffect(() => {
+    // Initialize the store on component mount
+    const config = {
+      chains: [chains.cosmoshub, chains.osmosis],
+      wallets: [wallets.keplr, wallets.cosmostation],
+      signerOptions: {
+        preferredSignType: () => 'amino',
+        signing: () => ({})
+      }
+    };
+    
+    walletStore.initialize(config);
+  }, []);
+
+  const handleConnect = async () => {
+    await walletStore.connect('keplr-extension', 'cosmoshub');
+  };
+
+  const handleDisconnect = async () => {
+    await walletStore.disconnect('keplr-extension', 'cosmoshub');
+  };
+
+  if (walletStore.isLoading) {
+    return <div>Loading wallet store...</div>;
+  }
+
+  if (walletStore.error) {
+    return <div>Error: {walletStore.error}</div>;
+  }
+
+  return (
+    <div>
+      <h2>Wallet Manager</h2>
+      <button onClick={handleConnect}>Connect Keplr</button>
+      <button onClick={handleDisconnect}>Disconnect</button>
+      
+      {walletStore.storeManager && (
+        <div>
+          <h3>Current State:</h3>
+          <p>Current Wallet: {walletStore.currentWallet}</p>
+          <p>Current Chain: {walletStore.currentChain}</p>
+          <p>Connected: {walletStore.isConnected ? 'Yes' : 'No'}</p>
+        </div>
+      )}
+    </div>
+  );
+});
+
+export default WalletManager;
+```
+
+## Custom Hooks
+
+Create custom hooks for better reusability:
+
+```typescript
+// hooks/useWalletStore.ts
+import { walletStore } from '../stores/wallet-store';
+
+export const useWalletStore = () => {
+  return walletStore;
+};
+
+export const useWalletConnection = () => {
+  return {
+    currentWallet: walletStore.currentWallet,
+    currentChain: walletStore.currentChain,
+    isConnected: walletStore.isConnected,
+    connectedAccounts: walletStore.connectedAccounts
+  };
+};
+
+export const useWalletActions = () => {
+  return {
+    connect: walletStore.connect.bind(walletStore),
+    disconnect: walletStore.disconnect.bind(walletStore),
+    reset: walletStore.reset.bind(walletStore)
+  };
+};
+```
+
+## Advanced Usage with Reactions
+
+Use MobX reactions for side effects:
+
+```typescript
+// stores/wallet-store.ts
+import { makeAutoObservable, runInAction, reaction } from 'mobx';
+
+class WalletStore {
+  // ... existing code ...
+
+  constructor() {
+    makeAutoObservable(this);
+    
+    // Set up reactions for side effects
+    this.setupReactions();
+  }
+
+  private setupReactions() {
+    // React to connection changes
+    reaction(
+      () => this.isConnected,
+      (isConnected) => {
+        if (isConnected) {
+          console.log('Wallet connected!');
+          // You can trigger other actions here
+        } else {
+          console.log('Wallet disconnected!');
+        }
+      }
+    );
+
+    // React to current wallet changes
+    reaction(
+      () => this.currentWallet,
+      (currentWallet) => {
+        if (currentWallet) {
+          console.log(`Current wallet changed to: ${currentWallet}`);
+        }
+      }
+    );
+  }
+}
+```
+
+## Complete Example
+
+Here's a complete example showing how to use the wallet store in a React app:
+
+```typescript
+// App.tsx
+import React from 'react';
+import { observer } from 'mobx-react-lite';
+import WalletManager from './components/WalletManager';
+import { useWalletConnection } from './hooks/useWalletStore';
+
+const App: React.FC = observer(() => {
+  const connection = useWalletConnection();
+
+  return (
+    <div>
+      <h1>Interchain Kit + MobX Demo</h1>
+      
+      <WalletManager />
+      
+      <div>
+        <h3>Connection Status:</h3>
+        <p>Wallet: {connection.currentWallet || 'None'}</p>
+        <p>Chain: {connection.currentChain || 'None'}</p>
+        <p>Connected: {connection.isConnected ? 'Yes' : 'No'}</p>
+        
+        {connection.connectedAccounts.length > 0 && (
+          <div>
+            <h4>Connected Accounts:</h4>
+            {connection.connectedAccounts.map((account, index) => (
+              <div key={index}>
+                <p>{account.walletName} on {account.chainName}</p>
+                <p>Address: {account.account?.address}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
+
+export default App;
+```
+
+## Account Balance Component
+
+Create a component to display account balances:
+
+```typescript
+// components/AccountBalance.tsx
+import React, { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { walletStore } from '../stores/wallet-store';
+
+interface Balance {
+  denom: string;
+  amount: string;
+}
+
+const AccountBalance: React.FC = observer(() => {
+  const [balances, setBalances] = useState<Balance[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchBalances = async () => {
+      if (!walletStore.storeManager || !walletStore.isConnected) {
+        setBalances([]);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const account = await walletStore.storeManager.getAccount(
+          walletStore.currentWallet!,
+          walletStore.currentChain!
+        );
+        
+        if (account?.balance) {
+          setBalances(account.balance);
+        }
+      } catch (error) {
+        console.error('Failed to fetch balances:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBalances();
+  }, [walletStore.isConnected, walletStore.currentWallet, walletStore.currentChain]);
+
+  if (!walletStore.isConnected) {
+    return <div>Not connected to any wallet</div>;
+  }
+
+  if (loading) {
+    return <div>Loading balances...</div>;
+  }
+
+  return (
+    <div>
+      <h3>Account Balances</h3>
+      {balances.length > 0 ? (
+        <ul>
+          {balances.map((balance, index) => (
+            <li key={index}>
+              {balance.amount} {balance.denom}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No balances found</p>
+      )}
+    </div>
+  );
+});
+
+export default AccountBalance;
+```
+
+## Benefits of MobX Integration
+
+- **Reactive Programming**: Automatic updates when observable data changes
+- **Computed Values**: Efficient derived state calculations
+- **Actions**: Clear separation of state mutations
+- **Reactions**: Powerful side effect management
+- **Performance**: Fine-grained reactivity with minimal re-renders
+- **DevTools**: Excellent debugging support with MobX DevTools
+
+## Next Steps
+
+- Add persistence with `mobx-persist-store`
+- Implement error boundaries for better error handling
+- Add loading states and optimistic updates
+- Create more computed values for derived state
+- Add middleware for logging and analytics

@@ -84,7 +84,7 @@ export class MockCosmosWallet extends CosmosWallet {
       isSmartContract: false,
     }
   }
-  async getOfflineSigner(chainId: string, preferredSignType?: unknown) {
+  async getOfflineSigner(chainId: string) {
     const chain = this.getChainById(chainId);
     const wallet = this.directWalletMap[chain.chainName];
     if (!wallet) {
@@ -95,7 +95,7 @@ export class MockCosmosWallet extends CosmosWallet {
       signDirect: async (signer, signDoc) => {
         return this.signDirect(chainId, signer, signDoc as DirectSignDoc);
       }
-    }) as IGenericOfflineSigner
+    })
   }
 
 
@@ -104,8 +104,8 @@ export class MockCosmosWallet extends CosmosWallet {
   addSuggestChain(chainId: string | undefined): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  getProvider(chainId: string | undefined): Promise<any> {
-    throw new Error('Method not implemented.');
+  getProvider() {
+    return {}
   }
 
 }

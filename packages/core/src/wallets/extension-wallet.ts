@@ -10,6 +10,7 @@ export class ExtensionWallet extends MultiChainWallet {
 
   async init() {
     const walletIdentify = await getClientFromExtension(this.info.windowKey);
+
     if (!walletIdentify) {
       throw clientNotExistError;
     }

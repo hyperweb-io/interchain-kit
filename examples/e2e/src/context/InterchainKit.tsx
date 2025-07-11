@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import { ChainProvider, InterchainWalletModal } from "@interchain-kit/react";
+import { ChainProvider, InterchainWalletModal } from '@interchain-kit/react';
 import {
   chain as osmosisChain,
   assetList as osmosisAssetList,
-} from "chain-registry/mainnet/osmosis";
+} from 'chain-registry/mainnet/osmosis';
 import {
   chain as cosmoshubChain,
   assetList as cosmoshubAssetList,
-} from "chain-registry/mainnet/cosmoshub";
+} from 'chain-registry/mainnet/cosmoshub';
 
-import { useChain as useStarshipChain } from "@/starship/hook";
-import { useEffect, useState } from "react";
-import { receiverWallet, senderWallet } from "@/wallet";
-import { notInstalledWallet } from "@/wallet/NotInstalledWallet";
-import { mockWallet } from "@/wallet/MockWallet";
-import { rejectSigningWallet } from "@/wallet/RejectSigningWallet";
-import { multipleAccountWallet } from "@/wallet/MultipleAccountWallet";
+import { useChain as useStarshipChain } from '@/starship/hook';
+import { useEffect, useState } from 'react';
+import { receiverWallet, senderWallet } from '@/wallet';
+import { notInstalledWallet } from '@/wallet/NotInstalledWallet';
+import { mockWallet } from '@/wallet/MockWallet';
+import { rejectSigningWallet } from '@/wallet/RejectSigningWallet';
+import { multipleAccountWallet } from '@/wallet/MultipleAccountWallet';
 
 export const InterchainKit = ({ children }: { children: React.ReactNode }) => {
   const [isRpcReady, setRpcReady] = useState(false);
 
   const [endpoint, setEndpoint] = useState({
-    osmosis: "",
-    cosmoshub: "",
+    osmosis: '',
+    cosmoshub: '',
   });
-  const osmosis = useStarshipChain("osmosis");
-  const cosmoshub = useStarshipChain("cosmoshub");
+  const osmosis = useStarshipChain('osmosis');
+  const cosmoshub = useStarshipChain('cosmoshub');
 
   const initStarship = async () => {
     await Promise.all([

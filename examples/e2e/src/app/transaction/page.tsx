@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { receiverWallet, senderWallet } from "@/wallet";
-import { useChainWallet } from "@interchain-kit/react";
-import { Coin, getAllBalances } from "interchainjs";
-import { useState } from "react";
-import { useChain as useStarshipChain } from "@/starship/hook";
-import { useSendToken } from "@/hook/useSendToken";
-import { rejectSigningWallet } from "@/wallet/RejectSigningWallet";
+import { receiverWallet, senderWallet } from '@/wallet';
+import { useChainWallet } from '@interchain-kit/react';
+import { Coin, getAllBalances } from 'interchainjs';
+import { useState } from 'react';
+import { useChain as useStarshipChain } from '@/starship/hook';
+import { useSendToken } from '@/hook/useSendToken';
+import { rejectSigningWallet } from '@/wallet/RejectSigningWallet';
 
 export const SenderWalletBlock = ({
   chainName,
@@ -22,7 +22,7 @@ export const SenderWalletBlock = ({
   const sendToken = useSendToken(chainName, senderWallet.info.name);
 
   const osmosisReceiverWallet = useChainWallet(
-    "osmosis",
+    'osmosis',
     receiverWallet.info.name
   );
 
@@ -48,7 +48,7 @@ export const SenderWalletBlock = ({
         resolveDenom: true,
       }
     );
-    console.log("All balances:", balances.balances);
+    console.log('All balances:', balances.balances);
     setAllBalances(balances.balances);
   };
 
@@ -74,7 +74,7 @@ export const SenderWalletBlock = ({
       <p>
         {allBalances.map((balance) => (
           <span key={balance.denom}>
-            {balance.amount} {balance.denom}{" "}
+            {balance.amount} {balance.denom}{' '}
           </span>
         ))}
       </p>
@@ -84,7 +84,7 @@ export const SenderWalletBlock = ({
 
 export const ReceiverWallet = () => {
   const { address, rpcEndpoint, connect, status } = useChainWallet(
-    "osmosis",
+    'osmosis',
     receiverWallet.info.name
   );
 
@@ -95,7 +95,7 @@ export const ReceiverWallet = () => {
       address,
       resolveDenom: true,
     });
-    console.log("All balances:", balances.balances);
+    console.log('All balances:', balances.balances);
     setAllBalances(balances.balances);
   };
 
@@ -107,21 +107,19 @@ export const ReceiverWallet = () => {
       <button onClick={connect}>connect</button>
       <button onClick={handleGetAllBalances}>get balances</button>
       <p>
-        {allBalances.map((balance) => (
-          <>
-            <span key={balance.denom}>
-              {balance.amount} {balance.denom}{" "}
-            </span>
-            <br />
-          </>
-        ))}
+        <div data-testid="ibc">
+          {allBalances.find((b) => b.denom.startsWith('ibc'))?.amount}
+        </div>
+        <div data-testid="osmo">
+          {allBalances.find((b) => b.denom.startsWith('uosmo'))?.amount}
+        </div>
       </p>
     </div>
   );
 };
 
 const RejectWallet = () => {
-  const chainName = "osmosis";
+  const chainName = 'osmosis';
 
   const receiverChainWallet = useChainWallet(
     chainName,
@@ -133,25 +131,22 @@ const RejectWallet = () => {
     rejectSigningWallet.info.name
   );
 
-  const { creditFromFaucet } = useStarshipChain("osmosis");
+  const { creditFromFaucet } = useStarshipChain('osmosis');
 
-  const sendToken = useSendToken("osmosis", rejectSigningWallet.info.name);
-
-  const [error, setError] = useState<string | null>(null);
+  const sendToken = useSendToken('osmosis', rejectSigningWallet.info.name);
 
   const send = async () => {
     try {
-      await sendToken(receiverChainWallet.address, "1000000");
+      await sendToken(receiverChainWallet.address, '1000000');
     } catch (err) {
       console.log(err);
-      setError((err as any).message);
     }
   };
 
   const [balances, setBalances] = useState<Coin[]>([]);
 
   const handleFaucet = async () => {
-    await creditFromFaucet(rejectChainWallet.address, "uosmo");
+    await creditFromFaucet(rejectChainWallet.address, 'uosmo');
     const balances = await getAllBalances(
       rejectChainWallet.rpcEndpoint as string,
       {
@@ -173,20 +168,20 @@ const RejectWallet = () => {
       <p>
         {balances.map((balance) => (
           <span key={balance.denom}>
-            {balance.amount} {balance.denom}{" "}
+            {balance.amount} {balance.denom}{' '}
           </span>
         ))}
       </p>
-      <p>error message: {error}</p>
+      <p>error message: {rejectChainWallet.message}</p>
     </div>
   );
 };
 
-export default function () {
+export default function TransactionPage() {
   return (
     <div>
-      <SenderWalletBlock chainName={"osmosis"} amountToSend="1111111111" />
-      <SenderWalletBlock chainName={"cosmoshub"} amountToSend="2222222222" />
+      <SenderWalletBlock chainName={'osmosis'} amountToSend="1111111111" />
+      <SenderWalletBlock chainName={'cosmoshub'} amountToSend="2222222222" />
       <ReceiverWallet />
       <RejectWallet />
     </div>

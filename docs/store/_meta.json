@@ -1,0 +1,5 @@
+{
+  "react-query-integration": "React Query Integration",
+  "zustand-integration": "Zustand Integration",
+  "mobx-integration": "MobX Integration"
+}

@@ -1,19 +1,10 @@
 import { AssetList, Chain } from '@chain-registry/types';
 import EventEmitter from 'events';
 
-import { Wallet, WalletAccount, WalletEvents } from '../types';
-import { BaseSignRequest } from '../types/sign-request';
+import { BaseSignRequest, Wallet, WalletAccount, WalletEvents } from '../types';
 import { BaseSignResponse } from '../types/sign-response';
 
-// 定义签名方法的类型
-export type SignMethod =
-  | 'cosmos_amino'
-  | 'cosmos_direct'
-  | 'cosmos_arbitrary'
-  | 'ethereum_message'
-  | 'ethereum_transaction';
-
-export abstract class BaseWallet<TSignData extends BaseSignRequest = BaseSignRequest, TSignResponse extends BaseSignResponse = BaseSignResponse, IGenericOfflineSigner = any> {
+export abstract class BaseWallet<TSignRequest extends BaseSignRequest = BaseSignRequest, TSignResponse extends BaseSignResponse = BaseSignResponse, IGenericOfflineSigner = any> {
   info: Wallet;
 
   events: EventEmitter<WalletEvents> = new EventEmitter();
@@ -64,7 +55,8 @@ export abstract class BaseWallet<TSignData extends BaseSignRequest = BaseSignReq
 
   abstract addSuggestChain(chainId: Chain['chainId']): Promise<void>;
 
-  abstract getProvider(chainId: Chain['chainId']): Promise<any>;
+  abstract getProvider(chainId: Chain['chainId']): any;
 
-  abstract sign(chainId: Chain['chainId'], data: TSignData): Promise<TSignResponse>;
+  // 使用 any 类型，让子类决定具体的签名请求类型
+  abstract sign(chainId: Chain['chainId'], data: TSignRequest): Promise<TSignResponse>;
 }

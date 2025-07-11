@@ -34,12 +34,12 @@ export type PlatformWalletMap = Record<PlatformTypes, PlatformWallet>
 export const selectWalletByPlatform = (
   walletPlatformMap: PlatformWalletMap, walletInfo: Wallet
 ): BaseWallet => {
-  // if (isMobile()) {
-  //   if ((window as any)[walletInfo.windowKey]) {
-  //     return walletPlatformMap['inAppBrowser']
-  //   } else {
-  //     return walletPlatformMap['mobileBrowser']
-  //   }
-  // }
+  if (isMobile()) {
+    if ((window as any)[walletInfo.windowKey]) {
+      return walletPlatformMap['inAppBrowser']
+    } else {
+      return walletPlatformMap['mobileBrowser']
+    }
+  }
   return walletPlatformMap['desktopBrowser']
 };
