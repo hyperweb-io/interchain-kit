@@ -1,7 +1,6 @@
 import { AssetList, Chain } from '@chain-registry/types';
 import { getWalletByType } from '@interchain-kit/core';
 import { AminoSigner, CosmosSignerConfig, createCosmosQueryClient, DirectSigner, OfflineSigner } from '@interchainjs/cosmos';
-import { ISigningClient } from '@interchainjs/cosmos/types/signing-client';
 import { HttpEndpoint } from '@interchainjs/types';
 import Bowser from 'bowser';
 import { getSigner } from 'interchainjs';
@@ -247,7 +246,7 @@ export class WalletManager {
     return cosmosWallet.getOfflineSigner(chain.chainId, preferredSignType);
   }
 
-  async getSigningClient(walletName: string, chainName: ChainName): Promise<ISigningClient> {
+  async getSigningClient(walletName: string, chainName: ChainName): Promise<DirectSigner | AminoSigner> {
     try {
       const chain = this.getChainByName(chainName);
       const rpcEndpoint = await this.getRpcEndpoint(walletName, chainName);
