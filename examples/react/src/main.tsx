@@ -60,8 +60,8 @@ import {
 const chainNames: string[] = [
   // "injectivetestnet",
   // "osmosistestnet",
-  // 'osmosis',
-  // "juno",
+  'osmosis',
+  "juno",
   'cosmoshub',
   // "stargaze",
   // "noble",
@@ -193,8 +193,8 @@ if (isInstanceOf(keplrWallet, ExtensionWallet)) {
 const _wallets: BaseWallet[] = [
   // mock1Wallet,
   // mock2Wallet,
-  // keplrWallet,
-  // leapWallet,
+  keplrWallet,
+  leapWallet,
   // cosmostationWallet,
   // stationWallet,
   // galaxyStationWallet,
@@ -214,10 +214,10 @@ const _wallets: BaseWallet[] = [
   // finWallet,
   // shellWallet,
   // ninjiWallet,
-  phantomWallet,
-  backPackWallet,
-  solflareWallet,
-  vultisigWallet,
+  // phantomWallet,
+  // backPackWallet,
+  // solflareWallet,
+  // vultisigWallet,
 ];
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -272,11 +272,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     >
       <BrowserRouter>
         <App />
-        {
-          <InterchainWalletModal
-            modalThemeProviderProps={{ defaultTheme: 'light' }}
-          />
-        }
       </BrowserRouter>
     </ChainProvider>
   </React.StrictMode>
