@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/okx-extension",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector",
   "main": "index.js",

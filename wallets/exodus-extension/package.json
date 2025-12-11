@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/exodus-extension",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector",
   "main": "index.js",
@@ -31,7 +31,7 @@
     "watch:dev": "tsc -w -p tsconfig.esm.json & tsc -w"
   },
   "dependencies": {
-    "@interchain-kit/core": "^0.6.0"
+    "@interchain-kit/core": "^0.7.0"
   },
   "keywords": [],
   "gitHead": "73396afd0b2d8d59de08404ad798193670e4b582"
