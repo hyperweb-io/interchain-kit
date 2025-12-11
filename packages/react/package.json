@@ -1,7 +1,7 @@
 {
   "name": "@interchain-kit/react",
   "version": "0.3.55",
-  "author": "Interweb <developers@interweb.co>",
+  "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector react package",
   "main": "index.js",
   "module": "esm/index.js",
