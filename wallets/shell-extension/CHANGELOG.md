@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/interchain-kit/shell-extension/compare/@interchain-kit/shell-extension@0.4.0...@interchain-kit/shell-extension@0.5.0) (2025-12-11)
+
+**Note:** Version bump only for package @interchain-kit/shell-extension
+
+
+
+
+
 # [0.4.0](https://github.com/interchain-kit/shell-extension/compare/@interchain-kit/shell-extension@0.3.55...@interchain-kit/shell-extension@0.4.0) (2025-12-11)
 
 **Note:** Version bump only for package @interchain-kit/shell-extension

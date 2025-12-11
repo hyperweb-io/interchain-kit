@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/vue",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit for vue",
   "main": "index.umd.js",
@@ -28,7 +28,7 @@
   "keywords": [],
   "dependencies": {
     "@chain-registry/types": "^2.0.1",
-    "@interchain-kit/core": "^0.4.0",
+    "@interchain-kit/core": "^0.5.0",
     "@interchain-ui/vue": "^1.4.1",
     "@interchainjs/cosmos": "1.17.3",
     "@interchainjs/cosmos-types": "1.17.3",

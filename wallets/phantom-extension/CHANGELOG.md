@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/interchain-kit/phantom-extension/compare/@interchain-kit/phantom-extension@0.4.0...@interchain-kit/phantom-extension@0.5.0) (2025-12-11)
+
+**Note:** Version bump only for package @interchain-kit/phantom-extension
+
+
+
+
+
 # [0.4.0](https://github.com/interchain-kit/phantom-extension/compare/@interchain-kit/phantom-extension@0.3.55...@interchain-kit/phantom-extension@0.4.0) (2025-12-11)
 
 **Note:** Version bump only for package @interchain-kit/phantom-extension
