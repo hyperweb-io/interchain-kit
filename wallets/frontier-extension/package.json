@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/frontier-extension",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector",
   "main": "index.js",
@@ -32,7 +32,7 @@
   },
   "keywords": [],
   "dependencies": {
-    "@interchain-kit/core": "^0.5.0"
+    "@interchain-kit/core": "^0.6.0"
   },
   "gitHead": "73396afd0b2d8d59de08404ad798193670e4b582"
 }
