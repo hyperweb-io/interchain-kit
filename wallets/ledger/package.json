@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/ledger",
-  "version": "0.3.55",
+  "version": "0.4.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector",
   "main": "index.js",
@@ -33,7 +33,7 @@
   "keywords": [],
   "dependencies": {
     "@chain-registry/types": "^2.0.1",
-    "@interchain-kit/core": "0.3.55",
+    "@interchain-kit/core": "^0.4.0",
     "@ledgerhq/hw-app-solana": "^7.5.2",
     "@ledgerhq/hw-transport": "^6.31.4",
     "@ledgerhq/hw-transport-webhid": "^6.29.4",

@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/solflare-extension",
-  "version": "0.3.55",
+  "version": "0.4.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector",
   "main": "index.js",
@@ -31,7 +31,7 @@
     "watch:dev": "tsc -w -p tsconfig.esm.json & tsc -w"
   },
   "dependencies": {
-    "@interchain-kit/core": "0.3.55"
+    "@interchain-kit/core": "^0.4.0"
   },
   "keywords": []
 }
