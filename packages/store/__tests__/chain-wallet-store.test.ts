@@ -208,6 +208,33 @@ describe('ChainWalletStore', () => {
       );
     });
 
+    it('should set currentWalletName and currentChainName on successful connect', async () => {
+      const mockAccount: WalletAccount = {
+        address: 'cosmos1abc123',
+        pubkey: new Uint8Array([1, 2, 3]),
+        isNanoLedger: false,
+        algo: 'secp256k1' as Algo,
+      };
+
+      (mockWallet.connect as jest.Mock).mockResolvedValue(undefined);
+      (mockWallet.getAccount as jest.Mock).mockResolvedValue(mockAccount);
+
+      await chainWalletStore.connect();
+
+      expect(mockInterchainStore.setCurrentWalletName).toHaveBeenCalledWith('keplr');
+      expect(mockInterchainStore.setCurrentChainName).toHaveBeenCalledWith('cosmoshub');
+    });
+
+    it('should not set current values on connection error', async () => {
+      const error = new Error('Connection failed');
+      (mockWallet.connect as jest.Mock).mockRejectedValue(error);
+
+      await chainWalletStore.connect();
+
+      expect(mockInterchainStore.setCurrentWalletName).not.toHaveBeenCalled();
+      expect(mockInterchainStore.setCurrentChainName).not.toHaveBeenCalled();
+    });
+
     it('should handle connection errors', async () => {
       const error = new Error('Connection failed');
       (mockWallet.connect as jest.Mock).mockRejectedValue(error);
@@ -262,6 +289,27 @@ describe('ChainWalletStore', () => {
         'cosmoshub',
         { walletState: WalletState.Disconnected, account: undefined, errorMessage: '' }
       );
+    });
+
+    it('should reset currentWalletName and currentChainName on successful disconnect', async () => {
+      (mockWallet.disconnect as jest.Mock).mockResolvedValue(undefined);
+
+      await chainWalletStore.disconnect();
+
+      expect(mockInterchainStore.setCurrentWalletName).toHaveBeenCalledWith('');
+      expect(mockInterchainStore.setCurrentChainName).toHaveBeenCalledWith('');
+    });
+
+    it('should not reset current values on disconnection error', async () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+      const error = new Error('Disconnection failed');
+      (mockWallet.disconnect as jest.Mock).mockRejectedValue(error);
+
+      await chainWalletStore.disconnect();
+
+      expect(mockInterchainStore.setCurrentWalletName).not.toHaveBeenCalled();
+      expect(mockInterchainStore.setCurrentChainName).not.toHaveBeenCalled();
+      consoleSpy.mockRestore();
     });
 
     it('should handle disconnection errors', async () => {
