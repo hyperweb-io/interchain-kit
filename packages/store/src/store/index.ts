@@ -78,6 +78,21 @@ export class InterchainStore {
     } else {
       this.addChainWalletState(walletName, chainName, state);
     }
+
+    switch (state.walletState) {
+      case WalletState.Connected:
+        this.setCurrentWalletName(walletName);
+        this.setCurrentChainName(chainName);
+        break;
+      case WalletState.Disconnected:
+        if (this.state.currentWalletName === walletName && this.state.currentChainName === chainName) {
+          // TODO: for supporting multiple wallet connections, 
+          // we should set these to the previous instead of clearing
+          this.setCurrentWalletName('');
+          this.setCurrentChainName('');
+        }
+        break;
+    }
   }
 
   // 添加新的 chain wallet state

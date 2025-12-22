@@ -56,8 +56,6 @@ export class ChainWalletStore extends BaseWallet {
       await this.wallet.connect(this.chain.chainId);
       const account = await this.getAccount();
       this.store.updateChainWalletState(this.wallet.info.name, this.chain.chainName, { walletState: WalletState.Connected, account });
-      this.store.setCurrentWalletName(this.wallet.info.name);
-      this.store.setCurrentChainName(this.chain.chainName);
     } catch (error) {
       this.store.updateChainWalletState(this.wallet.info.name, this.chain.chainName, { walletState: WalletState.Disconnected, errorMessage: (error as any).message });
     }
@@ -73,8 +71,6 @@ export class ChainWalletStore extends BaseWallet {
     try {
       await this.wallet.disconnect(this.chain.chainId);
       this.store.updateChainWalletState(this.wallet.info.name, this.chain.chainName, { walletState: WalletState.Disconnected, account: undefined, errorMessage: '' });
-      this.store.setCurrentWalletName('');
-      this.store.setCurrentChainName('');
     } catch (error) {
       console.error(error);
     }
