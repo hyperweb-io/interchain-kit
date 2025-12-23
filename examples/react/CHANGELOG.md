@@ -3,37 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.7.0](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/react-examples@0.6.0...@interchain-kit/react-examples@0.7.0) (2025-12-11)
+## [0.7.1](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/react-examples@0.7.0...@interchain-kit/react-examples@0.7.1) (2025-12-23)
 
 **Note:** Version bump only for package @interchain-kit/react-examples
 
+# [0.7.0](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/react-examples@0.6.0...@interchain-kit/react-examples@0.7.0) (2025-12-11)
 
-
-
+**Note:** Version bump only for package @interchain-kit/react-examples
 
 # [0.6.0](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/react-examples@0.5.0...@interchain-kit/react-examples@0.6.0) (2025-12-11)
 
 **Note:** Version bump only for package @interchain-kit/react-examples
 
-
-
-
-
 # [0.5.0](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/react-examples@0.4.0...@interchain-kit/react-examples@0.5.0) (2025-12-11)
 
 **Note:** Version bump only for package @interchain-kit/react-examples
 
-
-
-
-
 # [0.4.0](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/react-examples@0.3.55...@interchain-kit/react-examples@0.4.0) (2025-12-11)
 
 **Note:** Version bump only for package @interchain-kit/react-examples
-
-
-
-
 
 ## [0.3.55](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/react-examples@0.3.54...@interchain-kit/react-examples@0.3.55) (2025-10-22)
 

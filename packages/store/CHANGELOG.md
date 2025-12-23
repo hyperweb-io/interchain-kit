@@ -3,29 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.6.0...@interchain-kit/store@0.6.1) (2025-12-23)
+
+### Bug Fixes
+
+- set currentWalletName, currentChainName correctly ([05f2684](https://github.com/interchain-kit/store/commit/05f2684d17166d3f721de8b487926e14a366daba))
+
 # [0.6.0](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.5.0...@interchain-kit/store@0.6.0) (2025-12-11)
 
 **Note:** Version bump only for package @interchain-kit/store
-
-
-
-
 
 # [0.5.0](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.4.0...@interchain-kit/store@0.5.0) (2025-12-11)
 
 **Note:** Version bump only for package @interchain-kit/store
 
-
-
-
-
 # [0.4.0](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.3.55...@interchain-kit/store@0.4.0) (2025-12-11)
 
 **Note:** Version bump only for package @interchain-kit/store
-
-
-
-
 
 ## [0.3.55](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.3.54...@interchain-kit/store@0.3.55) (2025-10-22)
 

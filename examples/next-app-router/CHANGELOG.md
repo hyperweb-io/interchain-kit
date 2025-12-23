@@ -3,37 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.7.0](https://github.com/hyperweb-io/interchain-kit/compare/next-app-router@0.6.0...next-app-router@0.7.0) (2025-12-11)
+## [0.7.1](https://github.com/hyperweb-io/interchain-kit/compare/next-app-router@0.7.0...next-app-router@0.7.1) (2025-12-23)
 
 **Note:** Version bump only for package next-app-router
 
+# [0.7.0](https://github.com/hyperweb-io/interchain-kit/compare/next-app-router@0.6.0...next-app-router@0.7.0) (2025-12-11)
 
-
-
+**Note:** Version bump only for package next-app-router
 
 # [0.6.0](https://github.com/hyperweb-io/interchain-kit/compare/next-app-router@0.5.0...next-app-router@0.6.0) (2025-12-11)
 
 **Note:** Version bump only for package next-app-router
 
-
-
-
-
 # [0.5.0](https://github.com/hyperweb-io/interchain-kit/compare/next-app-router@0.4.0...next-app-router@0.5.0) (2025-12-11)
 
 **Note:** Version bump only for package next-app-router
 
-
-
-
-
 # [0.4.0](https://github.com/hyperweb-io/interchain-kit/compare/next-app-router@0.3.55...next-app-router@0.4.0) (2025-12-11)
 
 **Note:** Version bump only for package next-app-router
-
-
-
-
 
 ## [0.3.55](https://github.com/hyperweb-io/interchain-kit/compare/next-app-router@0.3.54...next-app-router@0.3.55) (2025-10-22)
 
