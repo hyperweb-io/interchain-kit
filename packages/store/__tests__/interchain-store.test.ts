@@ -238,4 +238,30 @@ describe('InterchainStore', () => {
       expect(osmosisKeplr).toBeUndefined();
     });
   });
+
+  describe('Current Wallet/Chain Auto-Sync', () => {
+    it('should set currentWalletName and currentChainName when connected', () => {
+      store.updateChainWalletState('keplr', 'cosmoshub', {
+        walletState: WalletState.Connected,
+      });
+
+      const state = store.getState();
+      expect(state.currentWalletName).toBe('keplr');
+      expect(state.currentChainName).toBe('cosmoshub');
+    });
+
+    it('should clear current when disconnecting the current wallet/chain', () => {
+      store.updateChainWalletState('keplr', 'cosmoshub', {
+        walletState: WalletState.Connected,
+      });
+
+      store.updateChainWalletState('keplr', 'cosmoshub', {
+        walletState: WalletState.Disconnected,
+      });
+
+      const state = store.getState();
+      expect(state.currentWalletName).toBe('');
+      expect(state.currentChainName).toBe('');
+    });
+  });
 });
