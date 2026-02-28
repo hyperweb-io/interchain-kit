@@ -23,8 +23,8 @@ npm install interchain-kit
 When first cloning the repo:
 
 ```
-yarn
-yarn build
+pnpm
+pnpm build
 ```
 
 ## Interchain JavaScript Stack 

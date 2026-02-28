@@ -22,27 +22,28 @@
   "scripts": {
     "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
     "clean": "rimraf dist/**",
-    "build": "vite build && npm run copy",
+    "build": "vite build && copyfiles -f ../../LICENSE README.md package.json dist",
     "watch:dev": "tsc -w -p tsconfig.esm.json & tsc -w"
   },
   "keywords": [],
   "dependencies": {
     "@chain-registry/types": "^2.0.1",
-    "@interchain-kit/core": "^0.7.0",
+    "@interchain-kit/core": "workspace:*",
     "@interchain-ui/vue": "^1.4.1",
     "@interchainjs/cosmos": "1.17.3",
     "@interchainjs/cosmos-types": "1.17.3",
+    "@interchainjs/types": "1.17.3",
     "@types/node": "^22.7.5",
     "@vue/compiler-sfc": "^3.5.12",
     "interchainjs": "1.17.3"
   },
   "devDependencies": {
+    "copyfiles": "^2.4.1",
     "typescript": "^5.6.3",
     "vite-plugin-dts": "^4.2.4",
     "vue-tsc": "^2.1.6"
   },
   "peerDependencies": {
     "vue": ">=3.0.0"
-  },
-  "gitHead": "73396afd0b2d8d59de08404ad798193670e4b582"
+  }
 }

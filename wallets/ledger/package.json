@@ -20,20 +20,19 @@
     "url": "https://github.com/interchain-kit/ledger/issues"
   },
   "scripts": {
-    "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
-    "clean": "rimraf dist/**",
-    "prepare": "npm run build",
-    "build": "npm run clean; tsc; tsc -p tsconfig.esm.json; npm run copy",
+    "clean": "makage clean",
+    "build": "makage build",
     "build:dev": "npm run clean; tsc --declarationMap; tsc -p tsconfig.esm.json; npm run copy",
     "lint": "eslint . --fix",
     "test": "jest",
     "test:watch": "jest --watch",
-    "watch:dev": "tsc -w -p tsconfig.esm.json & tsc -w"
+    "watch:dev": "tsc -w -p tsconfig.esm.json & tsc -w",
+    "prepack": "npm run build"
   },
   "keywords": [],
   "dependencies": {
     "@chain-registry/types": "^2.0.1",
-    "@interchain-kit/core": "^0.7.0",
+    "@interchain-kit/core": "workspace:*",
     "@ledgerhq/hw-app-solana": "^7.5.2",
     "@ledgerhq/hw-transport": "^6.31.4",
     "@ledgerhq/hw-transport-webhid": "^6.29.4",
@@ -44,10 +43,14 @@
     "chain-registry": "^2.0.1",
     "crypto": "npm:crypto-es",
     "crypto-browserify": "^3.12.1",
-    "crypto-es": "^2.1.0"
+    "crypto-es": "^2.1.0",
+    "@interchainjs/types": "1.17.3",
+    "@ledgerhq/hw-app-cosmos": "^6.30.4"
   },
   "browser": {
     "crypto": "crypto-es"
   },
-  "gitHead": "73396afd0b2d8d59de08404ad798193670e4b582"
+  "devDependencies": {
+    "makage": "^0.1.12"
+  }
 }

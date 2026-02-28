@@ -1,5 +1,5 @@
 import { AssetList, Chain } from '@chain-registry/types';
-import { getWalletByType } from '@interchain-kit/core';
+import { getWalletByType } from './utils';
 import { AminoSigner, CosmosSignerConfig, createCosmosQueryClient, DirectSigner, OfflineSigner } from '@interchainjs/cosmos';
 import { HttpEndpoint } from '@interchainjs/types';
 import Bowser from 'bowser';

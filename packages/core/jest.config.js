@@ -16,4 +16,7 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   modulePathIgnorePatterns: ['dist/*'],
   testPathIgnorePatterns: ['__tests__/helpers/*'],
+  moduleNameMapper: {
+    '^@interchain-kit/core$': '<rootDir>/src',
+  },
 };

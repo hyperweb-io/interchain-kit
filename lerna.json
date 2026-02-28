@@ -1,10 +1,7 @@
 {
   "lerna": "6",
   "conventionalCommits": true,
-  "npmClient": "yarn",
-  "npmClientArgs": [
-    "--no-lockfile"
-  ],
+  "npmClient": "pnpm",
   "packages": [
     "packages/*",
     "wallets/*",
@@ -22,6 +19,5 @@
       "allowBranch": "main",
       "message": "chore(release): publish"
     }
-  },
-  "useWorkspaces": true
+  }
 }

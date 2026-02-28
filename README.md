@@ -106,9 +106,9 @@ See our docs on [integrating your wallet](https://docs.cosmology.zone/interchain
 For high-level examples suitable for most developers, explore our [create-interchain-app](https://github.com/hyperweb-io/create-interchain-app). For a deeper, more technical understanding, this repository contains an example, which is also useful when integrating new wallets.
 
 ```sh
-yarn build
+pnpm build
 cd packages/example
-yarn dev
+pnpm dev
 ```
 
 #### [Basic Vanilla Example](https://github.com/hyperweb-io/interchain-kit/tree/main/examples)
@@ -211,20 +211,20 @@ classDiagram
 
 ## 🛠 Developing
 
-Checkout the repository and bootstrap the yarn workspace:
+Checkout the repository and bootstrap the pnpm workspace:
 
 ```sh
 # Clone the repo.
 git clone https://github.com/hyperweb-io/interchain-kit
 cd interchain-kit
-yarn
-yarn dev:watch
+pnpm
+pnpm dev:watch
 ```
 
 ### Building
 
 ```sh
-yarn build
+pnpm build
 ```
 
 ### Publishing
