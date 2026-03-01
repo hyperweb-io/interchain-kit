@@ -1,6 +1,4 @@
 import { CosmosWallet, ExtensionWallet } from '@interchain-kit/core';
-import { AminoGenericOfflineSigner } from '@interchainjs/cosmos/types/wallet';
-import { IGenericOfflineSigner } from '@interchainjs/types';
 
 import { stationExtensionInfo } from './registry';
 
@@ -11,7 +9,7 @@ const stationWallet = new ExtensionWallet(stationExtensionInfo);
 
 class StationCosmosWallet extends CosmosWallet {
   async getOfflineSigner(chainId: string) {
-    return new AminoGenericOfflineSigner(this.client.getOfflineSigner(chainId)) as IGenericOfflineSigner;
+    return this.client.getOfflineSigner(chainId);
   }
 }
 
