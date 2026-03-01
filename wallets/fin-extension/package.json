@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/fin-extension",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "author": "developers <developers@hyperweb.io>",
   "description": "interchain-kit wallet connector",
   "main": "index.js",

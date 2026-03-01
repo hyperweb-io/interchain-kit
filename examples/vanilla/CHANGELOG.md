@@ -3,24 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.5.0](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/vanilla-examples@0.4.0...@interchain-kit/vanilla-examples@0.5.0) (2026-03-01)
-
+# [0.6.0](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/vanilla-examples@0.4.0...@interchain-kit/vanilla-examples@0.6.0) (2026-03-01)
 
 ### Bug Fixes
 
-* update example apps to workspace:*, configure Next.js transpilePackages, consolidate license to MIT ([713424d](https://github.com/hyperweb-io/interchain-kit/commit/713424d16a747607d31dfae658c9bf10764fee1c))
+- update example apps to workspace:\*, configure Next.js transpilePackages, consolidate license to MIT ([713424d](https://github.com/hyperweb-io/interchain-kit/commit/713424d16a747607d31dfae658c9bf10764fee1c))
 
+# [0.5.0](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/vanilla-examples@0.4.0...@interchain-kit/vanilla-examples@0.5.0) (2026-03-01)
 
+### Bug Fixes
 
-
+- update example apps to workspace:\*, configure Next.js transpilePackages, consolidate license to MIT ([713424d](https://github.com/hyperweb-io/interchain-kit/commit/713424d16a747607d31dfae658c9bf10764fee1c))
 
 # [0.4.0](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/vanilla-examples@0.3.55...@interchain-kit/vanilla-examples@0.4.0) (2025-12-11)
 
 **Note:** Version bump only for package @interchain-kit/vanilla-examples
-
-
-
-
 
 ## [0.3.55](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/vanilla-examples@0.3.54...@interchain-kit/vanilla-examples@0.3.55) (2025-10-22)
 

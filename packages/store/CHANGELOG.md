@@ -3,21 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.7.0](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.6.1...@interchain-kit/store@0.7.0) (2026-03-01)
-
+# [0.8.0](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.6.1...@interchain-kit/store@0.8.0) (2026-03-01)
 
 ### Bug Fixes
 
-* update example apps to workspace:*, configure Next.js transpilePackages, consolidate license to MIT ([713424d](https://github.com/interchain-kit/store/commit/713424d16a747607d31dfae658c9bf10764fee1c))
-
+- update example apps to workspace:\*, configure Next.js transpilePackages, consolidate license to MIT ([713424d](https://github.com/interchain-kit/store/commit/713424d16a747607d31dfae658c9bf10764fee1c))
 
 ### Features
 
-* migrate from yarn to pnpm with makage + dist/ publishing ([0c3e255](https://github.com/interchain-kit/store/commit/0c3e25511437ceac3a6caefcd3db6221860674b6))
+- migrate from yarn to pnpm with makage + dist/ publishing ([0c3e255](https://github.com/interchain-kit/store/commit/0c3e25511437ceac3a6caefcd3db6221860674b6))
 
+# [0.7.0](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.6.1...@interchain-kit/store@0.7.0) (2026-03-01)
 
+### Bug Fixes
 
+- update example apps to workspace:\*, configure Next.js transpilePackages, consolidate license to MIT ([713424d](https://github.com/interchain-kit/store/commit/713424d16a747607d31dfae658c9bf10764fee1c))
 
+### Features
+
+- migrate from yarn to pnpm with makage + dist/ publishing ([0c3e255](https://github.com/interchain-kit/store/commit/0c3e25511437ceac3a6caefcd3db6221860674b6))
 
 ## [0.6.1](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.6.0...@interchain-kit/store@0.6.1) (2025-12-23)
 

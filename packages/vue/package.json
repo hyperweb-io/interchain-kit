@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/vue",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit for vue",
   "main": "index.umd.js",
