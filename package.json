@@ -12,7 +12,7 @@
     "clean": "pnpm -r run clean",
     "build": "pnpm -r --stream --filter '!@interchain-kit/vue-examples' --filter '!@interchain-kit/react-examples' --filter '!@interchain-kit/vanilla-examples' --filter '!e2e' --filter '!next-app-router' run build",
     "lint": "pnpm -r --parallel run lint",
-    "test": "pnpm -r --stream run test",
+    "test": "pnpm -r --stream --filter '!@interchain-kit/e2e' run test",
     "test:e2e": "cd e2e && npx playwright test",
     "test:e2e:ui": "cd e2e && npx playwright test --ui",
     "test:e2e:headed": "cd e2e && npx playwright test --headed",
