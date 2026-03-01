@@ -7,7 +7,7 @@
   "module": "index.es.js",
   "types": "index.d.ts",
   "homepage": "https://github.com/interchain-kit/vue",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "publishConfig": {
     "access": "public",
     "directory": "dist"

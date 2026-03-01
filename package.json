@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/hyperweb-io/interchain-kit"
   },
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "scripts": {
     "clean": "pnpm -r run clean",
     "build": "pnpm -r --stream --filter '!@interchain-kit/vue-examples' --filter '!@interchain-kit/react-examples' --filter '!@interchain-kit/vanilla-examples' --filter '!e2e' --filter '!next-app-router' run build",

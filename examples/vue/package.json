@@ -11,9 +11,9 @@
   "dependencies": {
     "@chain-registry/types": "^2.0.1",
     "@chenfengyuan/vue-qrcode": "^2.0.0",
-    "@interchain-kit/vue": "^0.1.0",
+    "@interchain-kit/vue": "workspace:*",
     "chain-registry": "^2.0.1",
-    "interchainjs": "0.0.1-alpha.31",
+    "interchainjs": "^1.20.0",
     "osmojs": "^16.15.0",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"
@@ -25,6 +25,5 @@
     "typescript": "^5.5.3",
     "vite": "^5.4.8",
     "vue-tsc": "^2.1.6"
-  },
-  "gitHead": "23631f4e4f9c1781d4de792a8da826cf0041180d"
+  }
 }

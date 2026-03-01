@@ -17,14 +17,13 @@
   "dependencies": {
     "@chain-registry/types": "^2.0.1",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@interchain-kit/core": "^0.1.0",
-    "@interchain-kit/keplr-extension": "^0.1.0",
-    "@interchain-kit/keplr-mobile": "^0.1.0",
+    "@interchain-kit/core": "workspace:*",
+    "@interchain-kit/keplr-extension": "workspace:*",
+    "@interchain-kit/keplr-mobile": "workspace:*",
     "@rollup/plugin-inject": "^5.0.5",
     "@vitejs/plugin-vue": "^5.0.5",
     "chain-registry": "^2.0.1",
     "qrcode": "^1.5.3",
     "vite-plugin-node-polyfills": "^0.22.0"
-  },
-  "gitHead": "23631f4e4f9c1781d4de792a8da826cf0041180d"
+  }
 }
