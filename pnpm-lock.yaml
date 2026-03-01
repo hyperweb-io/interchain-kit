@@ -44,6 +44,9 @@ importers:
       lerna:
         specifier: ^8.2.3
         version: 8.2.4(@types/node@20.19.35)(encoding@0.1.13)
+      makage:
+        specifier: ^0.1.12
+        version: 0.1.12
       prettier:
         specifier: ^3.8.0
         version: 3.8.1
@@ -152,14 +155,14 @@ importers:
   examples/next-app-router:
     dependencies:
       '@interchain-kit/keplr-extension':
-        specifier: ^0.7.0
-        version: 0.7.0(encoding@0.1.13)(starknet@8.9.2)(typescript@5.9.3)
+        specifier: workspace:*
+        version: link:../../wallets/keplr-extension/dist
       '@interchain-kit/metamask-extension':
-        specifier: ^0.7.0
-        version: 0.7.0(encoding@0.1.13)(typescript@5.9.3)
+        specifier: workspace:*
+        version: link:../../wallets/metamask-extension/dist
       '@interchain-kit/react':
-        specifier: ^0.7.1
-        version: 0.7.1(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(encoding@0.1.13)(immer@10.2.0)(jiti@2.6.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)(use-sync-external-store@1.6.0(react@19.2.4))
+        specifier: workspace:*
+        version: link:../../packages/react/dist
       next:
         specifier: 15.3.3
         version: 15.3.3(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -465,17 +468,17 @@ importers:
         specifier: ^2.0.1
         version: 2.0.163
       '@interchainjs/amino':
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
       '@interchainjs/cosmos':
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@interchainjs/cosmos-types':
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
       '@interchainjs/types':
-        specifier: 1.17.3
-        version: 1.17.3
+        specifier: 1.20.0
+        version: 1.20.0
       '@ledgerhq/hw-app-cosmos':
         specifier: ^6.30.4
         version: 6.33.0
@@ -519,8 +522,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       interchainjs:
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       long:
         specifier: ^5.2.3
         version: 5.3.2
@@ -561,14 +564,14 @@ importers:
         specifier: ^1.26.3
         version: 1.26.3(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@interchainjs/cosmos':
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@interchainjs/cosmos-types':
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
       '@interchainjs/types':
-        specifier: 1.17.3
-        version: 1.17.3
+        specifier: 1.20.0
+        version: 1.20.0
       '@react-icons/all-files':
         specifier: ^4.1.0
         version: 4.1.0(react@19.2.4)
@@ -582,8 +585,8 @@ importers:
         specifier: ^2.17.3
         version: 2.23.7
       interchainjs:
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       jest-transform-stub:
         specifier: ^2.0.0
         version: 2.0.0
@@ -656,14 +659,14 @@ importers:
         specifier: workspace:*
         version: link:../core/dist
       '@interchainjs/cosmos':
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@interchainjs/types':
-        specifier: 1.17.3
-        version: 1.17.3
+        specifier: 1.20.0
+        version: 1.20.0
       interchainjs:
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
     devDependencies:
       makage:
         specifier: ^0.1.12
@@ -682,14 +685,14 @@ importers:
         specifier: ^1.4.1
         version: 1.4.3(@types/react@19.2.14)(@vueuse/core@14.2.1(vue@3.5.29(typescript@5.9.3)))(@vueuse/integrations@14.2.1(axios@1.13.6)(focus-trap@7.6.0)(idb-keyval@6.2.2)(qrcode@1.5.4)(vue@3.5.29(typescript@5.9.3)))(focus-trap@7.6.0)(react@19.2.4)(vue@3.5.29(typescript@5.9.3))
       '@interchainjs/cosmos':
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@interchainjs/cosmos-types':
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
       '@interchainjs/types':
-        specifier: 1.17.3
-        version: 1.17.3
+        specifier: 1.20.0
+        version: 1.20.0
       '@types/node':
         specifier: ^22.7.5
         version: 22.19.13
@@ -697,8 +700,8 @@ importers:
         specifier: ^3.5.12
         version: 3.5.29
       interchainjs:
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       vue:
         specifier: '>=3.0.0'
         version: 3.5.29(typescript@5.9.3)
@@ -765,11 +768,11 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core/dist
       '@interchainjs/cosmos':
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@interchainjs/types':
-        specifier: 1.17.3
-        version: 1.17.3
+        specifier: 1.20.0
+        version: 1.20.0
     devDependencies:
       makage:
         specifier: ^0.1.12
@@ -868,11 +871,11 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core/dist
       '@interchainjs/cosmos':
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@interchainjs/types':
-        specifier: 1.17.3
-        version: 1.17.3
+        specifier: 1.20.0
+        version: 1.20.0
       long:
         specifier: ^5.2.3
         version: 5.3.2
@@ -913,8 +916,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core/dist
       '@interchainjs/types':
-        specifier: 1.17.3
-        version: 1.17.3
+        specifier: 1.20.0
+        version: 1.20.0
       '@ledgerhq/hw-app-cosmos':
         specifier: ^6.30.4
         version: 6.33.0
@@ -1070,11 +1073,11 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core/dist
       '@interchainjs/cosmos':
-        specifier: 1.17.3
-        version: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+        specifier: 1.20.0
+        version: 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@interchainjs/types':
-        specifier: 1.17.3
-        version: 1.17.3
+        specifier: 1.20.0
+        version: 1.20.0
     devDependencies:
       makage:
         specifier: ^0.1.12
@@ -2532,26 +2535,6 @@ packages:
       '@types/node':
         optional: true
 
-  '@interchain-kit/core@0.7.0':
-    resolution: {integrity: sha512-7Oza+59DLTyhyDzijNyki9aSrgcq+zVsOSz/vFUqzF7ObZGjb6n5DsgDNDi0ZcL3Ta4S3yQCBYESLvqmJDRlEw==}
-
-  '@interchain-kit/keplr-extension@0.7.0':
-    resolution: {integrity: sha512-y7zRGST0AEqDJHjNCdBGAZE/TvZGkr9SMmmIA9BVFPkT19XQx2BO/om1q3FBhRKvfcsQnrpoeIMxIx+BtGK68w==}
-
-  '@interchain-kit/metamask-extension@0.7.0':
-    resolution: {integrity: sha512-WsOBep4nGZB+qrqAxZlj9KEWDskQNc+7MJrw+n9idW1oupMAglmnf76WTAOoYyn347Lxk99KnaQqIiZKDBuCNQ==}
-
-  '@interchain-kit/react@0.7.1':
-    resolution: {integrity: sha512-G4NBdUelEb5M9qanm2DjOa4KkfGMsqYSu8RjTK93rEWmfPr5qN+vVhoA5DwgUVkZnpIDO85uI+Fy6joG9v6RAg==}
-    peerDependencies:
-      '@types/react': ^19.0.0
-      '@types/react-dom': ^19.0.0
-      react: ^19.0.0
-      react-dom: ^19.0.0
-
-  '@interchain-kit/store@0.6.1':
-    resolution: {integrity: sha512-MRs/FQY4U7V3KYUKzaDn1rP2H8VP4r9upkN6oiHqHRh16IGxzV3pUElwUuRKP8AgBIWdDZ3iEIxpkGH/L4hmrA==}
-
   '@interchain-ui/react@1.26.3':
     resolution: {integrity: sha512-kvGOZaSDJLNxtxieiyPMHOzxBGkpHR/BCpg/UEMDl2l7nLoPrygB/Oux1QEv/cwkw8GvepOBM7pzfJf8xk1IbQ==}
     peerDependencies:
@@ -2563,56 +2546,29 @@ packages:
     peerDependencies:
       vue: '>=3.0.0'
 
-  '@interchainjs/amino@1.17.3':
-    resolution: {integrity: sha512-o3QNUvqOpZ8P9cXrhxdW0jgfGb1sSCCW6PLFyZQVcgJZnK4W9VFj73FG6TnUEx8v7RDcNIv20XIukMK/RF9PAw==}
-
   '@interchainjs/amino@1.20.0':
     resolution: {integrity: sha512-HS7A9Rmv5wtd/1vPuBEIU7Dp1asZVgtr873lBF1SFYkHrUlh6GayPlHLCio4sot4x/f4tG7nbPx7f9dxhUROXw==}
-
-  '@interchainjs/auth@1.17.3':
-    resolution: {integrity: sha512-bpjZPWdgE46f+HWPD+jvFx3euBhcSbz3NE3qmL5gC2j1nMwjrHk/SsZHMjfDXhrfO3sjQiIMk4DcjCv7v+/6aw==}
 
   '@interchainjs/auth@1.20.0':
     resolution: {integrity: sha512-nuG9iqkSI9wQfQ1z2tLVqBrmXIHfDE2hOrx30m2ziIyAcp4dcXL3znu+rPC6c5W+BgGeSyiXuOBhJSnWa43EkQ==}
 
-  '@interchainjs/cosmos-types@1.17.3':
-    resolution: {integrity: sha512-lHQYzoa7haJfadieMTm9oe7LQq5trn9aoybyHvkj7Pt9k+mS0SmzJhzxXDTbj2pPfl6bnAflEOJ7PlC4x9IZHw==}
-
   '@interchainjs/cosmos-types@1.20.0':
     resolution: {integrity: sha512-0ODTN5jNQKc57UMi1Wa2eLRDjBCyCm1cPB7sSGZYWapF8P7KdNjDOPxOqUXVUUJ5n6YpxlK6Ivk75Auk1qZvwQ==}
-
-  '@interchainjs/cosmos@1.17.3':
-    resolution: {integrity: sha512-6ZwjLtIqDKcL7tvSgFJtLOSsKKv4DoQmKpBc7p1S3dzW10AtJ/TYD9ALdeD0+cwn+lnOAAquqkv1m7MQRjOtnw==}
 
   '@interchainjs/cosmos@1.20.0':
     resolution: {integrity: sha512-Jvok7nn17Hgih8Xqft7tBCeNi+d++DpFsgZuxrlOOcFt4boMWbNWAlKnZVsKEg5RP9313AUPqjcNZxEKZ6PrIg==}
 
-  '@interchainjs/crypto@1.17.3':
-    resolution: {integrity: sha512-Iyqmw2WAQUycb/HCTAnCNF5/huSUp1f8WU87yjOII/tcM7p6xDraijO0khnd8obqt0yJil2INx58W5U9xwiQ1w==}
-
   '@interchainjs/crypto@1.20.0':
     resolution: {integrity: sha512-lFnuFUnDsURCue+JLYygkjYAZoh7n91D9F7OWRT2/uHN4idxbXXsDfQjtNqZk5vvEY/UqGLJbVRdoNVwt4/frQ==}
-
-  '@interchainjs/encoding@1.17.3':
-    resolution: {integrity: sha512-Z1wEggXfcLE2aqfOZFyHDtw8HIZYkHhYlP+9IKds58qnH4VUWJLhWZ9DVUfMjvs20PKbCaZO71BYkNiM+x392Q==}
 
   '@interchainjs/encoding@1.19.0':
     resolution: {integrity: sha512-Q/KdcB+QbUHrJg40arFwUCxPWkCcX9GXhtmQEI58PLdg3cCWYL/jsAJxzEirw/ZMModbXICNrtuIIcwY5v1x2A==}
 
-  '@interchainjs/ethereum@1.17.3':
-    resolution: {integrity: sha512-uVhG0SNP7JirRcsi1cCYKEcdvhL2crCHMf4k+SXfSz3kDHIKVndHWXSTIALBTwj7iTrVmkixGaFAqmRS59hvAw==}
-
   '@interchainjs/ethereum@1.20.0':
     resolution: {integrity: sha512-FDlGwCk7Qs18P0tPHEfPUehOEcr1mMk+7Bd8DuQ7ii08OStvyB3tu2JM4uQh/L55R18M+HMtun4vH3NEG0tArQ==}
 
-  '@interchainjs/math@1.17.3':
-    resolution: {integrity: sha512-IGxi8KkQPKReHgXbg053SowUr0+48GJC+EjQ4MWfG2KMtUMN4f4dIYDdXCpdLt3QSZjxi2KCbgOuJ+7NwIjBow==}
-
   '@interchainjs/math@1.19.0':
     resolution: {integrity: sha512-7CWlRm+1UcDmJiqS6d1pLNTYfIg5aI1DfP8naURbkaamdr7neEESdMTmCGGBGsYNl0qSn2/Lh+KwaDmNh4tL3Q==}
-
-  '@interchainjs/pubkey@1.17.3':
-    resolution: {integrity: sha512-lVL1q7Kzadu2o9z//SRwG0FmYvQVLZ1m6OWi29Nb9uMTRvYWVTm5bx36xaEjYGSMlygeVPqGv+FkgkI5jDhYng==}
 
   '@interchainjs/pubkey@1.20.0':
     resolution: {integrity: sha512-no2dTEAqKe/2SElvfr6Vh3TOzacsYQ8xTdXTQd7veUE0l1lrYxr2W+jtFHDDEGAebulawFAkyFOO7ajuIhH6Zg==}
@@ -2620,17 +2576,8 @@ packages:
   '@interchainjs/solana@1.20.0':
     resolution: {integrity: sha512-4H8zbcf9yHs3UZXKmEbqAyljwR+dQwH9KStlRqqxu6icZw4W1cCi5w8UFl+L7pIjFgh3k+LDfRi8dL37X9zpLg==}
 
-  '@interchainjs/types@1.17.3':
-    resolution: {integrity: sha512-y4uihwvFRb16DVfvBCSXS7m45G6Mo6lgZq1F6Sut+hwhXBRV0Hvl59/7KhmMmH3sKffP1Lh/SmaeEvlUeQEI5A==}
-
   '@interchainjs/types@1.20.0':
     resolution: {integrity: sha512-q0gPQkXj4/87N6RzW1nxx6uGxb3kFmg9B8uvz+ypAcQ1c97fjURaD3W4ePBki7bdF/WqIhUjg9UdzT/ElKFUSg==}
-
-  '@interchainjs/utils@1.17.3':
-    resolution: {integrity: sha512-WFzJhhOGK+DZFx8s5cwHXvcAG9DHo60U8+h97ufyTmexPKXMMzBHty2Lir4gNibXUJbchre1+Yl5ElXXdsMSBA==}
-    peerDependencies:
-      '@chain-registry/v2': ^1.71.186
-      '@chain-registry/v2-types': ^0.53.115
 
   '@interchainjs/utils@1.20.0':
     resolution: {integrity: sha512-hQiuk/CIFxDwqMU8xFriFztu63E+xFsQQvgmBZ/ku95jlHc1+4CAHbOL9J5MNN1SxDtnjRkdKQQFqrKo1D8vfg==}
@@ -6951,9 +6898,6 @@ packages:
   inquirerer@1.9.1:
     resolution: {integrity: sha512-c7N3Yd9warVEpWdyX04dJUtYSad1qZFnNQYsKdqk0Av4qRg83lmxSnhWLn8Ok+UNzj87xXxo/ww0ReIL3ZO92g==}
 
-  interchainjs@1.17.3:
-    resolution: {integrity: sha512-dXWlouyywRMS2RaxIKAJnzbDBc3DhYaSN1p4gyVre+AVVQ29uoVzVsHTRemmA5K4CnDOoFlLSRWD95OdWGQd7Q==}
-
   interchainjs@1.20.0:
     resolution: {integrity: sha512-KPxBjTWN1zE8huyBVPy1mBFD/Dt+f1CCm3N6uIRSWMMG3QX0g8e972vD34DAj8ox7UFQqtE2B3G9D/NS4Kjl8Q==}
 
@@ -11209,7 +11153,7 @@ snapshots:
   '@cosmjs/socket@0.32.4(bufferutil@4.1.0)(utf-8-validate@5.0.10)':
     dependencies:
       '@cosmjs/stream': 0.32.4
-      isomorphic-ws: 4.0.1(ws@7.5.10)
+      isomorphic-ws: 4.0.1(ws@7.5.10(bufferutil@4.1.0)(utf-8-validate@5.0.10))
       ws: 7.5.10(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       xstream: 11.14.0
     transitivePeerDependencies:
@@ -11946,177 +11890,6 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.19.35
 
-  '@interchain-kit/core@0.7.0(encoding@0.1.13)(typescript@5.9.3)':
-    dependencies:
-      '@chain-registry/keplr': 2.0.163
-      '@chain-registry/types': 2.0.163
-      '@interchainjs/cosmos': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
-      '@interchainjs/cosmos-types': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/types': 1.17.3
-      '@ledgerhq/hw-app-cosmos': 6.33.0
-      '@ledgerhq/hw-transport': 6.32.0
-      '@ledgerhq/hw-transport-webhid': 6.31.0
-      '@ledgerhq/hw-transport-webusb': 6.30.0
-      '@solana/web3.js': 1.98.4(bufferutil@4.1.0)(encoding@0.1.13)(typescript@5.9.3)(utf-8-validate@5.0.10)
-      '@walletconnect/sign-client': 2.23.7(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
-      '@walletconnect/types': 2.23.7
-      '@walletconnect/universal-provider': 2.23.7(bufferutil@4.1.0)(encoding@0.1.13)(typescript@5.9.3)(utf-8-validate@5.0.10)
-      base64-js: 1.5.1
-      bowser: 2.14.1
-      bs58: 6.0.0
-      buffer: 6.0.3
-      chain-registry: 2.0.163
-      interchainjs: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
-      long: 5.3.2
-      pino-pretty: 7.6.1
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/functions'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - encoding
-      - ioredis
-      - typescript
-      - uploadthing
-      - utf-8-validate
-      - zod
-
-  '@interchain-kit/keplr-extension@0.7.0(encoding@0.1.13)(starknet@8.9.2)(typescript@5.9.3)':
-    dependencies:
-      '@interchain-kit/core': 0.7.0(encoding@0.1.13)(typescript@5.9.3)
-      '@keplr-wallet/provider-extension': 0.12.313(starknet@8.9.2)
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/functions'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - encoding
-      - ioredis
-      - starknet
-      - typescript
-      - uploadthing
-      - utf-8-validate
-      - zod
-
-  '@interchain-kit/metamask-extension@0.7.0(encoding@0.1.13)(typescript@5.9.3)':
-    dependencies:
-      '@interchain-kit/core': 0.7.0(encoding@0.1.13)(typescript@5.9.3)
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/functions'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - encoding
-      - ioredis
-      - typescript
-      - uploadthing
-      - utf-8-validate
-      - zod
-
-  '@interchain-kit/react@0.7.1(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(encoding@0.1.13)(immer@10.2.0)(jiti@2.6.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)(use-sync-external-store@1.6.0(react@19.2.4))':
-    dependencies:
-      '@chain-registry/types': 2.0.163
-      '@interchain-kit/core': 0.7.0(encoding@0.1.13)(typescript@5.9.3)
-      '@interchain-kit/store': 0.6.1
-      '@interchain-ui/react': 1.26.3(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@interchainjs/cosmos': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
-      '@interchainjs/cosmos-types': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/types': 1.17.3
-      '@react-icons/all-files': 4.1.0(react@19.2.4)
-      '@types/react': 19.2.14
-      '@types/react-dom': 19.2.3(@types/react@19.2.14)
-      '@walletconnect/types': 2.23.7
-      interchainjs: 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
-      jest-transform-stub: 2.0.0
-      postcss: 8.5.6
-      postcss-cli: 11.0.1(jiti@2.6.1)(postcss@8.5.6)
-      postcss-import: 16.1.1(postcss@8.5.6)
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
-      zustand: 5.0.11(@types/react@19.2.14)(immer@10.2.0)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/functions'
-      - '@vercel/kv'
-      - aws4fetch
-      - babel-plugin-macros
-      - bufferutil
-      - db0
-      - encoding
-      - immer
-      - ioredis
-      - jiti
-      - tsx
-      - typescript
-      - uploadthing
-      - use-sync-external-store
-      - utf-8-validate
-      - zod
-
-  '@interchain-kit/store@0.6.1': {}
-
   '@interchain-ui/react@1.26.3(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@floating-ui/core': 1.7.4
@@ -12180,37 +11953,12 @@ snapshots:
       - focus-trap
       - react
 
-  '@interchainjs/amino@1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
-    dependencies:
-      '@interchainjs/crypto': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/encoding': 1.17.3
-      '@interchainjs/math': 1.17.3
-      '@interchainjs/utils': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-    transitivePeerDependencies:
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
-
   '@interchainjs/amino@1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
     dependencies:
       '@interchainjs/crypto': 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
       '@interchainjs/encoding': 1.19.0
       '@interchainjs/math': 1.19.0
       '@interchainjs/utils': 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-    transitivePeerDependencies:
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
-
-  '@interchainjs/auth@1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
-    dependencies:
-      '@interchainjs/crypto': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/types': 1.17.3
-      '@interchainjs/utils': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@noble/curves': 1.9.7
-      '@noble/hashes': 1.8.0
-      '@scure/bip32': 1.7.0
-      bech32: 2.0.0
-      elliptic: 6.6.1
-      libsodium-wrappers-sumo: 0.7.16
     transitivePeerDependencies:
       - '@chain-registry/v2'
       - '@chain-registry/v2-types'
@@ -12230,15 +11978,6 @@ snapshots:
       - '@chain-registry/v2'
       - '@chain-registry/v2-types'
 
-  '@interchainjs/cosmos-types@1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
-    dependencies:
-      '@interchainjs/math': 1.17.3
-      '@interchainjs/types': 1.17.3
-      '@interchainjs/utils': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-    transitivePeerDependencies:
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
-
   '@interchainjs/cosmos-types@1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
     dependencies:
       '@interchainjs/encoding': 1.19.0
@@ -12248,28 +11987,6 @@ snapshots:
     transitivePeerDependencies:
       - '@chain-registry/v2'
       - '@chain-registry/v2-types'
-
-  '@interchainjs/cosmos@1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)':
-    dependencies:
-      '@interchainjs/auth': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/cosmos-types': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/crypto': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/encoding': 1.17.3
-      '@interchainjs/types': 1.17.3
-      '@interchainjs/utils': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@noble/curves': 1.9.7
-      '@noble/hashes': 1.8.0
-      bech32: 1.1.4
-      bignumber.js: 9.3.1
-      bip39: 3.1.0
-      decimal.js: 10.6.0
-      deepmerge: 4.2.2
-      ws: 8.19.0(bufferutil@4.1.0)(utf-8-validate@5.0.10)
-    transitivePeerDependencies:
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
-      - bufferutil
-      - utf-8-validate
 
   '@interchainjs/cosmos@1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)':
     dependencies:
@@ -12295,19 +12012,6 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@interchainjs/crypto@1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
-    dependencies:
-      '@interchainjs/encoding': 1.17.3
-      '@interchainjs/math': 1.17.3
-      '@interchainjs/utils': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@noble/hashes': 1.8.0
-      bn.js: 5.2.3
-      elliptic: 6.6.1
-      libsodium-wrappers-sumo: 0.7.16
-    transitivePeerDependencies:
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
-
   '@interchainjs/crypto@1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
     dependencies:
       '@interchainjs/encoding': 1.19.0
@@ -12321,38 +12025,12 @@ snapshots:
       - '@chain-registry/v2'
       - '@chain-registry/v2-types'
 
-  '@interchainjs/encoding@1.17.3':
-    dependencies:
-      '@interchainjs/math': 1.17.3
-      base64-js: 1.5.1
-      bech32: 1.1.4
-      readonly-date: 1.0.0
-
   '@interchainjs/encoding@1.19.0':
     dependencies:
       '@interchainjs/math': 1.19.0
       base64-js: 1.5.1
       bech32: 1.1.4
       readonly-date: 1.0.0
-
-  '@interchainjs/ethereum@1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
-    dependencies:
-      '@ethersproject/bignumber': 5.8.0
-      '@ethersproject/bytes': 5.8.0
-      '@ethersproject/hash': 5.8.0
-      '@ethersproject/transactions': 5.8.0
-      '@interchainjs/auth': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/types': 1.17.3
-      '@interchainjs/utils': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@noble/curves': 1.9.7
-      '@noble/hashes': 1.8.0
-      bip39: 3.1.0
-      deepmerge: 4.2.2
-      ethereum-cryptography: 3.2.0
-      rlp: 3.0.0
-    transitivePeerDependencies:
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
 
   '@interchainjs/ethereum@1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
     dependencies:
@@ -12374,24 +12052,9 @@ snapshots:
       - '@chain-registry/v2'
       - '@chain-registry/v2-types'
 
-  '@interchainjs/math@1.17.3':
-    dependencies:
-      bn.js: 5.2.3
-
   '@interchainjs/math@1.19.0':
     dependencies:
       bn.js: 5.2.3
-
-  '@interchainjs/pubkey@1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
-    dependencies:
-      '@interchainjs/amino': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/cosmos-types': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/encoding': 1.17.3
-      '@interchainjs/math': 1.17.3
-      '@interchainjs/types': 1.17.3
-    transitivePeerDependencies:
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
 
   '@interchainjs/pubkey@1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
     dependencies:
@@ -12423,20 +12086,8 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@interchainjs/types@1.17.3':
-    dependencies:
-      decimal.js: 10.6.0
-
   '@interchainjs/types@1.20.0':
     dependencies:
-      decimal.js: 10.6.0
-
-  '@interchainjs/utils@1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
-    dependencies:
-      '@chain-registry/v2': 1.71.237
-      '@chain-registry/v2-types': 0.53.146
-      '@interchainjs/types': 1.17.3
-      bech32: 2.0.0
       decimal.js: 10.6.0
 
   '@interchainjs/utils@1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)':
@@ -18424,25 +18075,6 @@ snapshots:
       js-yaml: 4.1.1
       minimist: 1.2.8
 
-  interchainjs@1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10):
-    dependencies:
-      '@interchainjs/cosmos': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
-      '@interchainjs/cosmos-types': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/crypto': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/encoding': 1.17.3
-      '@interchainjs/ethereum': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/math': 1.17.3
-      '@interchainjs/pubkey': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/types': 1.17.3
-      '@interchainjs/utils': 1.17.3(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@noble/hashes': 1.8.0
-      decimal.js: 10.6.0
-    transitivePeerDependencies:
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
-      - bufferutil
-      - utf-8-validate
-
   interchainjs@1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10):
     dependencies:
       '@interchainjs/cosmos': 1.20.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
@@ -18668,7 +18300,7 @@ snapshots:
 
   isomorphic-timers-promises@1.0.1: {}
 
-  isomorphic-ws@4.0.1(ws@7.5.10):
+  isomorphic-ws@4.0.1(ws@7.5.10(bufferutil@4.1.0)(utf-8-validate@5.0.10)):
     dependencies:
       ws: 7.5.10(bufferutil@4.1.0)(utf-8-validate@5.0.10)
 
@@ -18749,7 +18381,7 @@ snapshots:
       delay: 5.0.0
       es6-promisify: 5.0.0
       eyes: 0.1.8
-      isomorphic-ws: 4.0.1(ws@7.5.10)
+      isomorphic-ws: 4.0.1(ws@7.5.10(bufferutil@4.1.0)(utf-8-validate@5.0.10))
       json-stringify-safe: 5.0.1
       stream-json: 1.9.1
       uuid: 8.3.2

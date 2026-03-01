@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/core",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector core package",
   "main": "index.js",
@@ -33,10 +33,10 @@
   "dependencies": {
     "@chain-registry/keplr": "^2.0.1",
     "@chain-registry/types": "^2.0.1",
-    "@interchainjs/amino": "1.17.3",
-    "@interchainjs/cosmos": "1.17.3",
-    "@interchainjs/cosmos-types": "1.17.3",
-    "@interchainjs/types": "1.17.3",
+    "@interchainjs/amino": "1.20.0",
+    "@interchainjs/cosmos": "1.20.0",
+    "@interchainjs/cosmos-types": "1.20.0",
+    "@interchainjs/types": "1.20.0",
     "@ledgerhq/hw-app-cosmos": "^6.30.4",
     "@ledgerhq/hw-transport": "^6.31.4",
     "@ledgerhq/hw-transport-webhid": "^6.30.0",
@@ -50,10 +50,10 @@
     "bs58": "^6.0.0",
     "buffer": "^6.0.3",
     "chain-registry": "^2.0.1",
-    "interchainjs": "1.17.3",
+    "events": "^3.3.0",
+    "interchainjs": "1.20.0",
     "long": "^5.2.3",
-    "pino-pretty": "^7.6.0",
-    "events": "^3.3.0"
+    "pino-pretty": "^7.6.0"
   },
   "devDependencies": {
     "@keplr-wallet/types": "^0.12.168",

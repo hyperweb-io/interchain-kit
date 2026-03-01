@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/keplr-mobile",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "author": "Cosmology <developers@hyperweb.io>",
   "description": "interchain-kit wallet connector",
   "main": "index.js",

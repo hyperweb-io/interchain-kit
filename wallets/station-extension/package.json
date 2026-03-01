@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/station-extension",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector",
   "main": "index.js",
@@ -32,8 +32,8 @@
   "keywords": [],
   "dependencies": {
     "@interchain-kit/core": "workspace:*",
-    "@interchainjs/cosmos": "1.17.3",
-    "@interchainjs/types": "1.17.3"
+    "@interchainjs/cosmos": "1.20.0",
+    "@interchainjs/types": "1.20.0"
   },
   "devDependencies": {
     "makage": "^0.1.12"

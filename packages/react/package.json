@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/react",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector react package",
   "main": "index.js",
@@ -37,12 +37,12 @@
     "@interchain-kit/core": "workspace:*",
     "@interchain-kit/store": "workspace:*",
     "@interchain-ui/react": "^1.26.3",
-    "@interchainjs/cosmos": "1.17.3",
-    "@interchainjs/cosmos-types": "1.17.3",
-    "@interchainjs/types": "1.17.3",
+    "@interchainjs/cosmos": "1.20.0",
+    "@interchainjs/cosmos-types": "1.20.0",
+    "@interchainjs/types": "1.20.0",
     "@react-icons/all-files": "^4.1.0",
     "@walletconnect/types": "^2.17.3",
-    "interchainjs": "1.17.3",
+    "interchainjs": "1.20.0",
     "jest-transform-stub": "^2.0.0",
     "postcss": "^8.5.6",
     "postcss-cli": "^11.0.1",
@@ -61,8 +61,8 @@
     "@testing-library/react-hooks": "^8.0.1",
     "babel-jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "ts-jest": "^29.3.0",
-    "makage": "^0.1.12"
+    "makage": "^0.1.12",
+    "ts-jest": "^29.3.0"
   },
   "peerDependencies": {
     "@types/react": "^19.0.0",

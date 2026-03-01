@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/leap-cosmos-extension-metamask",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector for leap cosmos extension metamask",
   "main": "index.js",
@@ -31,11 +31,11 @@
   },
   "keywords": [],
   "dependencies": {
-    "@interchain-kit/core": "workspace:*",
     "@chain-registry/types": "^2.0.1",
     "@cosmjs/amino": "^0.32.3",
-    "@interchainjs/cosmos": "1.17.3",
-    "@interchainjs/types": "1.17.3",
+    "@interchain-kit/core": "workspace:*",
+    "@interchainjs/cosmos": "1.20.0",
+    "@interchainjs/types": "1.20.0",
     "long": "^5.2.3"
   },
   "devDependencies": {

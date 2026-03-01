@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/hyperweb-io/interchain-kit/compare/next-app-router@0.7.1...next-app-router@0.8.0) (2026-03-01)
+
+
+### Features
+
+* migrate from yarn to pnpm with makage + dist/ publishing ([0c3e255](https://github.com/hyperweb-io/interchain-kit/commit/0c3e25511437ceac3a6caefcd3db6221860674b6))
+
+
+
+
+
 ## [0.7.1](https://github.com/hyperweb-io/interchain-kit/compare/next-app-router@0.7.0...next-app-router@0.7.1) (2025-12-23)
 
 **Note:** Version bump only for package next-app-router

@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/vue",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit for vue",
   "main": "index.umd.js",
@@ -30,12 +30,12 @@
     "@chain-registry/types": "^2.0.1",
     "@interchain-kit/core": "workspace:*",
     "@interchain-ui/vue": "^1.4.1",
-    "@interchainjs/cosmos": "1.17.3",
-    "@interchainjs/cosmos-types": "1.17.3",
-    "@interchainjs/types": "1.17.3",
+    "@interchainjs/cosmos": "1.20.0",
+    "@interchainjs/cosmos-types": "1.20.0",
+    "@interchainjs/types": "1.20.0",
     "@types/node": "^22.7.5",
     "@vue/compiler-sfc": "^3.5.12",
-    "interchainjs": "1.17.3"
+    "interchainjs": "1.20.0"
   },
   "devDependencies": {
     "copyfiles": "^2.4.1",
