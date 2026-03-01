@@ -37,17 +37,17 @@ npm install test
 When first cloning the repo:
 
 ```sh
-yarn
+pnpm
 # build the prod packages. When devs would like to navigate to the source code, this will only navigate from references to their definitions (.d.ts files) between packages.
-yarn build
+pnpm build
 ```
 
 Or if you want to make your dev process smoother, you can run:
 
 ```sh
-yarn
+pnpm
 # build the dev packages with .map files, this enables navigation from references to their source code between packages.
-yarn build:dev
+pnpm build:dev
 ```
 
 ## Interchain JavaScript Stack 

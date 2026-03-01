@@ -8,7 +8,7 @@
 
 ```bash
 # 在專案根目錄運行
-yarn install
+pnpm install
 
 # 安裝 Playwright 瀏覽器
 cd e2e
@@ -21,16 +21,16 @@ npx playwright install
 
 ```bash
 # 在專案根目錄運行
-yarn test:e2e                    # 運行所有測試 (無頭模式)
-yarn test:e2e:headed             # 運行所有測試 (有頭模式，可以看到瀏覽器界面)
-yarn test:e2e:ui                 # 使用 Playwright UI 模式運行 (可視化測試界面)
-yarn test:e2e:debug              # 調試模式運行測試
+pnpm test:e2e                    # 運行所有測試 (無頭模式)
+pnpm test:e2e:headed             # 運行所有測試 (有頭模式，可以看到瀏覽器界面)
+pnpm test:e2e:ui                 # 使用 Playwright UI 模式運行 (可視化測試界面)
+pnpm test:e2e:debug              # 調試模式運行測試
 
 # 運行特定測試類別
-yarn test:e2e --grep "錢包發現和連接測試"       # 僅運行錢包發現與連接測試
-yarn test:e2e --grep "交易簽名流程測試"        # 僅運行交易簽名流程測試
-yarn test:e2e --grep "跨鏈用戶體驗測試"        # 僅運行跨鏈用戶體驗測試
-yarn test:e2e --grep "回歸測試/UI 案例"       # 僅運行回歸/UI測試
+pnpm test:e2e --grep "錢包發現和連接測試"       # 僅運行錢包發現與連接測試
+pnpm test:e2e --grep "交易簽名流程測試"        # 僅運行交易簽名流程測試
+pnpm test:e2e --grep "跨鏈用戶體驗測試"        # 僅運行跨鏈用戶體驗測試
+pnpm test:e2e --grep "回歸測試/UI 案例"       # 僅運行回歸/UI測試
 ```
 
 ## 測試報告

@@ -16,6 +16,9 @@
     "starship:multi-chain": "starship --config ./starship/configs/multi-chain.yaml",
     "starship:solana": "starship --config ./starship/configs/solana.yaml"
   },
+  "dependencies": {
+    "@interchain-kit/core": "workspace:*"
+  },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
     "@types/node": "^20.12.7",

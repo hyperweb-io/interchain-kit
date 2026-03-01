@@ -24,9 +24,9 @@ Using npm:
 ```sh
 npm install @interchain-kit/vue
 ```
-Using yarn:
+Using pnpm:
 ```sh
-yarn add @interchain-kit/vue
+pnpm add @interchain-kit/vue
 ```
 
 ## Usage
@@ -220,9 +220,9 @@ WIP
 
 When first cloning the repo, under project root directory run:
 ```bash
-yarn
+pnpm
 # build the prod packages. When devs would like to navigate to the source code, this will only navigate from references to their definitions (.d.ts files) between packages.
-yarn build
+pnpm build
 ```
 
 ## Interchain JavaScript Stack 

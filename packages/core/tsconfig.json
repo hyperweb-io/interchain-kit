@@ -2,7 +2,11 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src/"
+    "rootDir": "src/",
+    "baseUrl": ".",
+    "paths": {
+      "@interchain-kit/core": ["src"]
+    }
   },
   "include": ["src/**/*.ts", "__tests__/wallets/extension-wallet.test.ts"],
   "exclude": ["dist", "node_modules", "**/*.spec.*", "**/*.test.*"]

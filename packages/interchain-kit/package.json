@@ -7,7 +7,7 @@
   "module": "esm/index.js",
   "types": "index.d.ts",
   "homepage": "https://github.com/hyperweb-io/interchain-kit",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "publishConfig": {
     "access": "public",
     "directory": "dist"
@@ -20,14 +20,15 @@
     "url": "https://github.com/hyperweb-io/interchain-kit/issues"
   },
   "scripts": {
-    "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
-    "clean": "rimraf dist/**",
-    "prepare": "npm run build",
-    "build": "npm run clean; tsc; tsc -p tsconfig.esm.json; npm run copy",
+    "clean": "makage clean",
+    "build": "makage build",
     "lint": "eslint . --fix",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prepack": "npm run build"
   },
   "keywords": [],
-  "gitHead": "73396afd0b2d8d59de08404ad798193670e4b582"
+  "devDependencies": {
+    "makage": "^0.1.12"
+  }
 }

@@ -7,7 +7,7 @@
   "module": "esm/index.js",
   "types": "index.d.ts",
   "homepage": "https://github.com/interchain-kit/react",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "publishConfig": {
     "access": "public",
     "directory": "dist"
@@ -21,22 +21,21 @@
   },
   "scripts": {
     "build:css": "postcss src/styles.css -o dist/styles.css",
-    "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
-    "clean": "rimraf dist/**",
-    "prepare": "npm run build",
-    "build": "npm run clean; tsc; tsc -p tsconfig.esm.json; npm run copy; npm run build:css",
+    "clean": "makage clean",
+    "build": "makage build && npm run build:css",
     "build:dev": "npm run clean; tsc --declarationMap; tsc -p tsconfig.esm.json; npm run copy",
     "lint": "eslint . --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --watch",
-    "watch:dev": "tsc -w -p tsconfig.esm.json & tsc -w"
+    "watch:dev": "tsc -w -p tsconfig.esm.json & tsc -w",
+    "prepack": "npm run build"
   },
   "keywords": [],
   "dependencies": {
     "@chain-registry/types": "^2.0.1",
-    "@interchain-kit/core": "^0.7.0",
-    "@interchain-kit/store": "^0.6.1",
+    "@interchain-kit/core": "workspace:*",
+    "@interchain-kit/store": "workspace:*",
     "@interchain-ui/react": "^1.26.3",
     "@interchainjs/cosmos": "1.17.3",
     "@interchainjs/cosmos-types": "1.17.3",
@@ -62,13 +61,13 @@
     "@testing-library/react-hooks": "^8.0.1",
     "babel-jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "ts-jest": "^29.3.0"
+    "ts-jest": "^29.3.0",
+    "makage": "^0.1.12"
   },
   "peerDependencies": {
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
-  },
-  "gitHead": "73396afd0b2d8d59de08404ad798193670e4b582"
+  }
 }

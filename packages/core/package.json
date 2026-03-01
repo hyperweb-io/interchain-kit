@@ -7,7 +7,7 @@
   "module": "esm/index.js",
   "types": "index.d.ts",
   "homepage": "https://github.com/@interchain-kit/core",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "publishConfig": {
     "access": "public",
     "directory": "dist"
@@ -20,20 +20,20 @@
     "url": "https://github.com/@interchain-kit/core/issues"
   },
   "scripts": {
-    "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
-    "clean": "rimraf dist/**",
-    "prepare": "npm run build",
-    "build": "npm run clean; tsc; tsc -p tsconfig.esm.json; npm run copy",
+    "clean": "makage clean",
+    "build": "makage build",
     "lint": "eslint . --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --watch",
-    "watch:dev": "tsc -w -p tsconfig.esm.json & tsc -w"
+    "watch:dev": "tsc -w -p tsconfig.esm.json & tsc -w",
+    "prepack": "npm run build"
   },
   "keywords": [],
   "dependencies": {
     "@chain-registry/keplr": "^2.0.1",
     "@chain-registry/types": "^2.0.1",
+    "@interchainjs/amino": "1.17.3",
     "@interchainjs/cosmos": "1.17.3",
     "@interchainjs/cosmos-types": "1.17.3",
     "@interchainjs/types": "1.17.3",
@@ -52,11 +52,12 @@
     "chain-registry": "^2.0.1",
     "interchainjs": "1.17.3",
     "long": "^5.2.3",
-    "pino-pretty": "^7.6.0"
+    "pino-pretty": "^7.6.0",
+    "events": "^3.3.0"
   },
   "devDependencies": {
     "@keplr-wallet/types": "^0.12.168",
-    "jest-environment-jsdom": "^29.7.0"
-  },
-  "gitHead": "73396afd0b2d8d59de08404ad798193670e4b582"
+    "jest-environment-jsdom": "^29.7.0",
+    "makage": "^0.1.12"
+  }
 }

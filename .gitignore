@@ -5,6 +5,9 @@
 lerna-debug.log
 **/coverage
 
+# Package manager
+pnpm-debug.log
+
 # Playwright test report
 **/playwright-report/
 **/test-results/

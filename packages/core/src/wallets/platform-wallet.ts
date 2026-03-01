@@ -1,5 +1,5 @@
 import { AssetList, Chain } from '@chain-registry/types';
-import { OfflineAminoSigner, OfflineDirectSigner } from '@interchain-kit/core';
+import { OfflineAminoSigner, OfflineDirectSigner } from '../types/cosmos';
 
 import { SignType, WalletAccount } from '../types';
 import { getWalletByType, isMobile } from '../utils';

@@ -1,0 +1,5 @@
+packages:
+  - 'packages/*'
+  - 'wallets/*'
+  - 'examples/*'
+  - 'e2e'

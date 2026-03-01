@@ -25,9 +25,9 @@ Using npm:
 npm install @interchain-kit/core
 ```
 
-Using yarn:
+Using pnpm:
 ```
-yarn add @interchain-kit/core 
+pnpm add @interchain-kit/core 
 ```
 ## Usage
 #### Connect
@@ -165,8 +165,8 @@ await txSend(
 When first cloning the repo:
 
 ```
-yarn
-yarn dev
+pnpm
+pnpm dev
 ```
 
 ## Interchain JavaScript Stack 
