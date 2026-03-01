@@ -32,10 +32,10 @@
   "keywords": [],
   "dependencies": {
     "@chain-registry/types": "^2.0.1",
-    "@cosmjs/amino": "^0.32.3",
+    "@cosmjs/amino": "^0.38.1",
     "@interchain-kit/core": "workspace:*",
-    "@interchainjs/cosmos": "1.20.0",
-    "@interchainjs/types": "1.20.0",
+    "@interchainjs/cosmos": "1.21.0",
+    "@interchainjs/types": "1.21.0",
     "long": "^5.2.3"
   },
   "devDependencies": {

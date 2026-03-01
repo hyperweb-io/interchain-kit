@@ -2,7 +2,6 @@ import { CosmosWallet, EthereumWallet, ExtensionWallet } from '@interchain-kit/c
 
 import { cosmostationExtensionInfo } from './registry';
 
-export * from './extension';
 export * from './registry';
 
 const cosmostationWallet = new ExtensionWallet(cosmostationExtensionInfo);

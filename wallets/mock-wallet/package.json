@@ -32,10 +32,10 @@
   "keywords": [],
   "dependencies": {
     "@chain-registry/types": "^2.0.1",
-    "@cosmjs/amino": "^0.32.3",
-    "@cosmjs/proto-signing": "^0.32.3",
+    "@cosmjs/amino": "^0.38.1",
+    "@cosmjs/proto-signing": "^0.38.1",
     "@interchain-kit/core": "workspace:*",
-    "@keplr-wallet/types": "^0.12.168",
+    "@keplr-wallet/types": "^0.13.11",
     "@solana/web3.js": "^1.98.4",
     "bip39": "^3.1.0",
     "bs58": "^6.0.0",

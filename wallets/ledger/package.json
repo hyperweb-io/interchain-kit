@@ -33,7 +33,7 @@
   "dependencies": {
     "@chain-registry/types": "^2.0.1",
     "@interchain-kit/core": "workspace:*",
-    "@interchainjs/types": "1.20.0",
+    "@interchainjs/types": "1.21.0",
     "@ledgerhq/hw-app-cosmos": "^6.30.4",
     "@ledgerhq/hw-app-solana": "^7.5.2",
     "@ledgerhq/hw-transport": "^6.31.4",

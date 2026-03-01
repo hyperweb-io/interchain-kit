@@ -30,12 +30,12 @@
     "@chain-registry/types": "^2.0.1",
     "@interchain-kit/core": "workspace:*",
     "@interchain-ui/vue": "^1.4.1",
-    "@interchainjs/cosmos": "1.20.0",
-    "@interchainjs/cosmos-types": "1.20.0",
-    "@interchainjs/types": "1.20.0",
+    "@interchainjs/cosmos": "1.21.0",
+    "@interchainjs/cosmos-types": "1.21.0",
+    "@interchainjs/types": "1.21.0",
     "@types/node": "^22.7.5",
     "@vue/compiler-sfc": "^3.5.12",
-    "interchainjs": "1.20.0"
+    "interchainjs": "1.21.0"
   },
   "devDependencies": {
     "copyfiles": "^2.4.1",
