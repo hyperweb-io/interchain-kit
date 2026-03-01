@@ -31,7 +31,7 @@
   "keywords": [],
   "dependencies": {
     "@interchain-kit/core": "workspace:*",
-    "@keplr-wallet/provider-extension": "^0.12.102"
+    "@keplr-wallet/provider-extension": "^0.13.11"
   },
   "devDependencies": {
     "makage": "^0.1.12"

@@ -33,10 +33,10 @@
   "dependencies": {
     "@chain-registry/keplr": "^2.0.1",
     "@chain-registry/types": "^2.0.1",
-    "@interchainjs/amino": "1.20.0",
-    "@interchainjs/cosmos": "1.20.0",
-    "@interchainjs/cosmos-types": "1.20.0",
-    "@interchainjs/types": "1.20.0",
+    "@interchainjs/amino": "1.21.0",
+    "@interchainjs/cosmos": "1.21.0",
+    "@interchainjs/cosmos-types": "1.21.0",
+    "@interchainjs/types": "1.21.0",
     "@ledgerhq/hw-app-cosmos": "^6.30.4",
     "@ledgerhq/hw-transport": "^6.31.4",
     "@ledgerhq/hw-transport-webhid": "^6.30.0",
@@ -51,12 +51,12 @@
     "buffer": "^6.0.3",
     "chain-registry": "^2.0.1",
     "events": "^3.3.0",
-    "interchainjs": "1.20.0",
+    "interchainjs": "1.21.0",
     "long": "^5.2.3",
     "pino-pretty": "^7.6.0"
   },
   "devDependencies": {
-    "@keplr-wallet/types": "^0.12.168",
+    "@keplr-wallet/types": "^0.13.11",
     "jest-environment-jsdom": "^29.7.0",
     "makage": "^0.1.12"
   }
