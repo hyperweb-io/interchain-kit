@@ -1,13 +1,12 @@
 {
-  "lerna": "6",
-  "conventionalCommits": true,
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "version": "independent",
   "npmClient": "pnpm",
   "packages": [
     "packages/*",
     "wallets/*",
     "examples/*"
   ],
-  "version": "independent",
   "registry": "https://registry.npmjs.org",
   "command": {
     "create": {
@@ -15,9 +14,13 @@
       "license": "SEE LICENSE IN LICENSE",
       "access": "restricted"
     },
+    "version": {
+      "syncWorkspaceLock": true
+    },
     "publish": {
       "allowBranch": "main",
-      "message": "chore(release): publish"
+      "message": "chore(release): publish",
+      "conventionalCommits": true
     }
   }
 }
