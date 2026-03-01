@@ -2,7 +2,7 @@ import { AssetList, Chain } from '@chain-registry/types';
 import { BaseWallet, ChainName, CosmosSigningOptions, DeviceType, DownloadInfo, EndpointOptions, Endpoints, OS, SignerOptions, SignType, WalletAccount, WalletManager, WalletState } from '@interchain-kit/core';
 import { AminoSigner, CosmosSignerConfig, createCosmosQueryClient, DirectSigner,OfflineSigner } from '@interchainjs/cosmos';
 import { HttpEndpoint } from '@interchainjs/types';
-import { getSigner } from 'interchainjs';
+import { getSigner, COSMOS_DIRECT, COSMOS_AMINO } from 'interchainjs';
 
 import { createProxiedWallet } from '../proxied-wallets';
 import { InterchainStore } from '../store';
@@ -276,12 +276,12 @@ export class WalletManagerStore implements WalletManager {
 
       if (preferredSignType === 'direct') {
         return getSigner<DirectSigner>(offlineSigner, {
-          preferredSignType: 'direct',
+          preferredSignType: COSMOS_DIRECT,
           signerOptions,
         });
       } else {
         return getSigner<AminoSigner>(offlineSigner, {
-          preferredSignType: 'amino',
+          preferredSignType: COSMOS_AMINO,
           signerOptions,
         });
       }

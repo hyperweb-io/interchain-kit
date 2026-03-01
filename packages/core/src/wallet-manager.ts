@@ -3,7 +3,7 @@ import { getWalletByType } from './utils';
 import { AminoSigner, CosmosSignerConfig, createCosmosQueryClient, DirectSigner, OfflineSigner } from '@interchainjs/cosmos';
 import { HttpEndpoint } from '@interchainjs/types';
 import Bowser from 'bowser';
-import { getSigner } from 'interchainjs';
+import { getSigner, COSMOS_DIRECT, COSMOS_AMINO } from 'interchainjs';
 
 import { ChainName, DeviceType, DownloadInfo, EndpointOptions, Endpoints, OS, SignerOptions, SignType } from './types';
 import { CosmosSigningOptions } from './types/cosmos';
@@ -263,12 +263,12 @@ export class WalletManager {
 
       if (preferredSignType === 'direct') {
         return getSigner<DirectSigner>(offlineSigner, {
-          preferredSignType: 'direct',
+          preferredSignType: COSMOS_DIRECT,
           signerOptions,
         });
       } else {
         return getSigner<AminoSigner>(offlineSigner, {
-          preferredSignType: 'amino',
+          preferredSignType: COSMOS_AMINO,
           signerOptions,
         });
       }
