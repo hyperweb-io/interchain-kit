@@ -119,7 +119,7 @@ export class WCCosmosWallet extends CosmosWallet implements IWCCommon {
           signerAddress: signer,
           signDoc,
         },
-      }, `cosmos:${chainId}`);
+      }, `cosmos:${chainId}`, this.wcWallet?.options?.signingRequestExpiry);
 
       return result as AminoSignResponse;
     } catch (error) {
@@ -152,7 +152,7 @@ export class WCCosmosWallet extends CosmosWallet implements IWCCommon {
       const result = await (this.provider.request({
         method: 'cosmos_signDirect',
         params: signDocValue,
-      }, `cosmos:${chainId}`) as Promise<WCDirectSignResponse>);
+      }, `cosmos:${chainId}`, this.wcWallet?.options?.signingRequestExpiry) as Promise<WCDirectSignResponse>);
 
       return {
         signed: {
