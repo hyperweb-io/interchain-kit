@@ -13,7 +13,7 @@ export interface OfflineDirectSigner {
 }
 
 export interface CosmosSigningOptions {
-  cosmosSignerConfig: CosmosSignerConfig
+  cosmosSignerConfig: Partial<CosmosSignerConfig>
 }
 
 export interface Pubkey {
