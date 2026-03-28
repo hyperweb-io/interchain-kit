@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.1](https://github.com/@interchain-kit/core/compare/@interchain-kit/core@0.10.0...@interchain-kit/core@0.10.1) (2026-03-28)
+
+### Bug Fixes
+
+- **core:** make CosmosSigningOptions.cosmosSignerConfig partial ([2bbb374](https://github.com/@interchain-kit/core/commit/2bbb37454161424d2cf0f8dcf01c22c9fc52e8a3))
+
 # [0.10.0](https://github.com/@interchain-kit/core/compare/@interchain-kit/core@0.9.0...@interchain-kit/core@0.10.0) (2026-03-01)
 
 **Note:** Version bump only for package @interchain-kit/core
