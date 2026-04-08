@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.2](https://github.com/@interchain-kit/core/compare/@interchain-kit/core@0.10.1...@interchain-kit/core@0.10.2) (2026-04-08)
+
+### Bug Fixes
+
+- validate WC session covers all chains before reuse ([9130c7a](https://github.com/@interchain-kit/core/commit/9130c7aa3843ee13f395d257a624824599c9583f))
+
 ## [0.10.1](https://github.com/@interchain-kit/core/compare/@interchain-kit/core@0.10.0...@interchain-kit/core@0.10.1) (2026-03-28)
 
 ### Bug Fixes

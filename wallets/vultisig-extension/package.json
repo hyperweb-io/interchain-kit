@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/vultisig-extension",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector",
   "main": "index.js",

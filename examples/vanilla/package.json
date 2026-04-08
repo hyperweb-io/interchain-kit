@@ -2,7 +2,7 @@
   "name": "@interchain-kit/vanilla-examples",
   "author": "Constructive <developers@constructive.io>",
   "description": "interchain-kit wallet connector core package",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "type": "module",
   "private": true,
   "scripts": {
