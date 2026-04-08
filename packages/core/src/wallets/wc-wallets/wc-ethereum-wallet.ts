@@ -109,7 +109,7 @@ export class WCEthereumWallet extends EthereumWallet implements IWCCommon {
       const result = await this.provider.request({
         method: 'eth_sendTransaction',
         params: [transactionParameters]
-      }) as string;
+      }, undefined, this.wcWallet?.options?.signingRequestExpiry) as string;
       return result;
     } catch (error) {
       console.log('send transaction error:', error);
@@ -126,7 +126,7 @@ export class WCEthereumWallet extends EthereumWallet implements IWCCommon {
       const result = await this.provider.request({
         method: 'personal_sign',
         params: [message]
-      }) as string;
+      }, undefined, this.wcWallet?.options?.signingRequestExpiry) as string;
       return result;
     } catch (error) {
       console.log('sign message error:', error);

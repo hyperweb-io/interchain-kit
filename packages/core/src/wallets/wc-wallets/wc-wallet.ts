@@ -8,7 +8,7 @@ import { fromByteArray, toByteArray } from 'base64-js';
 import { BroadcastMode } from 'interchainjs';
 
 import { WalletConnectIcon } from '../../constant';
-import { DirectSignDoc, SignType, Wallet, WalletAccount, WCDirectSignResponse, WcEventTypes, WcProviderEventType } from '../../types';
+import { DirectSignDoc, SignType, Wallet, WalletAccount, WCDirectSignResponse, WcEventTypes, WcProviderEventType, WCWalletOptions } from '../../types';
 import { MultiChainWallet } from '../multichain-wallet';
 import { isWCCommon } from './wc-common';
 
@@ -35,11 +35,13 @@ export class WCWallet extends MultiChainWallet {
 
   accountToRestore: WalletAccount | null = null;
 
+  options?: WCWalletOptions;
+
   setAccountToRestore(account: WalletAccount) {
     this.accountToRestore = account;
   }
 
-  constructor(option?: Wallet, walletConnectOption?: SignClientTypes.Options) {
+  constructor(option?: Wallet, walletConnectOption?: SignClientTypes.Options, wcWalletOptions?: WCWalletOptions) {
     const defaultWalletConnectOption: Wallet = {
       name: 'WalletConnect',
       prettyName: 'Wallet Connect',
@@ -50,6 +52,7 @@ export class WCWallet extends MultiChainWallet {
     super({ ...defaultWalletConnectOption, ...option });
 
     this.walletConnectOption = walletConnectOption;
+    this.options = wcWalletOptions;
   }
 
   async init(): Promise<void> {
@@ -276,7 +279,7 @@ export class WCWallet extends MultiChainWallet {
           signerAddress: signer,
           signDoc,
         },
-      }, `cosmos:${chainId}`);
+      }, `cosmos:${chainId}`, this.options?.signingRequestExpiry);
 
       return result as AminoSignResponse;
     } catch (error) {
@@ -314,7 +317,7 @@ export class WCWallet extends MultiChainWallet {
     const result = await (this.provider.request({
       method: 'cosmos_signDirect',
       params: signDocValue,
-    }, `cosmos:${chainId}`) as Promise<WCDirectSignResponse>);
+    }, `cosmos:${chainId}`, this.options?.signingRequestExpiry) as Promise<WCDirectSignResponse>);
 
     return {
       signed: {

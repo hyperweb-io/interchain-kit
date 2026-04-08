@@ -118,7 +118,7 @@ export class WCSolanaWallet extends SolanaWallet implements IWCCommon {
       const result = await this.provider.request({
         method: 'solana_signAllTransactions',
         params: { transactions }
-      }) as any[];
+      }, undefined, this.wcWallet?.options?.signingRequestExpiry) as any[];
       return result;
     } catch (error) {
       console.log('sign all transactions error:', error);
@@ -135,7 +135,7 @@ export class WCSolanaWallet extends SolanaWallet implements IWCCommon {
       const result = await this.provider.request({
         method: 'solana_signAndSendAllTransactions',
         params: { transactions }
-      });
+      }, undefined, this.wcWallet?.options?.signingRequestExpiry);
       return result;
     } catch (error) {
       console.log('sign and send all transactions error:', error);
@@ -154,7 +154,7 @@ export class WCSolanaWallet extends SolanaWallet implements IWCCommon {
         params: {
           transaction: transaction.serialize({ verifySignatures: false }).toString('base64')
         }
-      }) as string;
+      }, undefined, this.wcWallet?.options?.signingRequestExpiry) as string;
       return result;
     } catch (error) {
       console.log('sign and send transaction error:', error);
@@ -190,7 +190,7 @@ export class WCSolanaWallet extends SolanaWallet implements IWCCommon {
       const result = await this.provider.request({
         method: 'solana_signMessage',
         params: { message: base58.encode(message), pubkey: address }
-      }) as Uint8Array;
+      }, undefined, this.wcWallet?.options?.signingRequestExpiry) as Uint8Array;
       return result;
     } catch (error) {
       console.log('sign message error:', error);
@@ -217,7 +217,8 @@ export class WCSolanaWallet extends SolanaWallet implements IWCCommon {
             ...transaction,
             transaction: transaction.serialize({ verifySignatures: false }).toString('base64')
           }
-        }
+        },
+        expiry: this.wcWallet?.options?.signingRequestExpiry,
       });
 
       const account = await this.getAccount('solana');
