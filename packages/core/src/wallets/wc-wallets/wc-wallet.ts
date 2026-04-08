@@ -102,10 +102,6 @@ export class WCWallet extends MultiChainWallet {
 
     // const chainIdsWithNS = Array.isArray(chainIds) ? chainIds.map((chainId) => `cosmos:${chainId}`) : [`cosmos:${chainIds}`]
 
-    if (this.provider.session) {
-      return Promise.resolve();
-    }
-
     const _chainIds = Array.from(this.chainMap).map(([chainId, chain]) => chainId);
     const cosmosChainNS: string[] = [];
     const eip155ChainNS: string[] = [];
@@ -123,6 +119,20 @@ export class WCWallet extends MultiChainWallet {
         solanaChainNS.push(`solana:${chainId}`);
       }
     });
+
+    // Reuse existing session only if it covers all required chains
+    if (this.provider.session) {
+      const sessionChains = Object.values(this.provider.session.namespaces)
+        .flatMap((ns) => ns.chains ?? []);
+      const requiredChains = [...cosmosChainNS, ...eip155ChainNS, ...solanaChainNS];
+      const allIncluded = requiredChains.every(c => sessionChains.includes(c));
+
+      if (allIncluded) {
+        return Promise.resolve();
+      }
+      // Stale session — disconnect before creating a new one
+      await this.disconnect();
+    }
 
     const connectParam: ConnectParams = {
       namespaces: {},
