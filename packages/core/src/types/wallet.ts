@@ -124,6 +124,15 @@ export interface SignOptions {
   readonly disableBalanceCheck?: boolean;
 }
 
+export interface WCWalletOptions {
+  /**
+   * Expiry for WalletConnect signing requests, in seconds.
+   * Must be between 300 (5 minutes) and 604800 (7 days).
+   * @see https://specs.walletconnect.com/2.0/specs/clients/sign/rpc-methods#expiry-validation
+   */
+  signingRequestExpiry?: number;
+}
+
 export type Algo = 'secp256k1' | 'eth_secp256k1';
 export interface AccountData {
   /** A printable address (typically bech32 encoded) */
