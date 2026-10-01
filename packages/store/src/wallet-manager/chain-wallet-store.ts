@@ -112,13 +112,13 @@ export class ChainWalletStore extends BaseWallet {
     const aminoOfflineSigner = {
       getAccounts: async () => [account],
       signAmino: async (signer: string, signDoc: StdSignDoc) => {
-        return cosmosWallet.signAmino(this.chain.chainId, signer, signDoc, {});
+        return cosmosWallet.signAmino(this.chain.chainId, signer, signDoc, undefined);
       }
     };
     const directOfflineSigner = {
       getAccounts: async () => [account],
       signDirect: async (signer: string, signDoc: DirectSignDoc) => {
-        return cosmosWallet.signDirect(this.chain.chainId, signer, signDoc, {});
+        return cosmosWallet.signDirect(this.chain.chainId, signer, signDoc, undefined);
       }
     };
 
