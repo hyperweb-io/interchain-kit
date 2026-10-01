@@ -507,7 +507,7 @@ describe('ChainWalletStore', () => {
         'cosmoshub-4',
         'cosmos1abc123',
         mockSignDoc,
-        {}
+        undefined
       );
     });
 
@@ -546,7 +546,7 @@ describe('ChainWalletStore', () => {
         'cosmoshub-4',
         'cosmos1abc123',
         mockSignDoc,
-        {}
+        undefined
       );
     });
   });
