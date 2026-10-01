@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.3](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.9.2...@interchain-kit/store@0.9.3) (2026-10-01)
+
+### Bug Fixes
+
+- pass undefined instead of empty object for signOptions in ChainWalletStore ([9f04e9c](https://github.com/interchain-kit/store/commit/9f04e9ccbcaa87b93394a80bb269898cbb802c02))
+
 ## [0.9.2](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.9.1...@interchain-kit/store@0.9.2) (2026-04-08)
 
 **Note:** Version bump only for package @interchain-kit/store
