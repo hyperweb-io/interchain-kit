@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.1](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/vue-examples@0.8.0...@interchain-kit/vue-examples@0.8.1) (2026-10-02)
+
+### Bug Fixes
+
+- **vue:** port to WalletManagerStore and current wallet-manager API ([bda07fc](https://github.com/hyperweb-io/interchain-kit/commit/bda07fc1dfa4e27de186c271fda0de4d7c193e75))
+
 # [0.8.0](https://github.com/hyperweb-io/interchain-kit/compare/@interchain-kit/vue-examples@0.7.2...@interchain-kit/vue-examples@0.8.0) (2026-10-02)
 
 **Note:** Version bump only for package @interchain-kit/vue-examples

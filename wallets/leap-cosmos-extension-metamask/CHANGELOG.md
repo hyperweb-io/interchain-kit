@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.11.1](https://github.com/interchain-kit/leap-cosmos-extension-metamask/compare/@interchain-kit/leap-cosmos-extension-metamask@0.11.0...@interchain-kit/leap-cosmos-extension-metamask@0.11.1) (2026-10-02)
+
+### Bug Fixes
+
+- **wallets:** type errors in metamask, leap-metamask and mock wallets ([0ffd5a7](https://github.com/interchain-kit/leap-cosmos-extension-metamask/commit/0ffd5a7bef97bb53af729e9cd3bb182d569b5b4b))
+
 # [0.11.0](https://github.com/interchain-kit/leap-cosmos-extension-metamask/compare/@interchain-kit/leap-cosmos-extension-metamask@0.10.2...@interchain-kit/leap-cosmos-extension-metamask@0.11.0) (2026-10-02)
 
 **Note:** Version bump only for package @interchain-kit/leap-cosmos-extension-metamask
