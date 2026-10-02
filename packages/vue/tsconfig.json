@@ -4,6 +4,7 @@
     "rootDir": "src/",
     // "outDir": "dist/esm",
     "module": "es2022",
+    "moduleResolution": "bundler",
     "declaration": true,
     "declarationDir": "dist/types",
     "emitDeclarationOnly": true,

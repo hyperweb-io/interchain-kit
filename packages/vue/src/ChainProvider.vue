@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ref, provide, defineProps, reactive } from 'vue'
+import { ref, provide, defineProps, shallowRef, triggerRef, onMounted, onUnmounted } from 'vue'
 import { Modal } from './modal'
 import { AssetList, Chain } from "@chain-registry/types";
 import {
   BaseWallet,
   SignerOptions,
-  WalletManager,
   EndpointOptions,
 } from "@interchain-kit/core";
+import { WalletManagerStore } from "@interchain-kit/store";
 import { WALLET_MANAGER_KEY, OPEN_MODAL_KEY, CLOSE_MODAL_KEY } from './utils/index'
 
 type InterchainWalletProviderProps = {
@@ -34,17 +34,21 @@ provide(CLOSE_MODAL_KEY, closeModal);
 
 const { chains, assetLists, wallets, signerOptions, endpointOptions } = props;
 
-// Make the walletManager instance reactive 
-// so that changes to any property of walletManager will immediately update currentWallet.
-// without needing to rerender the whole app like in React.
-const walletManager = reactive(new WalletManager(
+// State lives in the WalletManagerStore; every store update re-triggers the ref
+// so computeds reading through it re-evaluate.
+const walletManager = shallowRef(new WalletManagerStore(
   chains,
   assetLists,
   wallets,
   signerOptions,
   endpointOptions,
 ));
-walletManager.init();
+const unsubscribe = walletManager.value.subscribe(() => triggerRef(walletManager));
+
+onMounted(() => {
+  walletManager.value.init();
+});
+onUnmounted(unsubscribe);
 
 // injected globally
 provide(WALLET_MANAGER_KEY, walletManager)

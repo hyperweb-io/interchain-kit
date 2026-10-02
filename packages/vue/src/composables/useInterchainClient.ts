@@ -1,7 +1,6 @@
 import { WalletState } from '@interchain-kit/core';
 import { HttpEndpoint } from '@interchainjs/types';
-import { computed,Ref, ref, watch } from 'vue';
-import { onMounted } from 'vue';
+import { computed, Ref, ref, watch } from 'vue';
 
 import { SigningClient } from '../types';
 import { UseInterchainClientReturnType } from '../types/chain';
@@ -15,37 +14,32 @@ export function useInterchainClient(chainName: Ref<string>, walletName: Ref<stri
 
   const walletManager = useWalletManager();
 
-  const wallet = computed(() => {
-    return walletManager.wallets.find(w => w.info.name === walletName.value);
-  });
+  const chainWalletState = computed(() => walletManager.value.getChainWalletState(walletName.value, chainName.value));
 
   const initialize = async () => {
-    if (wallet.value && wallet.value?.walletState === WalletState.Connected) {
-      try {
-        isLoading.value = true;
-        rpcEndpoint.value = await walletManager.getRpcEndpoint(wallet.value, chainName.value);
-        signingClient.value = await walletManager.getSigningClient(walletName.value, chainName.value);
-      } catch (err) {
-        error.value = err;
-        console.log('create client error', err);
-      } finally {
-        isLoading.value = false;
-      }
+    const chain = walletManager.value.getChainByName(chainName.value);
+    if (chainWalletState.value?.walletState !== WalletState.Connected || chain?.chainType !== 'cosmos') {
+      signingClient.value = undefined;
+      return;
+    }
+    try {
+      isLoading.value = true;
+      error.value = null;
+      rpcEndpoint.value = await walletManager.value.getRpcEndpoint(walletName.value, chainName.value);
+      signingClient.value = await walletManager.value.getSigningClient(walletName.value, chainName.value);
+    } catch (err) {
+      error.value = err;
+      console.log('create client error', err);
+    } finally {
+      isLoading.value = false;
     }
   };
 
-  watch([chainName, wallet, walletManager], initialize);
-  watch(wallet, (newWt, oldWt) => {
-    if (newWt) {
-      oldWt?.events.off('accountChanged', initialize);
-      newWt?.events.on('accountChanged', initialize);
-    }
-  });
-  initialize();
-
-  onMounted(() => {
-    wallet.value?.events.on('accountChanged', initialize);
-  });
+  watch(
+    () => [chainName.value, walletName.value, chainWalletState.value?.walletState, chainWalletState.value?.account?.address],
+    initialize,
+    { immediate: true }
+  );
 
   return {
     rpcEndpoint,

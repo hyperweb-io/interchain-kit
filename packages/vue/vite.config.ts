@@ -18,7 +18,7 @@ export default defineConfig({
       formats: ['es', 'umd'],
     },
     rollupOptions: {
-      external: ['vue', '@interchain-kit/core'],
+      external: ['vue', '@interchain-kit/core', '@interchain-kit/store'],
     },
   },
   resolve: {

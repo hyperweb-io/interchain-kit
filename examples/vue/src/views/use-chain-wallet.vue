@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useChainWallet, useWalletManager } from '@interchain-kit/vue';
+import { useChainWallet } from '@interchain-kit/vue';
 const junoChainName = ref('juno')
 const stargazeChainName = ref('stargaze')
 const keplrWalletName = ref('keplr-extension')

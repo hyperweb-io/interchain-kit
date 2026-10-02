@@ -1,12 +1,12 @@
-import { WalletManager } from '@interchain-kit/core';
-import { inject, Reactive } from 'vue';
+import { WalletManagerStore } from '@interchain-kit/store';
+import { inject, ShallowRef } from 'vue';
 
 import { WALLET_MANAGER_KEY } from '../utils';
 
-export const useWalletManager = (): Reactive<WalletManager> => {
-  const wm = inject<Reactive<WalletManager>>(WALLET_MANAGER_KEY);
+export const useWalletManager = (): ShallowRef<WalletManagerStore> => {
+  const wm = inject<ShallowRef<WalletManagerStore>>(WALLET_MANAGER_KEY);
   if (!wm) {
-    console.error(`walletManager is undefined, did you foget to set ChainProvider?
+    throw new Error(`walletManager is undefined, did you forget to set ChainProvider?
     <ChainProvider
       :wallets="[keplrWallet, leapWallet, ...]"
       :chains="[osmosisChain, junoChain, ...]"
@@ -16,7 +16,6 @@ export const useWalletManager = (): Reactive<WalletManager> => {
     >
       <router-view>
     </ChainProvider>`);
-    return undefined;
   }
   return wm;
 };

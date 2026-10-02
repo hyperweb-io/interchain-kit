@@ -3,7 +3,6 @@ import { ref, computed } from 'vue'
 import { useChain, useWalletManager } from '@interchain-kit/vue';
 import { ibc } from 'osmojs'
 import { SigningStargateClient } from '@cosmjs/stargate'
-import { ExtensionWallet } from '@interchain-kit/core';
 
 const chainName = ref("cosmoshub")
 const { rpcEndpoint, chain } = useChain(chainName)
@@ -12,8 +11,7 @@ const signer = computed(() => {
   if (!chain.value.chainId) {
     return
   }
-  const wallet = wm.getCurrentWallet() as ExtensionWallet
-  return wallet.getOfflineSigner(chain.value.chainId, 'direct') // cosmoshub-4
+  return wm.value.getOfflineSigner(wm.value.currentWalletName, chainName.value) // cosmoshub-4
 })
 
 const transferMsg = ibc.applications.transfer.v1.MessageComposer.withTypeUrl.transfer({

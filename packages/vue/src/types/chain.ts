@@ -1,29 +1,30 @@
 import { AssetList, Chain } from '@chain-registry/types';
-import { BaseWallet, WalletState } from '@interchain-kit/core';
+import { WalletState } from '@interchain-kit/core';
+import { ChainWalletStore } from '@interchain-kit/store';
 import { HttpEndpoint } from '@interchainjs/types';
 import { ComputedRef, Ref } from 'vue';
 
 import { SigningClient } from './sign-client';
 
 export type CosmosKitUseChainReturnType = {
-  connect: ComputedRef<() => void>
-  disconnect: ComputedRef<() => void>
+  connect: ComputedRef<() => void | Promise<void>>
+  disconnect: ComputedRef<() => Promise<void>>
   openView: () => void
   closeView: () => void
-  getRpcEndpoint: Ref<() => Promise<string | HttpEndpoint>>
+  getRpcEndpoint: ComputedRef<() => Promise<string | HttpEndpoint>>
   status: ComputedRef<WalletState>
-  username: ComputedRef<string>
-  message: ComputedRef<string>
+  username: ComputedRef<string | undefined>
+  message: ComputedRef<string | undefined>
 }
 
 export type UseChainReturnType = {
-  logoUrl: Ref<string | undefined>
-  chain: Ref<Chain>
-  assetList: Ref<AssetList>
-  address: ComputedRef<string>
-  wallet: Ref<BaseWallet>
+  logoUrl: ComputedRef<string | undefined>
+  chain: ComputedRef<Chain>
+  assetList: ComputedRef<AssetList>
+  address: ComputedRef<string | undefined>
+  wallet: ComputedRef<ChainWalletStore | undefined>
   rpcEndpoint: Ref<string | HttpEndpoint>
-  signingClient: Ref<SigningClient>
+  signingClient: Ref<SigningClient | undefined>
   isLoading: Ref<boolean>
   error: Ref<unknown>
 } & CosmosKitUseChainReturnType

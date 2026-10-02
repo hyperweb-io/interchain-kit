@@ -1,56 +1,31 @@
-import { AssetList, Chain } from '@chain-registry/types';
-import { BaseWallet } from '@interchain-kit/core';
-import { computed, Ref, ref, watch } from 'vue';
+import { computed, Ref } from 'vue';
 
 import { UseChainWalletReturnType } from '../types/chain';
-import { useAccount } from './useAccount';
 import { useInterchainClient } from './useInterchainClient';
 import { useWalletManager } from './useWalletManager';
 
 export const useChainWallet = (chainName: Ref<string>, walletName: Ref<string>): UseChainWalletReturnType => {
-  const logoUrl = ref<string>('');
   const walletManager = useWalletManager();
-  const chainToShow = ref<Chain>();
-  const assetList = ref<AssetList>();
-  const account = useAccount(chainName, walletName);
   const interchainClient = useInterchainClient(chainName, walletName);
-  const getRpcEndpoint = ref();
 
-  const wallet = computed(() => {
-    return walletManager.wallets.find((w: BaseWallet) => w.info.name === walletName.value);
-  });
-
-  const _setValues = () => {
-    logoUrl.value = walletManager.getChainLogoUrl(chainName.value);
-    chainToShow.value = walletManager.chains.find((c: Chain) => c.chainName === chainName.value);
-    assetList.value = walletManager.assetLists.find((a: AssetList) => a.chainName === chainName.value);
-    getRpcEndpoint.value = async () => {
-      await walletManager.getRpcEndpoint(wallet.value, walletName.value);
-    };
-  };
-
-  const connect = computed(() => {
-    return () => walletManager.connect(walletName.value);
-  });
-  const disconnect = computed(() => {
-    return () => walletManager.disconnect(walletName.value);
-  });
-
-  watch([chainName, walletName, walletManager], _setValues);
-  _setValues();
+  const chainWalletState = computed(() => walletManager.value.getChainWalletState(walletName.value, chainName.value));
 
   return {
-    connect,
-    disconnect,
-    getRpcEndpoint,
-    status: computed(() => wallet.value?.walletState),
-    username: computed(() => account.value?.username),
-    message: computed(() => wallet.value?.errorMessage),
-    logoUrl,
-    chain: chainToShow,
-    assetList,
-    address: computed(() => account.value?.address),
-    wallet,
+    connect: computed(() => async () => {
+      walletManager.value.setCurrentWalletName(walletName.value);
+      walletManager.value.setCurrentChainName(chainName.value);
+      await walletManager.value.connect(walletName.value, chainName.value);
+    }),
+    disconnect: computed(() => () => walletManager.value.disconnect(walletName.value, chainName.value)),
+    getRpcEndpoint: computed(() => () => walletManager.value.getRpcEndpoint(walletName.value, chainName.value)),
+    status: computed(() => chainWalletState.value?.walletState),
+    username: computed(() => chainWalletState.value?.account?.username),
+    message: computed(() => chainWalletState.value?.errorMessage),
+    logoUrl: computed(() => walletManager.value.getChainLogoUrl(chainName.value)),
+    chain: computed(() => walletManager.value.getChainByName(chainName.value)),
+    assetList: computed(() => walletManager.value.getAssetListByName(chainName.value)),
+    address: computed(() => chainWalletState.value?.account?.address),
+    wallet: computed(() => walletManager.value.getChainWalletByName(walletName.value, chainName.value)),
     ...interchainClient,
   };
 };
