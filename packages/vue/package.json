@@ -23,6 +23,7 @@
     "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
     "clean": "rimraf dist/**",
     "build": "vite build && copyfiles -f ../../LICENSE README.md package.json dist",
+    "prepack": "npm run build",
     "watch:dev": "tsc -w -p tsconfig.esm.json & tsc -w"
   },
   "keywords": [],
