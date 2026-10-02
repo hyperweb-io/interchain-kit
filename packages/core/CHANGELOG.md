@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.11.0](https://github.com/@interchain-kit/core/compare/@interchain-kit/core@0.10.2...@interchain-kit/core@0.11.0) (2026-10-02)
+
+### Features
+
+- add configurable `signingRequestExpiry` to WC signing requests ([f829ba6](https://github.com/@interchain-kit/core/commit/f829ba6c66f779b407d9b0ef496cf9a011ac8c76))
+
 ## [0.10.2](https://github.com/@interchain-kit/core/compare/@interchain-kit/core@0.10.1...@interchain-kit/core@0.10.2) (2026-04-08)
 
 ### Bug Fixes

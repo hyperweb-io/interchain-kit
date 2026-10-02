@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.11.0](https://github.com/hyperweb-io/interchain-kit/compare/e2e@0.10.3...e2e@0.11.0) (2026-10-02)
+
+**Note:** Version bump only for package e2e
+
 ## [0.10.3](https://github.com/hyperweb-io/interchain-kit/compare/e2e@0.10.2...e2e@0.10.3) (2026-10-01)
 
 **Note:** Version bump only for package e2e

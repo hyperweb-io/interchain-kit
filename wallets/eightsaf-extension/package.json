@@ -1,6 +1,6 @@
 {
   "name": "@interchain-kit/eightsaf-extension",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "author": "EightSaf Team",
   "description": "EightSaf browser extension wallet adapter for Interchain Kit",
   "main": "index.js",
