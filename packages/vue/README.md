@@ -184,10 +184,10 @@ const stargaze = useChainWallet(stargazeChainName, leapWalletName);
 const walletManager = useWalletManager()
 	
 const connectKeplr = async() => {
-  await walletManager.connect('keplr-extension')
+  await walletManager.value.connect('keplr-extension', 'juno')
 }
 const connectLeap = async() => {
-  await walletManager.connect('leap-extension')
+  await walletManager.value.connect('leap-extension', 'stargaze')
 }
 </script>
 

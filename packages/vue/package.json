@@ -29,6 +29,7 @@
   "dependencies": {
     "@chain-registry/types": "^2.0.1",
     "@interchain-kit/core": "workspace:*",
+    "@interchain-kit/store": "workspace:*",
     "@interchain-ui/vue": "^1.4.1",
     "@interchainjs/cosmos": "1.21.0",
     "@interchainjs/cosmos-types": "1.21.0",

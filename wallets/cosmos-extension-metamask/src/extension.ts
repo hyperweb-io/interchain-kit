@@ -6,7 +6,8 @@ declare global {
   }
 }
 
-import { AminoSignResponse, DirectSignResponse,StdSignature } from '@interchainjs/cosmos/types/wallet';
+import { StdSignature } from '@interchainjs/amino';
+import { AminoSignResponse, DirectSignResponse } from '@interchainjs/cosmos';
 import { StdSignDoc } from '@interchainjs/types';
 
 import { Chain as MetaMaskCosmosChainInfo } from './types';
@@ -221,7 +222,8 @@ export class CosmosExtensionMetaMask extends CosmosWallet {
 
   async addSuggestChain(chainId: string): Promise<void> {
 
-    const chainInfo = getMetaMaskCosmosChainInfo(chain, this.assetLists[0]);
+    const chain = this.getChainById(chainId);
+    const chainInfo = getMetaMaskCosmosChainInfo(chain, this.getAssetListByChainId(chainId));
 
     await window.ethereum.request({
       method: 'wallet_invokeSnap',

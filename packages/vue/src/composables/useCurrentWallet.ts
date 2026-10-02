@@ -1,17 +1,9 @@
-import { BaseWallet } from '@interchain-kit/core';
-import { ref, watch } from 'vue';
+import { WalletStore } from '@interchain-kit/store';
+import { computed, ComputedRef } from 'vue';
 
 import { useWalletManager } from './useWalletManager';
 
-export const useCurrentWallet = () => {
+export const useCurrentWallet = (): ComputedRef<WalletStore | undefined> => {
   const walletManager = useWalletManager();
-  const currentWallet = ref<BaseWallet>();
-
-  watch(walletManager, () => {
-    currentWallet.value = walletManager?.getCurrentWallet();
-    console.log('[walletManager changed]', currentWallet.value?.info?.name, currentWallet.value?.walletState);
-  });
-  currentWallet.value = walletManager.getCurrentWallet();
-
-  return currentWallet;
+  return computed(() => walletManager.value.getWalletByName(walletManager.value.currentWalletName));
 };

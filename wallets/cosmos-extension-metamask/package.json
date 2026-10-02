@@ -34,6 +34,7 @@
     "@chain-registry/types": "^2.0.1",
     "@cosmjs/stargate": "^0.38.1",
     "@interchain-kit/core": "workspace:*",
+    "@interchainjs/amino": "1.21.0",
     "@interchainjs/cosmos": "1.21.0",
     "@interchainjs/types": "1.21.0"
   },
