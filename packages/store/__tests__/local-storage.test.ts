@@ -126,18 +126,18 @@ describe('LocalStorage', () => {
       localStorageMock.setItem('interchain-kit-store', JSON.stringify(data));
 
       const loadedData = localStorage.load();
-      // Note: Uint8Array gets serialized to plain object in JSON
       const expectedData = {
         ...data,
         chainWalletStates: data.chainWalletStates?.map(state => ({
           ...state,
           account: state.account ? {
             ...state.account,
-            pubkey: { 0: 1, 1: 2, 2: 3 }
+            pubkey: new Uint8Array([1, 2, 3])
           } : undefined
         }))
       };
       expect(loadedData).toEqual(expectedData);
+      expect(loadedData.chainWalletStates?.[0]?.account?.pubkey).toBeInstanceOf(Uint8Array);
     });
 
     it('should return empty object when no data exists', () => {
@@ -199,18 +199,19 @@ describe('LocalStorage', () => {
       localStorage.save(complexData);
       const loadedData = localStorage.load();
 
-      // Note: Uint8Array gets serialized to plain object in JSON
       const expectedData = {
         ...complexData,
         chainWalletStates: complexData.chainWalletStates?.map(state => ({
           ...state,
           account: state.account ? {
             ...state.account,
-            pubkey: { 0: 1, 1: 2, 2: 3 }
+            pubkey: new Uint8Array([1, 2, 3])
           } : undefined
         }))
       };
       expect(loadedData).toEqual(expectedData);
+      expect(loadedData.chainWalletStates?.[0]?.account?.pubkey).toBeInstanceOf(Uint8Array);
+      expect(loadedData.chainWalletStates?.[1]?.account?.pubkey).toBeInstanceOf(Uint8Array);
     });
   });
 
@@ -240,18 +241,18 @@ describe('LocalStorage', () => {
       localStorage.save(originalData);
       const loadedData = localStorage.load();
 
-      // Note: Uint8Array gets serialized to plain object in JSON
       const expectedData = {
         ...originalData,
         chainWalletStates: originalData.chainWalletStates?.map(state => ({
           ...state,
           account: state.account ? {
             ...state.account,
-            pubkey: { 0: 1, 1: 2, 2: 3 }
+            pubkey: new Uint8Array([1, 2, 3])
           } : undefined
         }))
       };
       expect(loadedData).toEqual(expectedData);
+      expect(loadedData.chainWalletStates?.[0]?.account?.pubkey).toBeInstanceOf(Uint8Array);
     });
 
     it('should handle multiple save/load cycles', () => {
@@ -271,6 +272,36 @@ describe('LocalStorage', () => {
 
       localStorage.save(data2);
       expect(localStorage.load()).toEqual(data2);
+    });
+
+    it('should revive Uint8Array pubkeys after save/load round-trip', () => {
+      const originalData: Partial<InterchainStoreType> = {
+        currentWalletName: 'keplr',
+        currentChainName: 'cosmoshub',
+        isReady: true,
+        chainWalletStates: [
+          {
+            chainName: 'cosmoshub',
+            walletName: 'keplr',
+            walletState: 'Connected' as any,
+            rpcEndpoint: 'https://rpc.cosmos.network',
+            errorMessage: '',
+            account: {
+              address: 'cosmos1abc123',
+              pubkey: new Uint8Array([1, 2, 3]),
+              isNanoLedger: false,
+              algo: 'secp256k1' as Algo,
+            },
+          },
+        ],
+      };
+
+      localStorage.save(originalData);
+      const loadedData = localStorage.load();
+      const pubkey = loadedData.chainWalletStates?.[0]?.account?.pubkey;
+
+      expect(pubkey).toBeInstanceOf(Uint8Array);
+      expect(Array.from(pubkey as Uint8Array)).toEqual([1, 2, 3]);
     });
   });
 });
