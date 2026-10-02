@@ -1,6 +1,5 @@
-import { AssetList,Chain } from '@chain-registry/types';
 import { CosmosWallet, DirectSignDoc, SignOptions, WalletAccount } from '@interchain-kit/core';
-import { AminoSignResponse } from '@interchainjs/cosmos/types/wallet';
+import { AminoSignResponse } from '@interchainjs/cosmos';
 import { StdSignDoc } from '@interchainjs/types';
 
 import { ChainInfo } from './types';
@@ -17,16 +16,10 @@ export class LeapCosmosExtensionMetaMask extends CosmosWallet {
   supportedChains: { [chainId: string]: ChainInfo } = {};
 
   async init() {
-    try {
-      if (!window.ethereum || window.ethereum.isMetaMask !== true) {
-        throw new Error('MetaMask is not installed');
-      }
-      this.supportedChains = await this.getSupportedChains();
-
-    } catch (error) {
-      this.errorMessage = (error as any).message;
-
+    if (!window.ethereum || window.ethereum.isMetaMask !== true) {
+      throw new Error('MetaMask is not installed');
     }
+    this.supportedChains = await this.getSupportedChains();
   }
 
   async getSupportedChains() {
@@ -151,8 +144,8 @@ export class LeapCosmosExtensionMetaMask extends CosmosWallet {
     });
   }
 
-  async addSuggestChain(chain: Chain, assetLists: AssetList[]): Promise<void> {
-
+  async addSuggestChain(chainId: string): Promise<void> {
+    const chain = this.getChainById(chainId);
     const chainInfo: ChainInfo = {
       chainId: chain.chainId,
       chainName: chain.prettyName,

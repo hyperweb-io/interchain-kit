@@ -1,5 +1,5 @@
 import { EthereumWallet, Wallet, WalletAccount } from '@interchain-kit/core';
-import { Eip1193Provider, ethers, HDNodeWallet } from 'ethers';
+import { ethers, HDNodeWallet } from 'ethers';
 
 export interface MockEthereumNetwork {
   chainId: number;
@@ -178,8 +178,8 @@ export class MockEthereumWallet extends EthereumWallet {
     return signature;
   }
 
-  async getProvider(): Promise<Eip1193Provider | null> {
-    return this.provider;
+  async getProvider(): Promise<ethers.JsonRpcProvider> {
+    return this.walletMap[this.currentChainId][this.currentAccountIndex].provider;
   }
 
 

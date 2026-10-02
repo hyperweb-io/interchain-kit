@@ -766,6 +766,9 @@ importers:
       '@interchain-kit/core':
         specifier: workspace:*
         version: link:../../packages/core/dist
+      '@interchainjs/amino':
+        specifier: 1.21.0
+        version: 1.21.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
       '@interchainjs/cosmos':
         specifier: 1.21.0
         version: 1.21.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
@@ -995,9 +998,6 @@ importers:
       '@interchain-kit/core':
         specifier: workspace:*
         version: link:../../packages/core/dist
-      '@keplr-wallet/types':
-        specifier: ^0.13.11
-        version: 0.13.11(starknet@8.9.2)
       '@solana/web3.js':
         specifier: ^1.98.4
         version: 1.98.4(bufferutil@4.1.0)(encoding@0.1.13)(typescript@5.9.3)(utf-8-validate@5.0.10)
