@@ -1,0 +1,21 @@
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  transform: {
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        babelConfig: false,
+        tsconfig: 'tsconfig.test.json',
+      },
+    ],
+  },
+  transformIgnorePatterns: [`/node_modules/*`],
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  modulePathIgnorePatterns: ['dist/*'],
+  moduleNameMapper: {
+    '^@interchain-kit/core$': '<rootDir>/../../packages/core/src',
+  },
+};
