@@ -1130,6 +1130,31 @@ importers:
         version: 0.1.12
     publishDirectory: dist
 
+  wallets/zunia-extension:
+    dependencies:
+      '@interchain-kit/core':
+        specifier: workspace:*
+        version: link:../../packages/core/dist
+    devDependencies:
+      makage:
+        specifier: ^0.1.12
+        version: 0.1.12
+    publishDirectory: dist
+
+  wallets/zunia-mobile:
+    dependencies:
+      '@interchain-kit/core':
+        specifier: workspace:*
+        version: link:../../packages/core/dist
+      '@interchainjs/amino':
+        specifier: 1.21.0
+        version: 1.21.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
+    devDependencies:
+      makage:
+        specifier: ^0.1.12
+        version: 0.1.12
+    publishDirectory: dist
+
 packages:
   '@adobe/css-tools@4.4.4':
     resolution:
