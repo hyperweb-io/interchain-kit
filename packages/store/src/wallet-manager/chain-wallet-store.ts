@@ -25,11 +25,11 @@ export class ChainWalletStore extends BaseWallet {
   }
 
   get walletState(): WalletState {
-    return this.store.getChainWalletState(this.chain.chainName, this.wallet.info.name)?.walletState || WalletState.NotExist;
+    return this.store.getChainWalletState(this.wallet.info.name, this.chain.chainName)?.walletState || WalletState.NotExist;
   }
 
   get errorMessage(): string {
-    return this.store.getChainWalletState(this.chain.chainName, this.wallet.info.name)?.errorMessage || '';
+    return this.store.getChainWalletState(this.wallet.info.name, this.chain.chainName)?.errorMessage || '';
   }
 
   async init(): Promise<void> {

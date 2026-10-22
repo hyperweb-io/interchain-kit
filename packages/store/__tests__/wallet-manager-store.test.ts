@@ -217,6 +217,39 @@ describe('WalletManagerStore', () => {
         currentChainName: savedState.currentChainName,
       });
     });
+    it('should restore a saved NotExist state as Disconnected', async () => {
+      const savedState: { chainWalletStates: ChainWalletState[]; currentWalletName: string; currentChainName: string } = {
+        chainWalletStates: [
+          {
+            chainName: 'cosmoshub',
+            walletName: 'keplr',
+            walletState: WalletState.NotExist,
+            rpcEndpoint: '',
+            errorMessage: 'Client not exist',
+            account: undefined,
+          },
+        ],
+        currentWalletName: '',
+        currentChainName: '',
+      };
+
+      mockLocalStorage.load.mockReturnValue(savedState);
+
+      await walletManagerStore.init();
+
+      // restore() writes the saved state first; later calls only add or drop entries.
+      expect(mockInterchainStore.setState).toHaveBeenNthCalledWith(1, {
+        chainWalletStates: [
+          {
+            ...savedState.chainWalletStates[0],
+            walletState: WalletState.Disconnected,
+            errorMessage: '',
+          },
+        ],
+        currentWalletName: '',
+        currentChainName: '',
+      });
+    });
   });
 
   describe('State Management', () => {
