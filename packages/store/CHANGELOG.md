@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.1](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.10.0...@interchain-kit/store@0.10.1) (2026-10-23)
+
+### Bug Fixes
+
+- **store:** do not restore a NotExist wallet state from localStorage ([a3905af](https://github.com/interchain-kit/store/commit/a3905af8a6b1ab0a61c8e07cd8c05a6369f102d1))
+
 # [0.10.0](https://github.com/interchain-kit/store/compare/@interchain-kit/store@0.9.3...@interchain-kit/store@0.10.0) (2026-10-02)
 
 **Note:** Version bump only for package @interchain-kit/store

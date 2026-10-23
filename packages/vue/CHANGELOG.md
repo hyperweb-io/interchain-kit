@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.11.2](https://github.com/interchain-kit/vue/compare/@interchain-kit/vue@0.11.1...@interchain-kit/vue@0.11.2) (2026-10-23)
+
+### Bug Fixes
+
+- **vue:** build on prepack so publish ships a fresh dist ([6a0f33b](https://github.com/interchain-kit/vue/commit/6a0f33beb2d5c87757ca7780dbe68ca72ed450f8))
+
 ## [0.11.1](https://github.com/interchain-kit/vue/compare/@interchain-kit/vue@0.11.0...@interchain-kit/vue@0.11.1) (2026-10-02)
 
 ### Bug Fixes
