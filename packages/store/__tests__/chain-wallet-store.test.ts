@@ -128,7 +128,7 @@ describe('ChainWalletStore', () => {
       const walletState = chainWalletStore.walletState;
 
       expect(walletState).toBe(WalletState.Connected);
-      expect(mockInterchainStore.getChainWalletState).toHaveBeenCalledWith('cosmoshub', 'keplr');
+      expect(mockInterchainStore.getChainWalletState).toHaveBeenCalledWith('keplr', 'cosmoshub');
     });
 
     it('should return NotExist when no state exists', () => {
@@ -161,6 +161,7 @@ describe('ChainWalletStore', () => {
       const errorMessage = chainWalletStore.errorMessage;
 
       expect(errorMessage).toBe('Connection failed');
+      expect(mockInterchainStore.getChainWalletState).toHaveBeenCalledWith('keplr', 'cosmoshub');
     });
 
     it('should return empty string when no state exists', () => {

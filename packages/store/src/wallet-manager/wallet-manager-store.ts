@@ -72,7 +72,12 @@ export class WalletManagerStore implements WalletManager {
     const oldState = this.localStorage.load();
 
     this.store.setState({
-      chainWalletStates: oldState.chainWalletStates || [],
+      // NotExist only means the extension was not injected yet on the load that saved it.
+      // Restoring it would block connect() for good, so start that wallet over as Disconnected;
+      // init() sets NotExist again if the extension is really missing.
+      chainWalletStates: (oldState.chainWalletStates || []).map(cws => cws.walletState === WalletState.NotExist
+        ? { ...cws, walletState: WalletState.Disconnected, errorMessage: '' }
+        : cws),
       currentWalletName: oldState.currentWalletName || '',
       currentChainName: oldState.currentChainName || ''
     });
