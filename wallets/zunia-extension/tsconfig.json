@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src/",
+    "baseUrl": ".",
+    "paths": {
+      "@interchain-kit/core": ["../../packages/core/dist"],
+      "@interchain-kit/core/*": ["../../packages/core/dist/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist", "node_modules", "**/*.spec.*", "**/*.test.*"]
+}

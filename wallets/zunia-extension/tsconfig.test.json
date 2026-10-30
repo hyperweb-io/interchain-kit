@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@interchain-kit/core": ["../../packages/core/src"],
+      "@interchain-kit/core/*": ["../../packages/core/src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "__tests__/**/*.ts"],
+  "exclude": ["dist", "node_modules"]
+}
