@@ -60,6 +60,9 @@ export function useAsync<T>({
   }, []);
 
   useEffect(() => {
+    let active = true;
+    const cleanup = () => { active = false; };
+
     if (!enabled) {
       setState({
         data: null,
@@ -82,7 +85,7 @@ export function useAsync<T>({
     if (activeRequests.has(cacheKey)) {
       activeRequests.get(cacheKey)!.then(
         (data) => {
-          if (mountedRef.current) {
+          if (active && mountedRef.current) {
             setState({
               data,
               isLoading: false,
@@ -91,7 +94,7 @@ export function useAsync<T>({
           }
         },
         (error) => {
-          if (mountedRef.current) {
+          if (active && mountedRef.current) {
             setState({
               data: null,
               isLoading: false,
@@ -100,7 +103,7 @@ export function useAsync<T>({
           }
         }
       );
-      return;
+      return cleanup;
     }
 
     setState(prev => ({ ...prev, isLoading: true, error: null }));
@@ -110,7 +113,7 @@ export function useAsync<T>({
         if (!disableCache) {
           cache.set(cacheKey, data);
         }
-        if (mountedRef.current) {
+        if (active && mountedRef.current) {
           setState({
             data,
             isLoading: false,
@@ -120,7 +123,7 @@ export function useAsync<T>({
         return data;
       })
       .catch((error) => {
-        if (mountedRef.current) {
+        if (active && mountedRef.current) {
           setState({
             data: null,
             isLoading: false,
@@ -133,6 +136,7 @@ export function useAsync<T>({
       });
 
     activeRequests.set(cacheKey, requestPromise);
+    return cleanup;
   }, [cacheKey, enabled, disableCache]);
 
   const refetch = async () => {

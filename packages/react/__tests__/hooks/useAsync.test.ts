@@ -155,4 +155,76 @@ describe('useAsync', () => {
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBeNull();
   });
+
+  it('ignores an old query result after switching keys', async () => {
+    let resolveOld!: (value: string) => void;
+    const oldRequest = new Promise<string>((resolve) => { resolveOld = resolve; });
+    const queryFn = jest.fn().mockReturnValueOnce(oldRequest).mockResolvedValueOnce('new data');
+    const { result, rerender } = renderHook(
+      ({ queryKey }) => useAsync({ queryKey, queryFn }),
+      { initialProps: { queryKey: 'old-query' } }
+    );
+
+    rerender({ queryKey: 'new-query' });
+    await waitFor(() => expect(result.current.data).toBe('new data'));
+    await act(async () => { resolveOld('old data'); });
+
+    expect(result.current.data).toBe('new data');
+    expect(result.current.error).toBeNull();
+    expect(cache.get('old-query')).toBe('old data');
+  });
+
+  it('ignores an old query error after switching keys', async () => {
+    let rejectOld!: (error: Error) => void;
+    const oldRequest = new Promise<string>((_, reject) => { rejectOld = reject; });
+    const queryFn = jest.fn().mockReturnValueOnce(oldRequest).mockResolvedValueOnce('new data');
+    const { result, rerender } = renderHook(
+      ({ queryKey }) => useAsync({ queryKey, queryFn }),
+      { initialProps: { queryKey: 'old-query-error' } }
+    );
+
+    rerender({ queryKey: 'new-query-success' });
+    await waitFor(() => expect(result.current.data).toBe('new data'));
+    await act(async () => { rejectOld(new Error('old request failed')); });
+
+    expect(result.current.data).toBe('new data');
+    expect(result.current.error).toBeNull();
+  });
+
+  it('does not restore data when a pending query is disabled', async () => {
+    let resolveRequest!: (value: string) => void;
+    const request = new Promise<string>((resolve) => { resolveRequest = resolve; });
+    const queryFn = jest.fn(() => request);
+    const { result, rerender } = renderHook(
+      ({ enabled }) => useAsync({ queryKey: 'disabled-pending', queryFn, enabled }),
+      { initialProps: { enabled: true } }
+    );
+
+    rerender({ enabled: false });
+    await act(async () => { resolveRequest('late data'); });
+
+    expect(result.current.data).toBeNull();
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.error).toBeNull();
+  });
+
+  it('ignores a shared request for a disabled subscriber while updating the active one', async () => {
+    let resolveRequest!: (value: string) => void;
+    const request = new Promise<string>((resolve) => { resolveRequest = resolve; });
+    const queryFn = jest.fn(() => request);
+    const owner = renderHook(() => useAsync({ queryKey: 'shared-pending', queryFn }));
+    const subscriber = renderHook(
+      ({ enabled }) => useAsync({ queryKey: 'shared-pending', queryFn, enabled }),
+      { initialProps: { enabled: true } }
+    );
+
+    subscriber.rerender({ enabled: false });
+    await act(async () => { resolveRequest('shared data'); });
+
+    expect(owner.result.current.data).toBe('shared data');
+    expect(subscriber.result.current.data).toBeNull();
+    expect(subscriber.result.current.isLoading).toBe(false);
+    expect(queryFn).toHaveBeenCalledTimes(1);
+    expect(activeRequests.has('shared-pending')).toBe(false);
+  });
 });
