@@ -1,7 +1,11 @@
-import { BaseWallet, MultiChainWallet } from '../wallets';
+import { BaseWallet } from '../wallets/base-wallet';
+import { MultiChainWallet } from '../wallets/multichain-wallet';
 import { isInstanceOf } from './helpers';
 
-export const getWalletByType = <T>(wallet: BaseWallet, WalletClass: new (...args: any[]) => T) => {
+export const getWalletByType = <T>(
+  wallet: BaseWallet,
+  WalletClass: new (...args: any[]) => T
+) => {
   if (isInstanceOf(wallet, WalletClass)) {
     return wallet as T;
   }
