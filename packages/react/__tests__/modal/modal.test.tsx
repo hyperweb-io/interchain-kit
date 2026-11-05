@@ -81,16 +81,93 @@ describe('WalletModal', () => {
     expect(screen.getByText('Select your wallet')).toBeInTheDocument();
   });
 
-  it('renders QRCodeContent when walletConnectQRCodeUri is provided', () => {
+  const pairingUri =
+    'wc:8a74e2cfb093524dbba0cbdd616909108c6cef30363f560b2853daeadbf345fb@2?relay-protocol=irn&symKey=5ea13e76bd30c736a5c5e33ee58c9f8e314036a0b7390ac18986bc2949d5c340&expiryTimestamp=1743361685';
+  const mobileWallet = {
+    ...mockWalletStore,
+    info: {
+      name: 'keplr-mobile',
+      prettyName: 'Keplr Mobile',
+      mode: 'wallet-connect' as const,
+    },
+  };
+
+  it.each(['WalletConnect', 'keplr-mobile', 'leap-mobile'])(
+    'renders the pairing QR code for %s',
+    (name) => {
+      render(
+        <WalletModalElement
+          {...mockProps}
+          isConnecting={true}
+          walletConnectQRCodeUri={pairingUri}
+          currentWallet={{
+            ...mobileWallet,
+            info: { ...mobileWallet.info, name },
+          }}
+        />
+      );
+      expect(screen.getByText('Open App to connect')).toBeInTheDocument();
+      expect(
+        screen.queryByText('Requesting Connection')
+      ).not.toBeInTheDocument();
+    }
+  );
+
+  it('keeps the connecting view when no pairing URI is available', () => {
     render(
       <WalletModalElement
         {...mockProps}
-        walletConnectQRCodeUri="wc:8a74e2cfb093524dbba0cbdd616909108c6cef30363f560b2853daeadbf345fb@2?relay-protocol=irn&symKey=5ea13e76bd30c736a5c5e33ee58c9f8e314036a0b7390ac18986bc2949d5c340&expiryTimestamp=1743361685"
-        currentWallet={
-          { name: 'Test Wallet', info: { name: 'WalletConnect' } } as any
-        }
+        isConnecting={true}
+        currentWallet={mobileWallet}
       />
     );
+    expect(screen.getByText('Requesting Connection')).toBeInTheDocument();
+    expect(screen.queryByText('Open App to connect')).not.toBeInTheDocument();
+  });
+
+  it('does not show a pairing QR code for an extension wallet', () => {
+    render(
+      <WalletModalElement
+        {...mockProps}
+        isConnecting={true}
+        walletConnectQRCodeUri={pairingUri}
+      />
+    );
+    expect(screen.getByText('Requesting Connection')).toBeInTheDocument();
+    expect(screen.queryByText('Open App to connect')).not.toBeInTheDocument();
+  });
+
+  it('prioritizes wallet selection over an available pairing URI', () => {
+    render(
+      <WalletModalElement
+        {...mockProps}
+        shouldShowList={true}
+        isConnecting={true}
+        walletConnectQRCodeUri={pairingUri}
+        currentWallet={mobileWallet}
+      />
+    );
+    expect(screen.getByText('Select your wallet')).toBeInTheDocument();
+    expect(screen.queryByText('Open App to connect')).not.toBeInTheDocument();
+  });
+
+  it('updates the pairing view when the wallet mode changes', () => {
+    const props = {
+      ...mockProps,
+      isConnecting: true,
+      walletConnectQRCodeUri: pairingUri,
+    };
+    const { rerender } = render(
+      <WalletModalElement
+        {...props}
+        currentWallet={{
+          ...mobileWallet,
+          info: { ...mobileWallet.info, mode: 'extension' },
+        }}
+      />
+    );
+    expect(screen.getByText('Requesting Connection')).toBeInTheDocument();
+    rerender(<WalletModalElement {...props} currentWallet={mobileWallet} />);
     expect(screen.getByText('Open App to connect')).toBeInTheDocument();
   });
 

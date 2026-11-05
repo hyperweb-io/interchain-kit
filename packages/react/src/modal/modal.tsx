@@ -224,7 +224,7 @@ export const WalletModalElement = ({
     if (
       currentWallet &&
       walletConnectQRCodeUri &&
-      currentWallet.info.name === 'WalletConnect'
+      currentWallet.info.mode === 'wallet-connect'
     ) {
       return {
         header: (
@@ -314,6 +314,7 @@ export const WalletModalElement = ({
     };
   }, [
     currentWallet?.info?.name,
+    currentWallet?.info?.mode,
     isConnected,
     isConnecting,
     address,
