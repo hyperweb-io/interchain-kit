@@ -214,6 +214,9 @@ importers:
       '@esbuild-plugins/node-globals-polyfill':
         specifier: ^0.2.3
         version: 0.2.3(esbuild@0.27.3)
+      '@interchain-kit/aria-extension':
+        specifier: workspace:*
+        version: link:../../wallets/aria-extension/dist
       '@interchain-kit/backpack-extension':
         specifier: workspace:*
         version: link:../../wallets/backpack-extension/dist
@@ -723,6 +726,17 @@ importers:
       vue-tsc:
         specifier: ^2.1.6
         version: 2.2.12(typescript@5.9.3)
+    publishDirectory: dist
+
+  wallets/aria-extension:
+    dependencies:
+      '@interchain-kit/core':
+        specifier: workspace:*
+        version: link:../../packages/core/dist
+    devDependencies:
+      makage:
+        specifier: ^0.1.12
+        version: 0.1.12
     publishDirectory: dist
 
   wallets/backpack-extension:

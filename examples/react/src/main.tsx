@@ -34,6 +34,7 @@ import { trustWallet } from '@interchain-kit/trust-extension';
 import { leapCosmosExtensionMetaMask } from '@interchain-kit/leap-cosmos-extension-metamask';
 import { xdefinWallet } from '@interchain-kit/xdefi-extension';
 import { vultisigWallet } from '@interchain-kit/vultisig-extension';
+import { ariaWallet } from '@interchain-kit/aria-extension';
 // import { MockWallet } from "@interchain-kit/mock-wallet";
 import { metaMaskWallet } from '@interchain-kit/metamask-extension';
 import { exodusWallet } from '@interchain-kit/exodus-extension';
@@ -218,6 +219,7 @@ const _wallets: BaseWallet[] = [
   // backPackWallet,
   // solflareWallet,
   // vultisigWallet,
+  // ariaWallet,
 ];
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
