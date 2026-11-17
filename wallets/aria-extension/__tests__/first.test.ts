@@ -1,6 +1,6 @@
 import { CosmosWallet, EthereumWallet, SolanaWallet } from '@interchain-kit/core';
 
-import { AriaCosmosWallet, ariaExtensionInfo, ariaWallet } from '../src';
+import { AriaCosmosWallet, ariaExtensionInfo, AriaSolanaWallet, ariaWallet, solanaCluster } from '../src';
 
 describe('Aria extension', () => {
   it('exposes correct wallet metadata', () => {
@@ -26,6 +26,7 @@ describe('Aria extension', () => {
     expect(ariaWallet.getWalletByChainType('cosmos')).toBeInstanceOf(AriaCosmosWallet);
     expect(ariaWallet.getWalletByChainType('cosmos')).toBeInstanceOf(CosmosWallet);
     expect(ariaWallet.getWalletByChainType('eip155')).toBeInstanceOf(EthereumWallet);
+    expect(ariaWallet.getWalletByChainType('solana')).toBeInstanceOf(AriaSolanaWallet);
     expect(ariaWallet.getWalletByChainType('solana')).toBeInstanceOf(SolanaWallet);
   });
 });
@@ -76,5 +77,54 @@ describe('AriaCosmosWallet connect', () => {
     await expect(wallet.connect('cosmoshub-4')).rejects.toThrow('User rejected the connection request');
     expect(getKey).not.toHaveBeenCalled();
     expect(addSuggestChain).not.toHaveBeenCalled();
+  });
+});
+
+describe('AriaSolanaWallet connect', () => {
+  const solanaChain = (chainId: string | undefined, rpc?: string): any => ({
+    chainName: `solana-${chainId}`,
+    chainType: 'solana',
+    chainId,
+    ...(rpc ? { apis: { rpc: [{ address: rpc }] } } : {}),
+  });
+  const setup = (chains: any[], changeCluster = jest.fn().mockResolvedValue({})) => {
+    const wallet = new AriaSolanaWallet(ariaExtensionInfo);
+    wallet.setChainMap(chains);
+    const connect = jest.fn().mockResolvedValue({ publicKey: 'So1' });
+    wallet.solana = { changeCluster, connect };
+    return { wallet, changeCluster, connect };
+  };
+
+  // interchain-kit's example names its devnet chain by testnet's genesis hash, on the devnet RPC
+  it("sets the chain's cluster in Aria before connecting", async () => {
+    const chain = solanaChain('4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z', 'https://api.devnet.solana.com');
+    const { wallet, changeCluster, connect } = setup([chain]);
+
+    await wallet.connect(chain.chainId);
+
+    expect(changeCluster).toHaveBeenCalledWith('devnet');
+    expect(changeCluster.mock.invocationCallOrder[0]).toBeLessThan(connect.mock.invocationCallOrder[0]);
+  });
+
+  it('a chain Aria has no RPCs for is refused, and the site is not connected', async () => {
+    const chain = solanaChain('local', 'http://localhost:8899');
+    const refusal = Object.assign(new Error('Aria has no Solana cluster solana:localnet.'), { code: -32602 });
+    const { wallet, connect } = setup([chain], jest.fn().mockRejectedValue(refusal));
+
+    await expect(wallet.connect(chain.chainId)).rejects.toThrow('Aria has no Solana cluster solana:localnet.');
+    expect(connect).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['the RPC names devnet', 'devnet', solanaChain('x', 'https://devnet.helius-rpc.com/?api-key=k')],
+    ['the RPC names testnet', 'testnet', solanaChain('x', 'https://api.testnet.solana.com')],
+    ['a local RPC', 'localnet', solanaChain('x', 'http://127.0.0.1:8899')],
+    ['the devnet genesis hash', 'devnet', solanaChain('EtWTRABZaYq6iMfeYKouRu166VU2xqa1')],
+    ['the testnet CAIP-2 ID', 'testnet', solanaChain('solana:4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z')],
+    ['the mainnet genesis hash', 'mainnet', solanaChain('5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp')],
+    ["a mainnet provider's RPC", 'mainnet', solanaChain(undefined, 'https://mainnet.helius-rpc.com')],
+    ['no chain at all', 'mainnet', undefined],
+  ])('%s: %s', (_, cluster, chain) => {
+    expect(solanaCluster(chain, chain?.chainId)).toBe(cluster);
   });
 });

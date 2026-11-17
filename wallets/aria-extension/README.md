@@ -39,3 +39,5 @@ export function App() {
 The adapter detects Aria via `window.aria` and uses the standard `CosmosWallet` implementation (`enable`, `getKey`, `signAmino`, `signDirect`, `signArbitrary`, `sendTx`, etc.) `EthereumWallet` for EVM chains, and `SolanaWallet` for Solana.
 
 Aria's `enable` connects the site without checking the chain, so on connect the adapter asks Aria for the account key and, if Aria reports the chain as unknown, suggests it through `experimentalSuggestChain` with the chain's registry data.
+
+On Solana, connect first tells Aria the chain's cluster (`changeCluster`): devnet or testnet when the chain's RPC names one, as Solana's wallet adapter reads an endpoint, else the cluster of its genesis-hash chain ID, else mainnet. Aria then simulates and sends that chain's transactions on that cluster, and refuses a cluster it has no RPCs for, such as a local validator.
