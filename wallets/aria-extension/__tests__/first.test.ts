@@ -1,4 +1,4 @@
-import { CosmosWallet, EthereumWallet } from '@interchain-kit/core';
+import { CosmosWallet, EthereumWallet, SolanaWallet } from '@interchain-kit/core';
 
 import { AriaCosmosWallet, ariaExtensionInfo, ariaWallet } from '../src';
 
@@ -10,6 +10,7 @@ describe('Aria extension', () => {
     expect(ariaWallet.info.windowKey).toBe('aria');
     expect(ariaWallet.info.cosmosKey).toBe('aria');
     expect(ariaWallet.info.ethereumKey).toBe('aria.ethereum');
+    expect(ariaWallet.info.solanaKey).toBe('aria.solana');
     expect(ariaWallet.info.keystoreChange).toBe('aria_keystorechange');
     expect(ariaWallet.info.downloads).toEqual(
       expect.arrayContaining([
@@ -21,10 +22,11 @@ describe('Aria extension', () => {
     );
   });
 
-  it('uses Aria for Cosmos and EVM chains', () => {
+  it('uses Aria for Cosmos, EVM and Solana chains', () => {
     expect(ariaWallet.getWalletByChainType('cosmos')).toBeInstanceOf(AriaCosmosWallet);
     expect(ariaWallet.getWalletByChainType('cosmos')).toBeInstanceOf(CosmosWallet);
     expect(ariaWallet.getWalletByChainType('eip155')).toBeInstanceOf(EthereumWallet);
+    expect(ariaWallet.getWalletByChainType('solana')).toBeInstanceOf(SolanaWallet);
   });
 });
 

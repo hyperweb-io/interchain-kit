@@ -1,4 +1,4 @@
-import { EthereumWallet, ExtensionWallet } from '@interchain-kit/core';
+import { EthereumWallet, ExtensionWallet, SolanaWallet } from '@interchain-kit/core';
 
 import { AriaCosmosWallet } from './extension';
 import { ariaExtensionInfo } from './registry';
@@ -10,5 +10,6 @@ const ariaWallet = new ExtensionWallet(ariaExtensionInfo);
 
 ariaWallet.setNetworkWallet('cosmos', new AriaCosmosWallet(ariaExtensionInfo));
 ariaWallet.setNetworkWallet('eip155', new EthereumWallet(ariaExtensionInfo));
+ariaWallet.setNetworkWallet('solana', new SolanaWallet(ariaExtensionInfo));
 
 export { ariaWallet };

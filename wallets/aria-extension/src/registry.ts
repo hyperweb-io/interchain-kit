@@ -10,6 +10,7 @@ export const ariaExtensionInfo: Wallet = {
   windowKey: 'aria',
   cosmosKey: 'aria',
   ethereumKey: 'aria.ethereum',
+  solanaKey: 'aria.solana',
   walletIdentifyKey: 'aria.ethereum.isAria',
   keystoreChange: 'aria_keystorechange',
   downloads: [
