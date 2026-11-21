@@ -95,7 +95,7 @@ describe('AriaSolanaWallet connect', () => {
     return { wallet, changeCluster, connect };
   };
 
-  // interchain-kit's example names its devnet chain by testnet's genesis hash, on the devnet RPC
+  // A chain ID and RPC that disagree (testnet's genesis hash, devnet's RPC): the RPC names the cluster
   it("sets the chain's cluster in Aria before connecting", async () => {
     const chain = solanaChain('4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z', 'https://api.devnet.solana.com');
     const { wallet, changeCluster, connect } = setup([chain]);

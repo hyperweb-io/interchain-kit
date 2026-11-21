@@ -4,8 +4,8 @@ import { chain, assetList } from '@chain-registry/v2/mainnet/solana'
 
 /**
  * 主网：solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp（或简化为 solana:mainnet）
- * 测试网：solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1（或 solana:testnet）
- * 开发网：solana:4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z（或 solana:devnet）
+ * 测试网：solana:4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z（或 solana:testnet）
+ * 开发网：solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1（或 solana:devnet）
  */
 
 export const createSolanaChain = (networkType: 'mainnet-beta' | 'devnet' | 'testnet' = 'devnet'): Chain => {
@@ -28,7 +28,7 @@ export const createSolanaChain = (networkType: 'mainnet-beta' | 'devnet' | 'test
   if (networkType === 'testnet') {
 
     newChain.chainName = 'solanatestnet';
-    newChain.chainId = 'EtWTRABZaYq6iMfeYKouRu166VU2xqa1';
+    newChain.chainId = '4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z';
     newChain.apis = {
       rpc: [
         {
@@ -41,7 +41,7 @@ export const createSolanaChain = (networkType: 'mainnet-beta' | 'devnet' | 'test
   if (networkType === 'devnet') {
 
     newChain.chainName = 'solanadevnet';
-    newChain.chainId = '4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z';
+    newChain.chainId = 'EtWTRABZaYq6iMfeYKouRu166VU2xqa1';
     newChain.apis = {
       rpc: [
         {
