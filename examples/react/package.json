@@ -26,6 +26,7 @@
     "@cosmjs/crypto": "^0.38.1",
     "@cosmjs/proto-signing": "^0.38.1",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@interchain-kit/aria-extension": "workspace:*",
     "@interchain-kit/backpack-extension": "workspace:*",
     "@interchain-kit/coin98-extension": "workspace:*",
     "@interchain-kit/compass-extension": "workspace:*",
